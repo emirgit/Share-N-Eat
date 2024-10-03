@@ -7,7 +7,7 @@ A web application with integrated social media features designed to inspire and 
 | Number | Name | Role
 | --- | --- | --- |
 | 210104004071 | Muhammed Emir Kara | Scrum Master / Back-End Developer 
-|  |  | Product Owner / Front-End Developer
+| 210104004004 | Serkan Efe Çamoğlu | Product Owner / Front-End Developer
 |  |  | Back-End Developer
 |  |  | Back-End Developer
 |  |  | Front-End Developer
