@@ -2,8 +2,8 @@ package gtu.codybuilders.shareneat.service.concretes;
 
 import gtu.codybuilders.shareneat.dataAccess.ProductRepository;
 import gtu.codybuilders.shareneat.entity.Product;
-import gtu.codybuilders.shareneat.service.DTO.ProductCreateDTO;
-import gtu.codybuilders.shareneat.service.DTO.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.service.DTO.request.ProductCreateDTO;
+import gtu.codybuilders.shareneat.service.DTO.response.ProductGetAllDTO;
 import gtu.codybuilders.shareneat.service.abstracts.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,7 +34,10 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public ProductCreateDTO createProduct(String name, String brand) {
-        return null;
+    public void createProduct(ProductCreateDTO productCreateDTO) {
+        Product product = modelMapper.map(productCreateDTO, Product.class);
+        productRepository.save(product);
     }
+
+
 }
