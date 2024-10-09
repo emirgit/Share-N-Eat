@@ -1,4 +1,4 @@
-package gtu.codybuilders.shareneat.entity;
+package gtu.codybuilders.shareneat.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -24,4 +24,6 @@ public class Post {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private Instant createdDate;
+    private Double averageRate;
+    private Integer totalRaters;
 }

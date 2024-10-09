@@ -1,4 +1,4 @@
-package gtu.codybuilders.shareneat.entity;
+package gtu.codybuilders.shareneat.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
