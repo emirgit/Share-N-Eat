@@ -1,7 +1,7 @@
 package gtu.codybuilders.shareneat.controller;
 
-import gtu.codybuilders.shareneat.service.DTO.request.ProductCreateDTO;
-import gtu.codybuilders.shareneat.service.DTO.response.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.DTO.request.ProductCreateDTO;
+import gtu.codybuilders.shareneat.DTO.response.ProductGetAllDTO;
 import gtu.codybuilders.shareneat.service.abstracts.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
