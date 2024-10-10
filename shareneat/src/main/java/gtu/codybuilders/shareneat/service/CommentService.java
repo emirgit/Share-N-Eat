@@ -1,0 +1,10 @@
+package gtu.codybuilders.shareneat.service;
+
+import java.util.List;
+import gtu.codybuilders.shareneat.dto.CommentDto;
+
+public interface CommentService {
+    void save(CommentDto commentDto);
+    List<CommentDto> getAllCommentsForPost(Long postId);
+    List<CommentDto> getAllCommentsForUser(String userName);
+}
