@@ -1,6 +1,8 @@
 package gtu.codybuilders.shareneat.controller;
 
 import gtu.codybuilders.shareneat.DTO.request.ProductCreateDTO;
+import gtu.codybuilders.shareneat.DTO.request.ProductDeleteDTO;
+import gtu.codybuilders.shareneat.DTO.request.ProductUpdateDTO;
 import gtu.codybuilders.shareneat.DTO.response.ProductGetAllDTO;
 import gtu.codybuilders.shareneat.service.abstracts.ProductService;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,17 @@ public class ProductController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public void createProduct(@RequestBody ProductCreateDTO productCreateDTO) {
         productService.createProduct(productCreateDTO);
+    }
+
+    @DeleteMapping()
+    //@ResponseStatus()
+    public void delete(@RequestBody ProductDeleteDTO productDeleteDTO){
+        productService.deleteProduct(productDeleteDTO);
+    }
+
+    @PutMapping
+    public void update(@RequestBody ProductUpdateDTO productUpdateDTO){
+        productService.updateProduct(productUpdateDTO);
     }
 
 }
