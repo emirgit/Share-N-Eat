@@ -47,14 +47,26 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductUpdateDTO productUpdateDTO){
+    public void updateProduct(ProductUpdateDTO productUpdateDTO) {
+        // Mevcut ürünü veritabanından bul
+        Product product = productRepository.findById(productUpdateDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        Product updatedProduct = modelMapper.map(productUpdateDTO, Product.class);
-        Product product = productRepository.findById(updatedProduct.getId()).orElseThrow();
+        // Güncellenmesi gereken alanları DTO'dan alıp mevcut ürüne aktar
+        product.setName(productUpdateDTO.getName());
+        product.setBrand(productUpdateDTO.getBrand());
 
-        productRepository.delete(product);
-        productRepository.save(updatedProduct);
+        // Eğer Nutrition güncelleniyorsa, bunu da güncelleyebilirsiniz
+        if (productUpdateDTO.getNutrition() != null) {
+            product.getNutrition().setProteinGrams(productUpdateDTO.getNutrition().getProteinGrams());
+            product.getNutrition().setCarbohydrateGrams(productUpdateDTO.getNutrition().getCarbohydrateGrams());
+            product.getNutrition().setFatGrams(productUpdateDTO.getNutrition().getFatGrams());
+        }
+
+        // Güncellenmiş ürünü kaydet
+        productRepository.save(product);
     }
+
 
 
 }

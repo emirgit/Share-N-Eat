@@ -15,12 +15,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "brand")
     private String brand;
 
-    @Column(name = "name")
     private String name;
 
-    
+    @Embedded
+    private Nutrition nutrition;
+
 
 }
