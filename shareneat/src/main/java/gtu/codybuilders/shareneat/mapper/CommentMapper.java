@@ -6,6 +6,7 @@ import gtu.codybuilders.shareneat.dto.CommentDto;
 import gtu.codybuilders.shareneat.model.Comment;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.User;
+import java.time.Instant;
 
 @Component
 public class CommentMapper {
@@ -16,7 +17,7 @@ public class CommentMapper {
                 .text(commentDto.getText())
                 .post(post)  
                 .user(user)  
-                .createdDate(commentDto.getCreatedDate())  
+                .createdDate(Instant.now())  
                 .build();
     }
 

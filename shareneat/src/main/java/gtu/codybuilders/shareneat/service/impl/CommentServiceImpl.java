@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import gtu.codybuilders.shareneat.dto.CommentDto;
+import gtu.codybuilders.shareneat.exceptions.CommentNotFoundException;
 import gtu.codybuilders.shareneat.exceptions.PostNotFoundException;
 import gtu.codybuilders.shareneat.mapper.CommentMapper;
 import gtu.codybuilders.shareneat.model.Comment;
@@ -19,7 +20,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
     
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -27,21 +28,40 @@ public class CommentServiceImpl implements CommentService{
     private final DummyAuthServiceImpl authService;
     private final CommentMapper commentMapper;
 
+    @Override
     public void save(CommentDto commentsDto) {
         Post post = postRepository.findById(commentsDto.getPostId())
                 .orElseThrow(() -> new PostNotFoundException(commentsDto.getPostId().toString()));
-        //TODO: Current user is called from authService.
         Comment comment = commentMapper.mapToComment(commentsDto, post, authService.getCurrentUser());
         commentRepository.save(comment);
     }
 
+    @Override
+    public void delete(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found with id: " + commentId));
+        commentRepository.delete(comment);
+    }
+
+    @Override
+    public void update(Long commentId, CommentDto commentDto) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found with id: " + commentId));
+        
+        existingComment.setText(commentDto.getText()); 
+        commentRepository.save(existingComment);
+    }
+
+    @Override
     public List<CommentDto> getAllCommentsForPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId.toString()));
         return commentRepository.findByPost(post)
                                 .stream()
-                                .map(commentMapper::mapToDto).toList();
+                                .map(commentMapper::mapToDto)
+                                .toList();
     }
 
+    @Override
     public List<CommentDto> getAllCommentsForUser(String userName) {
         User user = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(userName));
@@ -50,4 +70,5 @@ public class CommentServiceImpl implements CommentService{
                                 .map(commentMapper::mapToDto)
                                 .toList();
     }
+
 }

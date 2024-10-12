@@ -1,6 +1,7 @@
 package gtu.codybuilders.shareneat.mapper;
 
 import gtu.codybuilders.shareneat.dto.PostRequest;
+import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.User;
 
@@ -30,6 +31,19 @@ public class PostMapper {
                 .postName(post.getPostName())
                 .description(post.getDescription())
                 .url(post.getUrl())
+                .build();
+    }
+
+    public PostResponse mapToPostResponse(Post post) {
+        return PostResponse.builder()
+                .postId(post.getPostId())
+                .postName(post.getPostName())
+                .description(post.getDescription())
+                .url(post.getUrl())
+                .username(post.getUser().getUsername())  
+                .createdDate(post.getCreatedDate())      
+                .averageRate(post.getAverageRate())     
+                .totalRaters(post.getTotalRaters())     
                 .build();
     }
 }
