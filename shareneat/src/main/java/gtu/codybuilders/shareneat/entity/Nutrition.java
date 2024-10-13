@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Nutrition {
 
+    private Double calories;
     private Double proteinGrams;
     private Double carbohydrateGrams;
     private Double fatGrams;
