@@ -1,8 +1,9 @@
 package gtu.codybuilders.shareneat.model;
 
 public enum Role {
-    USER,
-    DOCTOR,
-    DIETICIAN,
-    ADMIN
+    ROLE_USER,
+    ROLE_DOCTOR,
+    ROLE_DIETICIAN,
+    ROLE_ADMIN
 }
+
