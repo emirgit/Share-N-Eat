@@ -1,4 +1,4 @@
-package gtu.codybuilders.shareneat.DTO.response;
+package gtu.codybuilders.shareneat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

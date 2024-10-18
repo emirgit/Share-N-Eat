@@ -1,12 +1,12 @@
-package gtu.codybuilders.shareneat.service.concretes;
+package gtu.codybuilders.shareneat.service.impl;
 
-import gtu.codybuilders.shareneat.DTO.request.ProductDeleteDTO;
-import gtu.codybuilders.shareneat.DTO.request.ProductUpdateDTO;
-import gtu.codybuilders.shareneat.dataAccess.ProductRepository;
-import gtu.codybuilders.shareneat.entity.Product;
-import gtu.codybuilders.shareneat.DTO.request.ProductCreateDTO;
-import gtu.codybuilders.shareneat.DTO.response.ProductGetAllDTO;
-import gtu.codybuilders.shareneat.service.abstracts.ProductService;
+import gtu.codybuilders.shareneat.dto.ProductDeleteDTO;
+import gtu.codybuilders.shareneat.dto.ProductUpdateDTO;
+import gtu.codybuilders.shareneat.repository.ProductRepository;
+import gtu.codybuilders.shareneat.model.Product;
+import gtu.codybuilders.shareneat.dto.ProductCreateDTO;
+import gtu.codybuilders.shareneat.dto.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -55,13 +55,13 @@ public class ProductServiceImp implements ProductService {
         product.setBrand(productUpdateDTO.getBrand());
 
         if (productUpdateDTO.getNutrition() != null) {
+            //
             product.getNutrition().setProteinGrams(productUpdateDTO.getNutrition().getProteinGrams());
             product.getNutrition().setCarbohydrateGrams(productUpdateDTO.getNutrition().getCarbohydrateGrams());
             product.getNutrition().setFatGrams(productUpdateDTO.getNutrition().getFatGrams());
             product.getNutrition().setCalories(productUpdateDTO.getNutrition().getCalories());
         }
 
-        // Güncellenmiş ürünü kaydet
         productRepository.save(product);
     }
 

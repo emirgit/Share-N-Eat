@@ -1,6 +1,6 @@
-package gtu.codybuilders.shareneat.DTO.request;
+package gtu.codybuilders.shareneat.dto;
 
-import gtu.codybuilders.shareneat.entity.Nutrition;
+import gtu.codybuilders.shareneat.model.Nutrition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

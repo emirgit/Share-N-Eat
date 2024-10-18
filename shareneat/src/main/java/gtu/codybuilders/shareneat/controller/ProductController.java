@@ -1,10 +1,10 @@
 package gtu.codybuilders.shareneat.controller;
 
-import gtu.codybuilders.shareneat.DTO.request.ProductCreateDTO;
-import gtu.codybuilders.shareneat.DTO.request.ProductDeleteDTO;
-import gtu.codybuilders.shareneat.DTO.request.ProductUpdateDTO;
-import gtu.codybuilders.shareneat.DTO.response.ProductGetAllDTO;
-import gtu.codybuilders.shareneat.service.abstracts.ProductService;
+import gtu.codybuilders.shareneat.dto.ProductCreateDTO;
+import gtu.codybuilders.shareneat.dto.ProductDeleteDTO;
+import gtu.codybuilders.shareneat.dto.ProductUpdateDTO;
+import gtu.codybuilders.shareneat.dto.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
