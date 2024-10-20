@@ -10,4 +10,4 @@ A web application with integrated social media features designed to inspire and 
 | 210104004004 | Serkan Efe Çamoğlu | Product Owner / Front-End Developer
 | 210104004093 | Emre Kibar | Back-End Developer
 | 210104004041 | Barış Eren Gezici | Back-End Developer
-|  |  | Front-End Developer
+| 220104004026 | Oğuz Akkuş | Front-End Developer
