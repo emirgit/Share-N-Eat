@@ -1,26 +1,17 @@
-package gtu.codybuilders.shareneat.model;
+package gtu.codybuilders.shareneat.dto;
 
-import jakarta.persistence.*;
+import gtu.codybuilders.shareneat.model.Nutrition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class ProductUpdateDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String brand;
-
     private String name;
-
-    @Embedded
+    private String brand;
     private Nutrition nutrition;
-
-
 }
