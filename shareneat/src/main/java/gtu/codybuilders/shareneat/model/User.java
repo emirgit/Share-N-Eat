@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 
 @Data
@@ -19,8 +18,11 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String nickname;
-    private String password;
+    @Email
+    @NotBlank(message = "Email is required.")
     private String email;
+    @NotBlank(message = "password is required.")
+    private String password;
     private Instant created;
     private boolean enabled;
     @Enumerated(EnumType.STRING)
