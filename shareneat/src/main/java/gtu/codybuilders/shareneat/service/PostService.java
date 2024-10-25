@@ -1,27 +1,16 @@
 package gtu.codybuilders.shareneat.service;
 
-import org.springframework.stereotype.Service;
-
 import gtu.codybuilders.shareneat.dto.PostRequest;
-import gtu.codybuilders.shareneat.mapper.PostMapper;
-import gtu.codybuilders.shareneat.model.Post;
-import gtu.codybuilders.shareneat.repository.PostRepository;
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import gtu.codybuilders.shareneat.dto.PostResponse;
 
-@Service
-@AllArgsConstructor
-@Slf4j
-@Transactional
-public class PostService {
+import java.util.List;
 
-    private final PostMapper postMapper;
-    private final PostRepository postRepository;
-
-    public void save(PostRequest postRequest) {
-        Post createdPost =  postMapper.mapToPost(postRequest);
-        postRepository.save(createdPost);
-    } 
-
+public interface PostService {
+    void save(PostRequest postRequest);
+    void delete(Long postId);
+    void update(Long postId, PostRequest postRequest);
+    List<PostResponse> getAllPosts(); 
+    PostResponse getPostById(Long postId);   
+    List<PostResponse> getAllPostsByUser(String username);  
 }
+
