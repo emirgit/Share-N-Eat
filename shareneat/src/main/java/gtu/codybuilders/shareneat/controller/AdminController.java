@@ -4,6 +4,7 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,9 @@ public class AdminController {
 
     @PutMapping("/upgrade/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> upgradeUserToAdmin(@PathVariable String email) {
-        Optional<User> userOptional = userService.findUserByEmail(email);
+    public ResponseEntity<?> upgradeUserToAdmin() {
+        Long userId = AuthUtil.getUserId();
+        Optional<User> userOptional = userService.findUserById(userId);
         if (userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

@@ -3,7 +3,7 @@ package gtu.codybuilders.shareneat.service.impl;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import gtu.codybuilders.shareneat.dto.RateDto;
-import gtu.codybuilders.shareneat.exceptions.PostNotFoundException;
+import gtu.codybuilders.shareneat.exception.PostNotFoundException;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.Rate;
 import gtu.codybuilders.shareneat.repository.PostRepository;

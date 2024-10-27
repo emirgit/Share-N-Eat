@@ -32,7 +32,7 @@ public class DataInitializer {
                 User adminUser = new User();
                 adminUser.setEmail(adminEmail);
                 adminUser.setPassword("Emirshareneat.deneme");
-                adminUser.setNickname("EmirtheAdmin");
+                adminUser.setUsername("EmirtheAdmin");
                 adminUser.setCreated(Instant.now());
                 adminUser.setEnabled(true);
                 adminUser.setRole(Role.ROLE_ADMIN);

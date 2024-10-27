@@ -12,10 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
@@ -23,7 +20,6 @@ import java.time.Instant;
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
-
     private final UserServiceImpl userService;
     private final JwtServiceImpl jwtService;
 
@@ -37,27 +33,20 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public ResponseEntity<String> login() {
-
         return ResponseEntity.status(401).body("Testing the security!");
     }
-
-
 
     // Login endpoint
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(@RequestBody UserRequestDto request) {
         try {
-            // Authenticate the user
+            // Authenticate using email or username
+            String loginIdentifier = request.getEmail().isEmpty() ? request.getUsername() : request.getEmail();
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
-//            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//            List<String> roles = authorities.stream()
-//                    .map(GrantedAuthority::getAuthority)
-//                    .collect(Collectors.toList());
+                    new UsernamePasswordAuthenticationToken(loginIdentifier, request.getPassword()));
 
             // Generate JWT token
-            final String jwt = jwtService.generateToken(request.getEmail());
+            final String jwt = jwtService.generateToken(loginIdentifier);
 
             // Return the token
             return ResponseEntity.ok(new UserResponseDto(jwt));
@@ -68,17 +57,17 @@ public class AuthenticationController {
     }
 
     // Registration endpoint
-// Registration endpoint
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserRequestDto request) {
-        // Check if the user already exists
-        if (userService.isUserExists(request.getEmail())) {
-            return ResponseEntity.status(409).body("User already exists");
+        // Check if the user already exists by email or username
+        if (userService.isUserExists(request.getEmail()) || userService.isUsernameExists(request.getUsername())) {
+            return ResponseEntity.status(409).body("User with this email or username already exists");
         }
 
         // Create a new User object
         User user = new User();
         user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setCreated(Instant.now());
         user.setEnabled(true);
@@ -95,5 +84,4 @@ public class AuthenticationController {
 
         return ResponseEntity.ok("User registered successfully");
     }
-
 }

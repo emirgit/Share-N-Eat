@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
-import gtu.codybuilders.shareneat.exceptions.PostNotFoundException;
+import gtu.codybuilders.shareneat.exception.PostNotFoundException;
 import gtu.codybuilders.shareneat.mapper.PostMapper;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.User;

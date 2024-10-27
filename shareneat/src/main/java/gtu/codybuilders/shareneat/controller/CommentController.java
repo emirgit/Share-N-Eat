@@ -3,12 +3,11 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.dto.CommentDto;
 import gtu.codybuilders.shareneat.service.impl.CommentServiceImpl;
 import lombok.AllArgsConstructor;
-
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -41,9 +40,9 @@ public class CommentController {
     }
 
     @GetMapping(params = "userName")
-    public ResponseEntity<List<CommentDto>> getAllCommentsForUser(@RequestParam String userName){
+    public ResponseEntity<List<CommentDto>> getAllCommentsForUser(){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(commentService.getAllCommentsForUser(userName));
+                .body(commentService.getAllCommentsForUser());
     }
 
 }

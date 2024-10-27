@@ -20,9 +20,12 @@ public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    private String nickname;
+    private String fullName;
+    @Column(unique = true)
+    private String username;
     @Email
     @NotBlank(message = "Email is required.")
+    @Column(unique = true)
     private String email;
     @NotBlank(message = "password is required.")
     private String password;
