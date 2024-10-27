@@ -1,16 +1,21 @@
 package gtu.codybuilders.shareneat.service.impl;
 
-import java.util.Optional;
-import org.springframework.stereotype.Service;
 import gtu.codybuilders.shareneat.dto.RateDto;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
+import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.Rate;
+import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.PostRepository;
 import gtu.codybuilders.shareneat.repository.RateRepository;
+import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.RateService;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,14 +23,19 @@ public class RateServiceImpl implements RateService{
 
     private final RateRepository rateRepository;
     private final PostRepository postRepository;
-    private final DummyAuthServiceImpl authService;
+    private final UserRepository userRepository;
 
     @Transactional
     public void rate(RateDto rateDto) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+
         Post post = postRepository.findById(rateDto.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + rateDto.getPostId()));
         //TODO: Current user is wanted form authService
-        Optional<Rate> existingRate = rateRepository.findTopByPostAndUserOrderByRateIdDesc(post, authService.getCurrentUser());
+        Optional<Rate> existingRate = rateRepository.findTopByPostAndUserOrderByRateIdDesc(post, user);
 
         if (existingRate.isPresent()) {
             Rate rate = existingRate.get();
@@ -60,10 +70,15 @@ public class RateServiceImpl implements RateService{
     }
 
     private Rate mapToRate(RateDto rateDto, Post post) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+
         return Rate.builder()
                 .rating(rateDto.getRating())
                 .post(post)
-                .user(authService.getCurrentUser()) //TODO: CurrentUser is wanted from authService
+                .user(user) //TODO: CurrentUser is wanted from authService
                 .build();
     }
     

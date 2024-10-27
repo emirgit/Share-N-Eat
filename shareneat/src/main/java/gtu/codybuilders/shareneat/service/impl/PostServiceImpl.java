@@ -1,19 +1,22 @@
 package gtu.codybuilders.shareneat.service.impl;
 
-import java.util.List;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
+import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.mapper.PostMapper;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.PostRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.PostService;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,12 +26,14 @@ public class PostServiceImpl implements PostService{
     private final PostMapper postMapper;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final DummyAuthServiceImpl authService;
 
     @Override
     public void save(PostRequest postRequest) {
-        //TODO: for the post, we need to know the user, it will come from authenticationService
-        Post createdPost =  postMapper.mapToPost(postRequest, authService.getCurrentUser());  
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+        Post createdPost =  postMapper.mapToPost(postRequest, user);
         postRepository.save(createdPost);
     } 
 

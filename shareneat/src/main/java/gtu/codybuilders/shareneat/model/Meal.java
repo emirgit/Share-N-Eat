@@ -19,6 +19,7 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mealId;
     private String name;
+    @OneToOne
     private Post post;
 
     @ElementCollection
@@ -35,7 +36,8 @@ public class Meal {
     private Double totalFiber;
     private Double totalSugar;
 
-    // Calculate nutritive values from products and their quantities
+
+    /*// Calculate nutritive values from products and their quantities
     public void calculateNutrition() {
         totalCalories = productsWithQuantities.entrySet().stream()
                 .mapToDouble(entry -> entry.getKey().getCalories() * (entry.getValue() / entry.getKey().getGrams()))
@@ -56,5 +58,7 @@ public class Meal {
                 .mapToDouble(entry -> entry.getKey().getSugar() * (entry.getValue() / entry.getKey().getGrams()))
                 .sum();
     }
+
+     */
 }
 
