@@ -8,10 +8,12 @@ import gtu.codybuilders.shareneat.repository.ProductRepository;
 import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +44,21 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResponseDTO> searchProducts(String keyword) {
         List<Product> products = productRepository.searchProducts(keyword);
 
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponseDTO> filterProducts(Map<String, String> filters) {
+        Specification<Product> spec = Specification.where(null);
+
+        for (Map.Entry<String, String> filter : filters.entrySet()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get(filter.getKey()), filter.getValue()));
+        }
+
+        List<Product> products = productRepository.findAll(spec);
         return products.stream()
                 .map(product -> modelMapper.map(product, ProductResponseDTO.class))
                 .collect(Collectors.toList());

@@ -14,6 +14,7 @@ public class ProductResponseDTO {
     private Long id;
     private String name;
     private String brand;
+    private String imageUrl;
 
     private Double calories;
     private Double proteinGrams;

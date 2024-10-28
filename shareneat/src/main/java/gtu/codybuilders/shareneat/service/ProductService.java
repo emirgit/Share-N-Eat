@@ -4,6 +4,7 @@ import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
 
@@ -20,5 +21,7 @@ public interface ProductService {
     List<ProductResponseDTO> getSortedProducts(String criteria, String asc);
 
     List<ProductResponseDTO> searchProducts(String keyword);
+
+    List<ProductResponseDTO> filterProducts(Map<String, String> filters);
 
 }
