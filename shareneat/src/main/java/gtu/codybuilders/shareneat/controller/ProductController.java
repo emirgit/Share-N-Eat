@@ -30,6 +30,12 @@ public class ProductController {
         return ResponseEntity.ok(productResponseDTO);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String keyword) {
+        List<ProductResponseDTO> productResponseDTOS = productService.searchProducts(keyword);
+        return ResponseEntity.ok(productResponseDTOS);
+    }
+
     @GetMapping("/sortedBy{criteria}{asc}") // "asc" or "desc" expected
     public ResponseEntity<List<ProductResponseDTO>> getSortedProducts(@PathVariable String criteria, @PathVariable String asc){
         List<ProductResponseDTO> productResponseDTOS = productService.getSortedProducts(criteria, asc);

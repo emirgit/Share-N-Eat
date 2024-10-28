@@ -18,4 +18,7 @@ public interface ProductService {
     ProductResponseDTO getProductById(long productId);
 
     List<ProductResponseDTO> getSortedProducts(String criteria, String asc);
+
+    List<ProductResponseDTO> searchProducts(String keyword);
+
 }

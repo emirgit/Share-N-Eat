@@ -39,6 +39,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDTO> searchProducts(String keyword) {
+        List<Product> products = productRepository.searchProducts(keyword);
+
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ProductResponseDTO> getSortedProducts(String criteria, String asc) {
 
         Comparator<Product> comparator = switch (criteria.toLowerCase()) {
