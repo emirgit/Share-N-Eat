@@ -16,11 +16,11 @@ public class Product {
     private Long id;
 
     private String brand;
-
     private String name;
 
-    @Embedded
-    private Nutrition nutrition;
-
+    private Double calories;
+    private Double proteinGrams;
+    private Double carbohydrateGrams;
+    private Double fatGrams;
 
 }

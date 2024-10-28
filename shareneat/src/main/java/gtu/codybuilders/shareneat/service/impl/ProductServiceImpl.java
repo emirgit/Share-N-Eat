@@ -1,11 +1,10 @@
 package gtu.codybuilders.shareneat.service.impl;
 
-import gtu.codybuilders.shareneat.dto.ProductDeleteDTO;
-import gtu.codybuilders.shareneat.dto.ProductUpdateDTO;
-import gtu.codybuilders.shareneat.repository.ProductRepository;
+import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
+import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
+import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
 import gtu.codybuilders.shareneat.model.Product;
-import gtu.codybuilders.shareneat.dto.ProductCreateDTO;
-import gtu.codybuilders.shareneat.dto.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.repository.ProductRepository;
 import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,43 +23,44 @@ public class ProductServiceImpl implements ProductService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<ProductGetAllDTO> getAll() {
+    public List<ProductResponseDTO> getAll() {
         List<Product> products = productRepository.findAll();
 
-        List<ProductGetAllDTO> productGetAllDTOList = products.stream()
-                .map(product -> modelMapper.map(product, ProductGetAllDTO.class))
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
                 .collect(Collectors.toList());
-
-        return productGetAllDTOList;
     }
 
     @Override
-    public void createProduct(ProductCreateDTO productCreateDTO) {
-        Product product = modelMapper.map(productCreateDTO, Product.class);
+    public ProductResponseDTO getProductById(long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
+        return modelMapper.map(product, ProductResponseDTO.class);
+    }
+
+    @Override
+    public void createProduct(ProductRequestDTO productRequestDTO) {
+        Product product = modelMapper.map(productRequestDTO, Product.class);
         productRepository.save(product);
     }
 
     @Override
-    public void deleteProduct(ProductDeleteDTO productDeleteDTO){
-        Product product = modelMapper.map(productDeleteDTO, Product.class);
+    public void deleteProduct(long productId){
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
         productRepository.delete(product);
     }
 
     @Override
-    public void updateProduct(ProductUpdateDTO productUpdateDTO) {
+    public void updateProduct(ProductRequestDTO productRequestDTO, long productId) {
 
-        Product product = productRepository.findById(productUpdateDTO.getId()).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
 
-        product.setName(productUpdateDTO.getName());
-        product.setBrand(productUpdateDTO.getBrand());
+        product.setName(productRequestDTO.getName());
+        product.setBrand(productRequestDTO.getBrand());
 
-        if (productUpdateDTO.getNutrition() != null) {
-            //
-            product.getNutrition().setProteinGrams(productUpdateDTO.getNutrition().getProteinGrams());
-            product.getNutrition().setCarbohydrateGrams(productUpdateDTO.getNutrition().getCarbohydrateGrams());
-            product.getNutrition().setFatGrams(productUpdateDTO.getNutrition().getFatGrams());
-            product.getNutrition().setCalories(productUpdateDTO.getNutrition().getCalories());
-        }
+        product.setCalories(product.getCalories());
+        product.setCarbohydrateGrams(productRequestDTO.getCarbohydrateGrams());
+        product.setFatGrams(productRequestDTO.getFatGrams());
+        product.setProteinGrams(productRequestDTO.getProteinGrams());
 
         productRepository.save(product);
     }

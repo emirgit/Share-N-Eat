@@ -1,9 +1,7 @@
 package gtu.codybuilders.shareneat.controller;
 
-import gtu.codybuilders.shareneat.dto.ProductCreateDTO;
-import gtu.codybuilders.shareneat.dto.ProductDeleteDTO;
-import gtu.codybuilders.shareneat.dto.ProductUpdateDTO;
-import gtu.codybuilders.shareneat.dto.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
+import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,28 +18,34 @@ public class ProductController {
     private ProductService productService;
 
     //returns all products stored in database, without ids
-    @GetMapping()
-    public ResponseEntity<List<ProductGetAllDTO>> getAll(){
-        List<ProductGetAllDTO> productGetAllDTOS = productService.getAll();
-        return ResponseEntity.ok(productGetAllDTOS);
+    @GetMapping("/getAll")
+    public ResponseEntity<List<ProductResponseDTO>> getAll(){
+        List<ProductResponseDTO> productResponseDTOS = productService.getAll();
+        return ResponseEntity.ok(productResponseDTOS);
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable long productId){
+        ProductResponseDTO productResponseDTO = productService.getProductById(productId);
+        return ResponseEntity.ok(productResponseDTO);
     }
 
     //saves a new product into database
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createProduct(@RequestBody ProductCreateDTO productCreateDTO) {
-        productService.createProduct(productCreateDTO);
+    public void createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
+        productService.createProduct(productRequestDTO);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/{productId}")
     //@ResponseStatus()
-    public void delete(@RequestBody ProductDeleteDTO productDeleteDTO){
-        productService.deleteProduct(productDeleteDTO);
+    public void delete(@PathVariable long productId){
+        productService.deleteProduct(productId);
     }
 
-    @PutMapping
-    public void update(@RequestBody ProductUpdateDTO productUpdateDTO){
-        productService.updateProduct(productUpdateDTO);
+    @PutMapping("/{productId}")
+    public void update(@RequestBody ProductRequestDTO productRequestDTO, @PathVariable long productId){
+        productService.updateProduct(productRequestDTO, productId);
     }
 
 }

@@ -7,9 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductGetAllDTO {
+public class ProductResponseDTO {
 
     private Long id;
     private String name;
     private String brand;
+
+    private Double calories;
+    private Double proteinGrams;
+    private Double carbohydrateGrams;
+    private Double fatGrams;
+
 }
