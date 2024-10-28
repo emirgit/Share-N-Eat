@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +18,12 @@ public class ProductRequestDTO {
     private Double proteinGrams;
     private Double carbohydrateGrams;
     private Double fatGrams;
+    private Double fiberGrams;
+    private Double sugarGrams;
+
+    private Double rating;
+    private Integer ratingCount;
+    private Integer numberOfComments;
+    private Instant created;
 
 }

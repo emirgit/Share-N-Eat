@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,38 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDTO getProductById(long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
         return modelMapper.map(product, ProductResponseDTO.class);
+    }
+
+    @Override
+    public List<ProductResponseDTO> getSortedProducts(String criteria, String asc) {
+
+        Comparator<Product> comparator = switch (criteria.toLowerCase()) {
+            case "name" -> Comparator.comparing(Product::getName);
+            case "brand" -> Comparator.comparing(Product::getBrand);
+            case "calories" -> Comparator.comparing(Product::getCalories);
+            case "protein" -> Comparator.comparing(Product::getProteinGrams);
+            case "carbohydrates" -> Comparator.comparing(Product::getCarbohydrateGrams);
+            case "fat" -> Comparator.comparing(Product::getFatGrams);
+            case "fiber" -> Comparator.comparing(Product::getFiberGrams);
+            case "sugar" -> Comparator.comparing(Product::getSugarGrams);
+            case "rating" -> Comparator.comparing(Product::getRating);
+            case "created" -> Comparator.comparing(Product::getCreated);
+            default -> throw new IllegalArgumentException("Invalid sorting criteria: " + criteria);
+        };
+
+        if (asc.equals("desc")) {
+            comparator = comparator.reversed();
+        }
+
+        List<Product> products = productRepository.findAll();
+
+        List<Product> sortedProducts = products.stream()
+                .sorted(comparator)
+                .toList();
+
+        return sortedProducts.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

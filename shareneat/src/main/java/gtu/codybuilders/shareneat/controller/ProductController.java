@@ -30,6 +30,12 @@ public class ProductController {
         return ResponseEntity.ok(productResponseDTO);
     }
 
+    @GetMapping("/sortedBy{criteria}{asc}") // "asc" or "desc" expected
+    public ResponseEntity<List<ProductResponseDTO>> getSortedProducts(@PathVariable String criteria, @PathVariable String asc){
+        List<ProductResponseDTO> productResponseDTOS = productService.getSortedProducts(criteria, asc);
+        return ResponseEntity.ok(productResponseDTOS);
+    }
+
     //saves a new product into database
     @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
