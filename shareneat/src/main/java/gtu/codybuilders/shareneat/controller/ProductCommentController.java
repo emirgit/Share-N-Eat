@@ -19,15 +19,26 @@ public class ProductCommentController {
     private final ProductCommentService productCommentService;
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<ProductCommentResponseDTO>> getAllProductCommentsOfProduct(long productId) {
+    public ResponseEntity<List<ProductCommentResponseDTO>> getAllProductCommentsOfProduct(@PathVariable long productId) {
         return ResponseEntity.ok(productCommentService.getAllProductCommentsOfProduct(productId));
     }
 
     @PostMapping()
     public ResponseEntity<Void> createProductComment(@RequestBody ProductCommentRequestDTO productCommentRequestDTO) {
-        //eksik
+        productCommentService.createProductComment(productCommentRequestDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/{productCommentId}")
+    public ResponseEntity<Void> updateProductComment(@PathVariable long productCommentId, @RequestBody ProductCommentRequestDTO productCommentRequestDTO) {
+        productCommentService.updateProductComment(productCommentId, productCommentRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{productCommentId}")
+    public ResponseEntity<Void> deleteProductComment(@PathVariable long productCommentId) {
+        productCommentService.deleteProductComment(productCommentId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
