@@ -5,6 +5,7 @@ import gtu.codybuilders.shareneat.exception.PostNotFoundException;
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.Rate;
+import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.PostRepository;
 import gtu.codybuilders.shareneat.repository.RateRepository;
@@ -34,7 +35,6 @@ public class RateServiceImpl implements RateService{
 
         Post post = postRepository.findById(rateDto.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + rateDto.getPostId()));
-        //TODO: Current user is wanted form authService
         Optional<Rate> existingRate = rateRepository.findTopByPostAndUserOrderByRateIdDesc(post, user);
 
         if (existingRate.isPresent()) {
@@ -43,13 +43,22 @@ public class RateServiceImpl implements RateService{
             rate.setRating(rateDto.getRating()); 
             rateRepository.save(rate);
 
-            post.setAverageRate(calculateUpdatedAverage(post.getAverageRate(), post.getTotalRaters(), oldRating, rateDto.getRating()));
+            if(user.getRole() == Role.ROLE_USER){
+                post.setAverageRateRegular(calculateUpdatedAverage(post.getAverageRateRegular(), post.getTotalRatersRegular(), oldRating, rateDto.getRating()));
+            }else{
+                post.setAverageRateExpert(calculateUpdatedAverage(post.getAverageRateExpert(), post.getTotalRatersExpert(), oldRating, rateDto.getRating()));
+            }
         } else {
             Rate newRate = mapToRate(rateDto, post);
             rateRepository.save(newRate);
             
-            post.setTotalRaters(post.getTotalRaters() + 1);
-            post.setAverageRate(calculateNewAverage(post.getAverageRate(), post.getTotalRaters(), rateDto.getRating()));
+            if(user.getRole() == Role.ROLE_USER){
+                post.setTotalRatersRegular(post.getTotalRatersRegular() + 1);
+                post.setAverageRateRegular(calculateNewAverage(post.getAverageRateRegular(), post.getTotalRatersRegular(), rateDto.getRating()));
+            }else{
+                post.setTotalRatersExpert(post.getTotalRatersExpert() + 1);
+                post.setAverageRateExpert(calculateNewAverage(post.getAverageRateExpert(), post.getTotalRatersExpert(), rateDto.getRating()));
+            }
         }
 
         postRepository.save(post);
@@ -78,7 +87,7 @@ public class RateServiceImpl implements RateService{
         return Rate.builder()
                 .rating(rateDto.getRating())
                 .post(post)
-                .user(user) //TODO: CurrentUser is wanted from authService
+                .user(user)
                 .build();
     }
     

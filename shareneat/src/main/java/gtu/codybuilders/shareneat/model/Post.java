@@ -24,6 +24,9 @@ public class Post {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
     private Instant createdDate;
-    private Double averageRate;
-    private Integer totalRaters;
+    private Integer likeCount;
+    private Double averageRateExpert;
+    private Double averageRateRegular;
+    private Integer totalRatersExpert;
+    private Integer totalRatersRegular;
 }

@@ -13,7 +13,6 @@ public class CommentMapper {
     
     public Comment mapToComment(CommentDto commentDto, Post post, User user) {
         return Comment.builder()
-                .id(commentDto.getId())
                 .text(commentDto.getText())
                 .post(post)  
                 .user(user)  

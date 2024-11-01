@@ -12,16 +12,18 @@ import java.time.Instant;
 @Component
 public class PostMapper {
 
-    // TODO: this mapping method should take user.
     public Post mapToPost(PostRequest postRequest, User user) {
         return Post.builder()
                 .postName(postRequest.getPostName())
                 .description(postRequest.getDescription())
                 .url(postRequest.getUrl())
-                .user(user)  //TODO there must be a user to map it
-                .createdDate(Instant.now())  
-                .averageRate(0.0)            
-                .totalRaters(0)              
+                .user(user) 
+                .createdDate(Instant.now())
+                .likeCount(0)  
+                .averageRateExpert(0.0)
+                .averageRateRegular(0.0)
+                .totalRatersExpert(0)            
+                .totalRatersRegular(0)              
                 .build();
     }
 
@@ -41,9 +43,12 @@ public class PostMapper {
                 .description(post.getDescription())
                 .url(post.getUrl())
                 .username(post.getUser().getUsername())  
-                .createdDate(post.getCreatedDate())      
-                .averageRate(post.getAverageRate())     
-                .totalRaters(post.getTotalRaters())     
+                .createdDate(post.getCreatedDate())
+                .likeCount(post.getLikeCount())      
+                .averageRateExpert(post.getAverageRateExpert())
+                .averageRateRegular(post.getAverageRateRegular())      
+                .totalRatersExpert(post.getTotalRatersExpert())     
+                .totalRatersRegular(post.getTotalRatersRegular())
                 .build();
     }
 }
