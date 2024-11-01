@@ -2,6 +2,7 @@ package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.dto.ProductCommentRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductCommentResponseDTO;
+import gtu.codybuilders.shareneat.exception.ProductCommentNotFoundException;
 import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
 import gtu.codybuilders.shareneat.model.Product;
 import gtu.codybuilders.shareneat.model.ProductComment;
@@ -40,13 +41,13 @@ public class ProductCommentServiceImpl implements ProductCommentService {
 
     @Override
     public void deleteProductComment(long productCommentId) {
-        ProductComment productComment = productCommentRepository.findById(productCommentId).orElseThrow(() -> new ProductNotFoundException("Product comment not found with id : " + productCommentId));
+        ProductComment productComment = productCommentRepository.findById(productCommentId).orElseThrow(() -> new ProductCommentNotFoundException("Product comment not found with id : " + productCommentId));
         productCommentRepository.delete(productComment);
     }
 
     @Override
     public void updateProductComment(long productCommentId, ProductCommentRequestDTO productCommentRequestDTO) {
-        ProductComment productComment = productCommentRepository.findById(productCommentId).orElseThrow(() -> new ProductNotFoundException("Product comment not found with id : " + productCommentId));
+        ProductComment productComment = productCommentRepository.findById(productCommentId).orElseThrow(() -> new ProductCommentNotFoundException("Product comment not found with id : " + productCommentId));
         productComment.setText(productCommentRequestDTO.getText());
         productCommentRepository.save(productComment);
     }

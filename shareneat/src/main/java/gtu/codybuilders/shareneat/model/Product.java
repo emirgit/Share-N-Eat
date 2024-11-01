@@ -1,14 +1,12 @@
 package gtu.codybuilders.shareneat.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,7 +26,6 @@ public class Product {
     private Double proteinGrams;
     private Double carbohydrateGrams;
     private Double fatGrams;
-    private Double fiberGrams;
     private Double sugarGrams;
 
     private Double rating;
@@ -36,8 +33,9 @@ public class Product {
     private Integer numberOfComments;
     private Instant created;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Rate> ratings;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "commentId", referencedColumnName = "id")
+    private List<ProductComment> comments;
 
 
 }

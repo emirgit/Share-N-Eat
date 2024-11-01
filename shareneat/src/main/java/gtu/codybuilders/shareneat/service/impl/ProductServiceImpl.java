@@ -74,7 +74,6 @@ public class ProductServiceImpl implements ProductService {
             case "protein" -> Comparator.comparing(Product::getProteinGrams);
             case "carbohydrates" -> Comparator.comparing(Product::getCarbohydrateGrams);
             case "fat" -> Comparator.comparing(Product::getFatGrams);
-            case "fiber" -> Comparator.comparing(Product::getFiberGrams);
             case "sugar" -> Comparator.comparing(Product::getSugarGrams);
             case "rating" -> Comparator.comparing(Product::getRating);
             case "created" -> Comparator.comparing(Product::getCreated);

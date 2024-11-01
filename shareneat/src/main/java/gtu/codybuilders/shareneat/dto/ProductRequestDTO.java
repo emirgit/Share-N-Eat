@@ -19,7 +19,6 @@ public class ProductRequestDTO {
     private Double proteinGrams;
     private Double carbohydrateGrams;
     private Double fatGrams;
-    private Double fiberGrams;
     private Double sugarGrams;
 
     private Double rating;
