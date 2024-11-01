@@ -6,14 +6,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class UserRequestDto {
+public class LoginRequestDto {
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Please provide a valid email address")
     private String email;
-
-    @NotEmpty(message = "User name cannot be empty")
-    @Size(min = 8, message = "Username must be at least 8 characters long")
-    private String username;
 
     @NotEmpty(message = "Password cannot be empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")
