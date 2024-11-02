@@ -21,7 +21,7 @@ public class FavoritePost {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId", referencedColumnName = "id")
+    @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
 
     public FavoritePost(User user, Post post) {

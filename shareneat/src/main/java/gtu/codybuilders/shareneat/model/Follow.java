@@ -1,12 +1,12 @@
 package gtu.codybuilders.shareneat.model;
 
-import java.time.Instant;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 
 @Data
 @Builder
@@ -19,11 +19,11 @@ public class Follow {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id", referencedColumnName = "userId", nullable = false)
+    @JoinColumn(name = "followerId", referencedColumnName = "userId", nullable = false)
     private User follower;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id", referencedColumnName = "userId", nullable = false)
+    @JoinColumn(name = "followedId", referencedColumnName = "userId", nullable = false)
     private User followed;
 
     private Instant followedAt;
