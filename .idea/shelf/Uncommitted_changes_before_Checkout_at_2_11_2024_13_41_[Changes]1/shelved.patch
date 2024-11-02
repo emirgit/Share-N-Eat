@@ -1,0 +1,64 @@
+Index: shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java
+===================================================================
+diff --git a/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java b/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java
+new file mode 100644
+--- /dev/null	
++++ b/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java	
+@@ -0,0 +1,32 @@
++package gtu.codybuilders.shareneat.controller;
++
++import gtu.codybuilders.shareneat.dto.UserProfileDto;
++import gtu.codybuilders.shareneat.model.User;
++import gtu.codybuilders.shareneat.service.UserService;
++import gtu.codybuilders.shareneat.util.AuthUtil;
++import org.modelmapper.ModelMapper;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.GetMapping;
++import org.springframework.web.bind.annotation.RequestMapping;
++import org.springframework.web.bind.annotation.RestController;
++
++@RestController
++@RequestMapping("/user")
++public class UserController {
++
++    private final UserService userService;
++    private final ModelMapper modelMapper;
++
++    public UserController(UserService userService, ModelMapper modelMapper) {
++        this.userService = userService;
++        this.modelMapper = modelMapper;
++    }
++
++    @GetMapping("/profile")
++    public ResponseEntity<UserProfileDto> getUserProfile() {
++        Long userId = AuthUtil.getUserId();
++        User user = userService.findUserById(userId);
++        UserProfileDto userProfileDto = modelMapper.map(user, UserProfileDto.class);
++        return ResponseEntity.ok(userProfileDto);
++    }
++}
+Index: shareneat/src/main/java/gtu/codybuilders/shareneat/dto/UserProfileDto.java
+===================================================================
+diff --git a/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/UserProfileDto.java b/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/UserProfileDto.java
+new file mode 100644
+--- /dev/null	
++++ b/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/UserProfileDto.java	
+@@ -0,0 +1,18 @@
++package gtu.codybuilders.shareneat.dto;
++
++import gtu.codybuilders.shareneat.model.Role;
++import lombok.Data;
++
++@Data
++public class UserProfileDto {
++    private Long userId;
++    private String fullName;
++    private String username;
++    private Role role;
++    private String profilePictureUrl; // URL to the user's profile picture
++    private String bio; // Short biography or description of the user
++    private Integer followersCount; // Number of followers
++    private Integer followingCount; // Number of accounts the user follows
++    private Integer postsCount; // Number of posts the user has made
++
++}
