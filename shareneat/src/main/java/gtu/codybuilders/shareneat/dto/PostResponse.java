@@ -17,7 +17,10 @@ public class PostResponse {
     private String description;   
     private String url;            
     private String username;       
-    private Instant createdDate; 
-    private Double averageRate;   
-    private Integer totalRaters;   
+    private Instant createdDate;
+    private Integer likeCount; 
+    private Double averageRateExpert;
+    private Double averageRateRegular;   
+    private Integer totalRatersExpert;
+    private Integer totalRatersRegular;   
 }
