@@ -9,6 +9,7 @@ import ChangePhoto from './pages/ChangeUsername';
 import ChangeDescription from './pages/ChangeDescription';
 import HelpPage from './pages/HelpPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 // import ProductPage from './pages/ProductPage';
 // import ProfilePage from './pages/ProfilePage';
@@ -26,6 +27,7 @@ function App() {
             <Route path="/change-description" element={<ChangeDescription />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
                 {/* <Route path="/product" component={ProductPage} />
                 <Route path="/profile" component={ProfilePage} /> */}
             </Routes>
