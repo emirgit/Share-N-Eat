@@ -12,5 +12,6 @@ public interface PostService {
     List<PostResponse> getAllPosts(); 
     PostResponse getPostById(Long postId);   
     List<PostResponse> getAllPostsByUser(String username);  
+    List<PostResponse> getPostsForUser();
 }
 

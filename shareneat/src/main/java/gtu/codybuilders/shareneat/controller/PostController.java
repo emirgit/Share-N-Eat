@@ -52,4 +52,11 @@ public class PostController {
         List<PostResponse> posts = postService.getAllPostsByUser(username);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<List<PostResponse>> getPostsForUser() {
+        List<PostResponse> posts = postService.getPostsForUser();
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+    
 }
