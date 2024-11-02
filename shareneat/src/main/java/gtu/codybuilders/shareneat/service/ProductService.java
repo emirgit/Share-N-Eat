@@ -1,20 +1,27 @@
 package gtu.codybuilders.shareneat.service;
 
-import gtu.codybuilders.shareneat.dto.ProductCreateDTO;
-import gtu.codybuilders.shareneat.dto.ProductDeleteDTO;
-import gtu.codybuilders.shareneat.dto.ProductUpdateDTO;
-import gtu.codybuilders.shareneat.dto.ProductGetAllDTO;
+import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
+import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
 
-    List<ProductGetAllDTO> getAll();
+    List<ProductResponseDTO> getAll();
 
-    void createProduct(ProductCreateDTO productCreateDTO);
+    void createProduct(ProductRequestDTO productRequestDTO);
 
-    void deleteProduct(ProductDeleteDTO productDeleteDTO);
+    void deleteProduct(long productId);
 
-    void updateProduct(ProductUpdateDTO productUpdateDTO);
+    void updateProduct(ProductRequestDTO productRequestDTO, long productId);
+
+    ProductResponseDTO getProductById(long productId);
+
+    List<ProductResponseDTO> getSortedProducts(String criteria, String asc);
+
+    List<ProductResponseDTO> searchProducts(String keyword);
+
+    List<ProductResponseDTO> filterProducts(Map<String, String> filters);
 
 }

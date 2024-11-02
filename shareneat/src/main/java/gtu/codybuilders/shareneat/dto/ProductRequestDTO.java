@@ -1,25 +1,18 @@
-package gtu.codybuilders.shareneat.model;
+package gtu.codybuilders.shareneat.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class ProductRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String brand;
     private String name;
+    private String brand;
     private String imageUrl;
 
     private Double calories;
@@ -32,10 +25,5 @@ public class Product {
     private Integer ratingCount;
     private Integer numberOfComments;
     private Instant created;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commentId", referencedColumnName = "id")
-    private List<ProductComment> comments;
-
 
 }
