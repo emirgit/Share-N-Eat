@@ -39,5 +39,12 @@ public class CommentController {
                 .body(commentService.getAllCommentsForPost(postId));
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<List<CommentDto>> getAllCommentsForUser(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(commentService.getAllCommentsForUser());
+    }
+
+
 
 }
