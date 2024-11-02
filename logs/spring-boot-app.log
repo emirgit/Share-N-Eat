@@ -1376,3 +1376,40 @@ io.jsonwebtoken.security.SignatureException: JWT signature does not match locall
 2024-11-02 19:33:41 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-11-02 19:33:41 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2024-11-02 19:33:41 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-11-02 22:33:37 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-11-02 22:33:37 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 21.0.1 with PID 5369 (/Users/bariserengezici/Desktop/Share-N-Eat/shareneat/target/classes started by bariserengezici in /Users/bariserengezici/Desktop/Share-N-Eat)
+2024-11-02 22:33:37 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-02 22:33:37 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-11-02 22:33:37 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-11-02 22:33:38 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-02 22:33:38 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 29 ms. Found 12 JPA repository interfaces.
+2024-11-02 22:33:38 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-11-02 22:33:38 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-02 22:33:38 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-02 22:33:38 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-11-02 22:33:38 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-02 22:33:38 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 528 ms
+2024-11-02 22:33:38 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-02 22:33:38 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-02 22:33:38 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-02 22:33:38 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-02 22:33:38 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-02 22:33:38 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3beabbd7
+2024-11-02 22:33:38 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-02 22:33:38 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-02 22:33:39 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-02 22:33:39 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-02 22:33:39 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-11-02 22:33:39 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-02 22:33:39 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-02 22:33:40 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-02 22:33:40 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-02 22:33:40 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-11-02 22:33:40 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 2.332 seconds (process running for 2.694)
+2024-11-02 22:33:40 - g.c.s.service.impl.UserServiceImpl - User registered successfully: m.emir.kara@outlook.com
+2024-11-02 22:33:46 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-02 22:33:46 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-11-02 22:33:46 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-11-02 22:47:13 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-02 22:47:13 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-11-02 22:47:13 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
