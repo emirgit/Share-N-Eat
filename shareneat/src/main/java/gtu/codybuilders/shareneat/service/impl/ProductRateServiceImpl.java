@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ProductRateServiceImpl implements ProductRateService {
 
-    private final ProductRateService productRateService;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 

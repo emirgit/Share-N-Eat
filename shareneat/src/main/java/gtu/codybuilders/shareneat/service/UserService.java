@@ -3,6 +3,7 @@ package gtu.codybuilders.shareneat.service;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
 import gtu.codybuilders.shareneat.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -21,4 +22,6 @@ public interface UserService {
     User resetPassword(String token, String newPassword);
 
     public void deleteUser(String email);
+
+    List<User> searchUsers(String query); // Added for SearchController
 }

@@ -140,6 +140,14 @@ public class PostServiceImpl implements PostService{
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PostResponse> searchPosts(String query) {
+        return postRepository.findByPostNameContainingIgnoreCase(query)
+                                .stream()
+                                .map(postMapper::mapToPostResponse)
+                                .collect(Collectors.toList());
+    }
     
 
 }

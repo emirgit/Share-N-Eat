@@ -27,4 +27,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findTop100ByOrderByCreatedDateDesc();
 
+    List<Post> findByPostNameContainingIgnoreCase(String postName);
+
 }

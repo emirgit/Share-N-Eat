@@ -64,6 +64,47 @@ public class RateServiceImpl implements RateService{
         postRepository.save(post);
     }
 
+    @Transactional
+    public void unrate(Long postId) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + postId));
+
+        Optional<Rate> existingRate = rateRepository.findTopByPostAndUserOrderByRateIdDesc(post, user);
+
+        if (existingRate.isPresent()) {
+            Rate rate = existingRate.get();
+            double oldRating = rate.getRating();
+            
+            rateRepository.delete(rate); // Delete the rating
+
+            // Update the average rating and total raters count based on user role
+            if (user.getRole() == Role.ROLE_USER) {
+                post.setTotalRatersRegular(post.getTotalRatersRegular() - 1);
+                post.setAverageRateRegular(calculateUpdatedAverageOnUnrate(post.getAverageRateRegular(), post.getTotalRatersRegular(), oldRating));
+            } else {
+                post.setTotalRatersExpert(post.getTotalRatersExpert() - 1);
+                post.setAverageRateExpert(calculateUpdatedAverageOnUnrate(post.getAverageRateExpert(), post.getTotalRatersExpert(), oldRating));
+            }
+
+            postRepository.save(post);
+        } else {
+            throw new IllegalArgumentException("No rating found for the user on this post.");
+        }
+    }
+
+    private double calculateUpdatedAverageOnUnrate(Double currentAverage, Integer totalRaters, double oldRating) {
+        if (totalRaters == 0) {
+            return 0.0; // Reset to 0 if no raters left
+        }
+
+        return ((currentAverage * (totalRaters + 1)) - oldRating) / totalRaters;
+    }
+
     private double calculateNewAverage(Double currentAverage, Integer totalRaters, double newRating) {
         if (totalRaters == 1) {
             return newRating;

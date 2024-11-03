@@ -5,6 +5,8 @@ import gtu.codybuilders.shareneat.service.impl.RateServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +23,11 @@ public class RateController {
     public ResponseEntity<Void> rate(@RequestBody RateDto rateDto) {
         rateService.rate(rateDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> unrate(@PathVariable Long postId) {
+        rateService.unrate(postId);
+        return ResponseEntity.ok().build();
     }
 }

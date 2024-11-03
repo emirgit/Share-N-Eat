@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -130,5 +131,9 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
-
+    // Added for SearchController
+    @Override
+    public List<User> searchUsers(String query) {
+        return repository.findByUsernameContainingIgnoreCase(query);
+    }
 }
