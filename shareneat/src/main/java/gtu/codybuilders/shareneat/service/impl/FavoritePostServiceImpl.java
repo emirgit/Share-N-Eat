@@ -1,9 +1,11 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import gtu.codybuilders.shareneat.dto.FavoritePostDto;
 import gtu.codybuilders.shareneat.exception.FavoritePostNotFound;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
@@ -45,33 +47,36 @@ public class FavoritePostServiceImpl implements FavoritePostService{
                 .orElseThrow(() -> new FavoritePostNotFound("Favorite post not found for the specified user and post ID!"));
         favoritePostRepository.delete(favoritePost);
     }       
-/* 
-    @Override                                                   
-    public void removeFavoritePost(Long postId) {
-        Long userId = AuthUtil.getUserId(); 
-    
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found!"));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("Post not found!"));
-        FavoritePost favoritePost = favoritePostRepository.findByUserAndPost(user, post)
-                .orElseThrow(() -> new FavoritePostNotFound("Favorite post not found for the specified user and post ID!"));
-        favoritePostRepository.delete(favoritePost);
-    } */
+
         
     @Override
-    public List<FavoritePost> getFavoritePostsOfUser(){
-        Long userId = AuthUtil.getUserId(); 
+    public List<FavoritePostDto> getFavoritePostsOfUser() {
+        Long userId = AuthUtil.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
-        return favoritePostRepository.findByUser(user);
+        
+        return favoritePostRepository.findByUser(user)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<FavoritePost> getFavoritePostsByUserId(Long userId) {
+    public List<FavoritePostDto> getFavoritePostsByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
-        return favoritePostRepository.findByUser(user);
+        
+        return favoritePostRepository.findByUser(user)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    private FavoritePostDto mapToDto(FavoritePost favoritePost) {
+        return FavoritePostDto.builder()
+                .postId(favoritePost.getPost().getPostId())
+                .username(favoritePost.getUser().getUsername())
+                .build();
     }
 
 }
