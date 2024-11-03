@@ -6655,3 +6655,65 @@ Caused by: org.postgresql.util.PSQLException: ERROR: update or delete on table "
 2024-11-03 21:39:32 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
 2024-11-03 21:39:32 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.689 seconds (process running for 9.337)
 2024-11-03 21:39:33 - g.c.s.service.impl.UserServiceImpl - User registered successfully: m.emir.kara@outlook.com
+2024-11-03 21:45:27 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-11-03 21:45:27 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 26788 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
+2024-11-03 21:45:27 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-03 21:45:28 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-11-03 21:45:28 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-11-03 21:45:29 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-03 21:45:29 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 104 ms. Found 12 JPA repository interfaces.
+2024-11-03 21:45:29 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-11-03 21:45:29 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-03 21:45:30 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-03 21:45:30 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-11-03 21:45:30 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-03 21:45:30 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2050 ms
+2024-11-03 21:45:30 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-03 21:45:30 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-03 21:45:30 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-03 21:45:30 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-03 21:45:30 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-03 21:45:30 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@694150b2
+2024-11-03 21:45:30 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-03 21:45:31 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-03 21:45:32 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-03 21:45:32 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-03 21:45:32 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-11-03 21:45:32 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-03 21:45:33 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-03 21:45:34 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-03 21:45:34 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-03 21:45:34 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-11-03 21:45:34 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 7.46 seconds (process running for 8.021)
+2024-11-03 21:45:35 - g.c.s.service.impl.UserServiceImpl - User registered successfully: m.emir.kara@outlook.com
+2024-11-03 21:50:50 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-11-03 21:50:50 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 21704 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
+2024-11-03 21:50:50 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-03 21:50:50 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-11-03 21:50:50 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-11-03 21:50:51 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-03 21:50:51 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 115 ms. Found 12 JPA repository interfaces.
+2024-11-03 21:50:52 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-11-03 21:50:52 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-03 21:50:52 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-03 21:50:52 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-11-03 21:50:52 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-03 21:50:52 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2400 ms
+2024-11-03 21:50:53 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-03 21:50:53 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-03 21:50:53 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-03 21:50:53 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-03 21:50:53 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-03 21:50:54 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3034caf9
+2024-11-03 21:50:54 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-03 21:50:54 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-03 21:50:55 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-03 21:50:55 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-03 21:50:56 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-11-03 21:50:56 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-03 21:50:57 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-03 21:50:58 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-03 21:50:58 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-03 21:50:58 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-11-03 21:50:58 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.519 seconds (process running for 9.183)
+2024-11-03 21:50:59 - g.c.s.service.impl.UserServiceImpl - User registered successfully: m.emir.kara@outlook.com
