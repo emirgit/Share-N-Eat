@@ -37,5 +37,9 @@ public class Product {
     @JoinColumn(name = "commentId", referencedColumnName = "id")
     private List<ProductComment> comments;
 
+    private Double averageRateExpert;
+    private Double averageRateRegular;
+    private Integer totalRatersExpert;
+    private Integer totalRatersRegular;
 
 }
