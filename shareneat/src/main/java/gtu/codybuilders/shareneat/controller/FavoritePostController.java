@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import gtu.codybuilders.shareneat.model.FavoritePost;
+import gtu.codybuilders.shareneat.dto.FavoritePostDto;
 import gtu.codybuilders.shareneat.service.FavoritePostService;
 import lombok.AllArgsConstructor;
 
@@ -29,14 +29,14 @@ public class FavoritePostController {
     }
 
     @GetMapping("/current-user")
-    public ResponseEntity<List<FavoritePost>> getFavoritePost() {
+    public ResponseEntity<List<FavoritePostDto>> getFavoritePost() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(favoritePostService.getFavoritePostsOfUser());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<FavoritePost>> getFavoritePostsByUserId(@PathVariable Long userId) {
-        List<FavoritePost> favoritePosts = favoritePostService.getFavoritePostsByUserId(userId);
+    public ResponseEntity<List<FavoritePostDto>> getFavoritePostsByUserId(@PathVariable Long userId) {
+        List<FavoritePostDto> favoritePosts = favoritePostService.getFavoritePostsByUserId(userId);
         return ResponseEntity.ok(favoritePosts);
     }
 

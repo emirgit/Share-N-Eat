@@ -148,6 +148,14 @@ public class PostServiceImpl implements PostService{
                                 .map(postMapper::mapToPostResponse)
                                 .collect(Collectors.toList());
     }
+
+    @Override
+    public String returnProfilePhoto(){
+        Long userId = AuthUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+        return user.getProfilePictureUrl();
+    }
     
 
 }
