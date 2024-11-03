@@ -1,14 +1,14 @@
 package gtu.codybuilders.shareneat.service;
 
-import gtu.codybuilders.shareneat.model.FavoriteProduct;
+import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 
 import java.util.List;
 
 public interface FavoriteProductService {
 
-    void addFavoriteProduct(Long productId, Long userId);
+    void addFavoriteProduct(Long productId);
 
-    void removeFavoriteProduct(Long productId, Long userId);
+    void removeFavoriteProduct(Long productId);
 
-    List<FavoriteProduct> getFavoriteProductsOfUser(Long userId);
+    List<ProductResponseDTO> getFavoriteProductsOfUser();
 }

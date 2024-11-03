@@ -33,8 +33,7 @@ public class Product {
     private Integer numberOfComments;
     private Instant created;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commentId", referencedColumnName = "id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductComment> comments;
 
     private Double averageRateExpert;
