@@ -48,6 +48,31 @@ public class DataInitializer {
             userService.saveUser(adminUser);
 
             System.out.println("Admin user created with email: " + adminEmail);
+
+
+            String dummyEmail = "dummy@outlook.com";
+
+            // Check if admin user already exists
+            if (userService.isUserExists(dummyEmail))
+                userService.deleteUser(dummyEmail);
+
+            User dummyUser = new User();
+            dummyUser.setEmail(dummyEmail);
+            dummyUser.setPassword("dummy.deneme");
+            dummyUser.setUsername("DummyTheUser");
+            dummyUser.setCreated(Instant.now());
+            dummyUser.setEnabled(true);
+            dummyUser.setRole(Role.ROLE_USER);
+
+            // Set default values for other fields
+            dummyUser.setFollowersCount(0);
+            dummyUser.setFollowingCount(0);
+            dummyUser.setPostsCount(0);
+            dummyUser.setLastLogin(Instant.now());
+
+            userService.saveUser(dummyUser);
+
+            System.out.println("Admin user created with email: " + dummyEmail);
         };
     }
 }
