@@ -1,7 +1,5 @@
 package gtu.codybuilders.shareneat.dto;
 
-import gtu.codybuilders.shareneat.model.Product;
-import gtu.codybuilders.shareneat.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +13,8 @@ public class ProductCommentResponseDTO {
 
     private Long id;
     private String text;
-    private Product product;
-    private User user;
+    private Long productId;
+    private Long userId;
     private Instant createdDate;
 
 }

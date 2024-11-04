@@ -4,10 +4,9 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.dto.ProductRateRequestDTO;
 import gtu.codybuilders.shareneat.service.ProductRateService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/product-rate")
@@ -19,7 +18,14 @@ public class ProductRateController {
     @PostMapping
     public ResponseEntity<Void> rateProduct(ProductRateRequestDTO productRateRequestDTO) {
         productRateService.rateProduct(productRateRequestDTO);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> unrateProduct(@PathVariable Long productId) {
+        productRateService.unrateProduct(productId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }

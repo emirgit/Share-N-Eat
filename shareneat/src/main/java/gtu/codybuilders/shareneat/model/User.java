@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,6 +34,21 @@ public class User{
     private boolean enabled;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteProduct> favoriteProducts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductComment> productComments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rate> rates;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoritePost> favoritePosts;
 
 
     // New fields for social media features

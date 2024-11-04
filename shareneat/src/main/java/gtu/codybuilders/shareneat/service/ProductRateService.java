@@ -7,5 +7,5 @@ public interface ProductRateService {
 
     void rateProduct(ProductRateRequestDTO productRateRequestDTO);
 
-
+    void unrateProduct(Long productId);
 }

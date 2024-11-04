@@ -59,13 +59,15 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     //@ResponseStatus()
-    public void delete(@PathVariable long productId){
+    public ResponseEntity<Void> delete(@PathVariable long productId){
         productService.deleteProduct(productId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{productId}")
-    public void update(@RequestBody ProductRequestDTO productRequestDTO, @PathVariable long productId){
+    public ResponseEntity<Void> update(@RequestBody ProductRequestDTO productRequestDTO, @PathVariable long productId){
         productService.updateProduct(productRequestDTO, productId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

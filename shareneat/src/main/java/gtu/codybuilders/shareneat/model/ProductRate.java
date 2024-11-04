@@ -29,7 +29,7 @@ public class ProductRate {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User userId;
+    private User user;
 
 
 }

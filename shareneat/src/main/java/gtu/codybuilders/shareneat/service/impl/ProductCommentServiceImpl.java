@@ -8,13 +8,13 @@ import gtu.codybuilders.shareneat.model.Product;
 import gtu.codybuilders.shareneat.model.ProductComment;
 import gtu.codybuilders.shareneat.repository.ProductCommentRepository;
 import gtu.codybuilders.shareneat.repository.ProductRepository;
+import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.ProductCommentService;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -22,20 +22,36 @@ public class ProductCommentServiceImpl implements ProductCommentService {
 
     private final ProductCommentRepository productCommentRepository;
     private final ProductRepository productRepository;
-    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+
 
     @Override
     public List<ProductCommentResponseDTO> getAllProductCommentsOfProduct(long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
+        List<ProductComment> productComments = productCommentRepository.findAllByProduct(product);
 
-        return productCommentRepository.findAllByProduct(product).stream()
-                .map(productComment -> modelMapper.map(productComment, ProductCommentResponseDTO.class))
-                .collect(Collectors.toList());
+        return productComments.stream().map(productComment -> {
+            ProductCommentResponseDTO productCommentResponseDTO = new ProductCommentResponseDTO();
+            productCommentResponseDTO.setId(productComment.getId());
+            productCommentResponseDTO.setText(productComment.getText());
+            productCommentResponseDTO.setProductId(productComment.getProduct().getId());
+            productCommentResponseDTO.setUserId(productComment.getUser().getUserId());
+            productCommentResponseDTO.setCreatedDate(productComment.getCreatedDate());
+            return productCommentResponseDTO;
+        }).toList();
     }
 
     @Override
     public void createProductComment(ProductCommentRequestDTO productCommentRequestDTO) {
-        ProductComment productComment = modelMapper.map(productCommentRequestDTO, ProductComment.class);
+
+        Product product = productRepository.findById(productCommentRequestDTO.getProductId()).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productCommentRequestDTO.getProductId()));
+
+        ProductComment productComment = new ProductComment();
+        productComment.setText(productCommentRequestDTO.getText());
+        productComment.setProduct(product);
+        productComment.setUser(userRepository.findById(AuthUtil.getUserId()).orElseThrow());
+        productComment.setCreatedDate(productCommentRequestDTO.getCreatedDate());
+
         productCommentRepository.save(productComment);
     }
 
