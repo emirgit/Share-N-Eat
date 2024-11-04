@@ -50,6 +50,16 @@ public class User{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoritePost> favoritePosts;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followers; // Users following this user
+    
+    @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> following; // Users this user is following
+    
+
 
     // New fields for social media features
     private String profilePictureUrl; // URL to the user's profile picture

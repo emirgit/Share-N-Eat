@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,4 +30,10 @@ public class Post {
     private Double averageRateRegular;
     private Integer totalRatersExpert;
     private Integer totalRatersRegular;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rate> rates;
 }
