@@ -22,6 +22,8 @@ function App() {
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-reset" element={<PrivateRoute element={ForgotPassword} />} />
+        <Route path="/reset-password" element={<PrivateRoute element={ResetPassword} />} />
 
         {/* Protected Routes */}
         <Route path="/" element={<PrivateRoute element={MainPage} />} />
@@ -32,8 +34,7 @@ function App() {
         <Route path="/change-photo" element={<PrivateRoute element={ChangePhoto} />} />
         <Route path="/change-description" element={<PrivateRoute element={ChangeDescription} />} />
         <Route path="/help" element={<PrivateRoute element={HelpPage} />} />
-        <Route path="/verify-reset" element={<PrivateRoute element={ForgotPassword} />} />
-        <Route path="/reset-password" element={<PrivateRoute element={ResetPassword} />} />
+        
 
       </Routes>
     </Router>
