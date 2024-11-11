@@ -53,6 +53,12 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+    @GetMapping("/current-user/range")
+    public ResponseEntity<List<PostResponse>> getPostsForCurrentUserInRange(@RequestParam int start, @RequestParam int end) {
+        List<PostResponse> posts = postService.getPostsForCurrentUserInRange(start, end);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
     @GetMapping("/current-user")
     public ResponseEntity<List<PostResponse>> getPostsForUser() {
         List<PostResponse> posts = postService.getPostsForUser();

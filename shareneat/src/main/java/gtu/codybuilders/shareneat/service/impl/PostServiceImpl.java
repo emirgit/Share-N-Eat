@@ -86,6 +86,19 @@ public class PostServiceImpl implements PostService{
                              .map(postMapper::mapToPostResponse)
                              .toList();
     }
+
+    @Override
+    public List<PostResponse> getPostsForCurrentUserInRange(int start, int end) {
+        Long userId = AuthUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(start, end - start));
+        return posts.stream()
+                .map(postMapper::mapToPostResponse)
+                .collect(Collectors.toList());
+    }
+
     
     @Override
     public List<PostResponse> getPostsForUser() {
