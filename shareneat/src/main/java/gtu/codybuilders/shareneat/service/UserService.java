@@ -1,8 +1,12 @@
 package gtu.codybuilders.shareneat.service;
 
+import gtu.codybuilders.shareneat.dto.UserProfileDTO;
+import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
 import gtu.codybuilders.shareneat.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +25,13 @@ public interface UserService {
     PasswordResetToken validateToken(String token);
     User resetPassword(String token, String newPassword);
 
-    public void deleteUser(String email);
+    void deleteUser(String email);
 
     List<User> searchUsers(String query); // Added for SearchController
+
+    public UserProfileDTO convertToUserProfileDTO(User user);
+
+    User updateUserProfile(UserProfileRequestDTO userRequestDTO, Long userId);
+
+    String saveProfilePhoto(User user, MultipartFile file) throws IOException;
 }

@@ -25,30 +25,6 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initAdminUser() {
         return args -> {
-            String adminEmail = "m.emir.kara@outlook.com";
-
-            // Check if admin user already exists
-            if (userService.isUserExists(adminEmail))
-                userService.deleteUser(adminEmail);
-
-            User adminUser = new User();
-            adminUser.setEmail(adminEmail);
-            adminUser.setPassword("Emirshareneat.deneme");
-            adminUser.setUsername("EmirtheAdmin");
-            adminUser.setCreated(Instant.now());
-            adminUser.setEnabled(true);
-            adminUser.setRole(Role.ROLE_ADMIN);
-
-            // Set default values for other fields
-            adminUser.setFollowersCount(0);
-            adminUser.setFollowingCount(0);
-            adminUser.setPostsCount(0);
-            adminUser.setLastLogin(Instant.now());
-
-            userService.saveUser(adminUser);
-
-            System.out.println("Admin user created with email: " + adminEmail);
-
 
             String dummyEmail = "dummy@outlook.com";
 
@@ -62,13 +38,15 @@ public class DataInitializer {
             dummyUser.setUsername("DummyTheUser");
             dummyUser.setCreated(Instant.now());
             dummyUser.setEnabled(true);
+            dummyUser.setBio("I'm the dummy to serve your desire. I happy to assist you");
             dummyUser.setRole(Role.ROLE_USER);
 
             // Set default values for other fields
-            dummyUser.setFollowersCount(0);
-            dummyUser.setFollowingCount(0);
-            dummyUser.setPostsCount(0);
+            dummyUser.setFollowersCount(121);
+            dummyUser.setFollowingCount(999);
+            dummyUser.setPostsCount(5);
             dummyUser.setLastLogin(Instant.now());
+            dummyUser.setProfilePictureUrl("dummy.png");
 
             userService.saveUser(dummyUser);
 

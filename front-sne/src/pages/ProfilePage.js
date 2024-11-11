@@ -161,74 +161,147 @@
 
 // export default ProfilePage;
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import ramenImg from '../assets/ramen.jpeg';
-import userImg from '../assets/profilepic-shrneat.png'
+import axios from 'axios';
 
 const ProfilePage = () => {
-    // User data with initial state values for editing
     const [user, setUser] = useState({
-        profilePhoto: userImg, // Placeholder image
-        username: 'JohnDoe',
-        isCertified: true,
-        description: 'Food lover and passionate chef. I love to share my favorite recipes with everyone!',
-        followers: 1200,
-        following: 180,
+        username: '',
+        isCertified: false,
+        bio: '',
+        followers: 0,
+        following: 0,
     });
 
-    const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
+    const [isEditing, setIsEditing] = useState(false);
     const [newUsername, setNewUsername] = useState(user.username);
-    const [newDescription, setNewDescription] = useState(user.description);
+    const [newBio, setNewBio] = useState(user.bio);
+    const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+
+    useEffect(() => {
+        const fetchUserDataAndProfilePicture = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error("Authorization token is missing");
+                    return;
+                }
+                
+                const userDataResponse = await axios.get('http://localhost:8080/api/user/my-account', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                
+                const userData = userDataResponse.data;
+                setUser({
+                    username: userData.username,
+                    isCertified: userData.isCertified,
+                    bio: userData.bio,
+                    followers: userData.followersCount,
+                    following: userData.followingCount,
+                });
+                setNewUsername(userData.username);
+                setNewBio(userData.bio);
+
+                const profilePictureResponse = await axios.get('http://localhost:8080/api/user/my-account/profile-picture', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    responseType: 'blob',
+                });
+                setProfilePictureUrl(URL.createObjectURL(profilePictureResponse.data));
+
+            } catch (error) {
+                console.error("Error fetching user data or profile picture", error);
+            }
+        };
+
+        fetchUserDataAndProfilePicture();
+    }, []);
+    
 
     const posts = [
         { id: 1, imageUrl: ramenImg },
         { id: 2, imageUrl: ramenImg },
         { id: 3, imageUrl: ramenImg },
         { id: 4, imageUrl: ramenImg },
-        // Add more posts as needed
     ];
 
     const handleEditClick = () => {
         setIsEditing(true);
     };
 
-    const handleSaveChanges = () => {
-        setUser({
-            ...user,
-            username: newUsername,
-            description: newDescription,
-        });
-        setIsEditing(false); // Exit edit mode
-    };
+    const handleSaveChanges = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("Authorization token is missing");
+                return;
+            }
+            
+            console.log("Saving changes:", { newUsername, newBio });
+            
+            await axios.put('http://localhost:8080/api/user/my-account', {
+                username: newUsername,
+                bio: newBio,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-    const handlePhotoChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setUser({ ...user, profilePhoto: URL.createObjectURL(file) });
+            setUser({
+                ...user,
+                username: newUsername,
+                bio: newBio,
+            });
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error saving user data", error);
         }
     };
 
+    const handlePhotoChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                const token = localStorage.getItem('token');
+                const formData = new FormData();
+                formData.append('profilePhoto', file); // 'profilePhoto' is the key used in the backend
+    
+                // Upload the file to the backend
+                await axios.put('http://localhost:8080/api/user/my-account/upload-photo', formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data', // Required for file uploads
+                    },
+                });
+    
+                // Update the profile picture preview
+                setProfilePictureUrl(URL.createObjectURL(file));
+            } catch (error) {
+                console.error("Error uploading profile photo", error);
+            }
+        }
+    };
+    
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
-            {/* Navbar */}
             <Navbar />
-
             <div className="flex flex-row w-full">
-                {/* Sidebar */}
                 <Sidebar />
-
-                {/* Profile Content */}
                 <div className="flex-1 flex flex-col items-center p-8">
-                    {/* Profile Info Section */}
                     <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8 mb-8 flex items-start">
-                        {/* Profile Photo with Hover Effect */}
                         <div className="relative w-32 h-32 mr-6">
                             <img
-                                src={user.profilePhoto}
+                                src={profilePictureUrl}
                                 alt="Profile"
                                 className="w-32 h-32 rounded-full object-cover"
                             />
@@ -246,8 +319,6 @@ const ProfilePage = () => {
                                 className="hidden"
                             />
                         </div>
-
-                        {/* Username, Certification, Followers, and Description */}
                         <div className="flex flex-col w-full">
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center">
@@ -285,12 +356,12 @@ const ProfilePage = () => {
                             <div className="mt-4">
                                 {isEditing ? (
                                     <textarea
-                                        value={newDescription}
-                                        onChange={(e) => setNewDescription(e.target.value)}
+                                        value={newBio}
+                                        onChange={(e) => setNewBio(e.target.value)}
                                         className="w-full p-2 border rounded-md"
                                     />
                                 ) : (
-                                    <p className="text-gray-700">{user.description}</p>
+                                    <p className="text-gray-700">{user.bio}</p>
                                 )}
                             </div>
                             {isEditing && (
@@ -303,10 +374,8 @@ const ProfilePage = () => {
                             )}
                         </div>
                     </div>
-
-                    {/* User's Posts Collection */}
-                     <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                         {posts.map((post) => (
+                    <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {posts.map((post) => (
                             <div 
                                 key={post.id} 
                                 className="bg-white rounded-3xl shadow-md overflow-hidden"

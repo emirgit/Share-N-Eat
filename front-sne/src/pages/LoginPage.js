@@ -11,12 +11,13 @@ const LoginPage = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/login', {
+            const response = await axios.post('http://localhost:8080/auth/login', {
                 email: email,
                 password: password,
             });
             // Store the JWT token in local storage or cookies
             localStorage.setItem('token', response.data.jwt);
+            console.log('Jwt:',localStorage.getItem('token')); 
             setError('');
             console.log('Logging in with:', email, password); // Moved inside try block
             navigate('/'); // Redirect to MainPage on successful login

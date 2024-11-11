@@ -1,13 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import logo from '../assets/logo.png';
-import userProfilePic from '../assets/profilepic-shrneat.png';
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isSubMenuOpen, setIsSubMenuOpen] = useState(false); // State for the settings sub-menu
+    const [profilePictureUrl, setProfilePictureUrl] = useState(null);
     const navigate = useNavigate();
     const dropdownRef = useRef(null); // Ref for the dropdown
+
+        // Fetch user profile picture on component mount
+        useEffect(() => {
+            const fetchProfilePicture = async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await axios.get('http://localhost:8080/api/user/my-account/profile-picture', {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        responseType: 'blob',
+                    });
+                    setProfilePictureUrl(URL.createObjectURL(response.data));
+                } catch (error) {
+                    console.error("Failed to fetch profile picture", error);
+                }
+            };
+    
+            fetchProfilePicture();
+        }, []);
+    
 
     // Toggle dropdown visibility
     const handleProfileClick = () => {
@@ -55,6 +77,7 @@ const Navbar = () => {
 
     // Logout function to navigate to Login Page
     const handleLogout = () => {
+        localStorage.removeItem('token');
         navigate('/login');
         setIsDropdownOpen(false);
         setIsSubMenuOpen(false);
@@ -72,14 +95,17 @@ const Navbar = () => {
             </div>
             <input 
                 type="text" 
-                placeholder="What do you cook ?" 
+                placeholder="What do you cook ?"
+                //Temporarily will not be used
+                //value={searchQuery}
+                //onChange={handleSearch} // Trigger search on input change
                 className="flex-1 mx-4 p-2 rounded-3xl border border-gray-300"
             />
             
             {/* User Profile Image and Dropdown */}
             <div className="relative">
                 <img
-                    src={userProfilePic}
+                    src={profilePictureUrl || 'defaultProfilePic.png'}
                     alt="User Profile"
                     className="w-10 h-10 rounded-full border-2 border-gray-300 cursor-pointer"
                     onClick={handleProfileClick}

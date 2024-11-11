@@ -1,5 +1,7 @@
 package gtu.codybuilders.shareneat.service.impl;
 
+import gtu.codybuilders.shareneat.dto.UserProfileDTO;
+import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.exception.UserAlreadyExistsException;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
 import gtu.codybuilders.shareneat.model.User;
@@ -11,7 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +26,8 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    private final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"),"shareneat", "src", "main", "resources", "static", "images");
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -135,5 +144,51 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> searchUsers(String query) {
         return repository.findByUsernameContainingIgnoreCase(query);
+    }
+
+    public UserProfileDTO convertToUserProfileDTO(User user) {
+        return UserProfileDTO.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .bio(user.getBio())
+                .followersCount(user.getFollowersCount())
+                .followingCount(user.getFollowingCount())
+                .postsCount(user.getPostsCount())
+                .role(user.getRole())
+                //.posts(user.getPosts().stream().map(this::convertToPostResponse).toList()) // Assuming you have a method to convert each post
+                .build();
+    }
+
+    public User updateUserProfile(UserProfileRequestDTO userRequestDTO, Long userId) {
+
+        Optional<User> userOptional = findUserById(userId);
+
+        return userOptional.map(user -> {
+            user.setBio(userRequestDTO.getBio());
+            user.setUsername(userRequestDTO.getUsername());
+            return repository.save(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
+
+    }
+
+    public String saveProfilePhoto(User user, MultipartFile file) throws IOException {
+        // Ensure the upload directory exists
+        Files.createDirectories(UPLOAD_DIR);
+
+        // Generate a unique file name
+        String fileName = user.getUsername() + "_" + file.getOriginalFilename(); // can be changed
+        Path filePath = UPLOAD_DIR.resolve(fileName);
+
+        System.out.println(filePath);
+        // Save the file to the file system
+        Files.write(filePath, file.getBytes());
+
+        // Update the user's profile picture path in the database
+        user.setProfilePictureUrl(fileName); // Save only the file name or relative path
+        repository.save(user);
+
+        // Return the file path or URL if needed
+        return filePath.toString();
     }
 }

@@ -68,6 +68,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(new UserResponseDto(jwt));
 
         } catch (BadCredentialsException e) {
+            logger.info("Bad credintials with" + request.getEmail());
             return ResponseEntity.status(401).body(new UserResponseDto("Invalid credentials"));
         }
     }
