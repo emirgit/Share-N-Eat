@@ -135,11 +135,11 @@ const Navbar = () => {
                                         <ul className="py-2">
                                             <li 
                                                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => navigateTo('/change-password')}
+                                                onClick={() => navigateTo('/verify-reset')}
                                             >
                                                 Change Password
                                             </li>
-                                            <li 
+                                            <li
                                                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500"
                                                 onClick={() => navigateTo('/delete-account')}
                                             >

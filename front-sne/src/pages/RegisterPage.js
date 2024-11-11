@@ -27,7 +27,7 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-[#0097b2] to-[#7ed957]">
             <h1 className="text-2xl font-semibold mb-6">Register</h1>
             <form onSubmit={handleRegister} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
                 {error && <div className="text-red-500 mb-4">{error}</div>}

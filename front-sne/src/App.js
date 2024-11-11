@@ -10,6 +10,8 @@ import ChangeDescription from './pages/ChangeDescription';
 import HelpPage from './pages/HelpPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 import PrivateRoute from './components/PrivateRoute'; // Make sure the path is correct
 
@@ -30,6 +32,9 @@ function App() {
         <Route path="/change-photo" element={<PrivateRoute element={ChangePhoto} />} />
         <Route path="/change-description" element={<PrivateRoute element={ChangeDescription} />} />
         <Route path="/help" element={<PrivateRoute element={HelpPage} />} />
+        <Route path="/verify-reset" element={<PrivateRoute element={ForgotPassword} />} />
+        <Route path="/reset-password" element={<PrivateRoute element={ResetPassword} />} />
+
       </Routes>
     </Router>
   );
