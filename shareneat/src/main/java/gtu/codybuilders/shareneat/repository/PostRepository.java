@@ -29,4 +29,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByPostNameContainingIgnoreCase(String postName);
 
+    List<Post> findByUserOrderByCreatedDateDesc(User user, Pageable pageable);
+
 }

@@ -304,6 +304,40 @@ gtu.codybuilders.shareneat.exception.ProductNotFoundException: Product not found
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
+2024-11-04 01:02:45 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-11-04 01:02:45 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 21.0.1 with PID 7125 (/Users/bariserengezici/Desktop/Share-N-Eat/shareneat/target/classes started by bariserengezici in /Users/bariserengezici/Desktop/Share-N-Eat)
+2024-11-04 01:02:45 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-04 01:02:45 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-11-04 01:02:45 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-11-04 01:02:46 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-04 01:02:46 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 29 ms. Found 12 JPA repository interfaces.
+2024-11-04 01:02:46 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-11-04 01:02:46 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-11-04 01:02:46 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-04 01:02:46 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-11-04 01:02:46 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-04 01:02:46 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 516 ms
+2024-11-04 01:02:46 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-04 01:02:46 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-04 01:02:46 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-04 01:02:46 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-04 01:02:46 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-04 01:02:46 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6c944e09
+2024-11-04 01:02:46 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-04 01:02:46 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-04 01:02:47 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-04 01:02:47 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-04 01:02:47 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-11-04 01:02:47 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-04 01:02:47 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-04 01:02:47 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-11-04 01:02:47 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-11-04 01:02:47 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-11-04 01:02:47 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 2.303 seconds (process running for 2.566)
+2024-11-04 01:02:48 - g.c.s.service.impl.UserServiceImpl - User registered successfully: m.emir.kara@outlook.com
+2024-11-04 01:03:38 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-04 01:03:38 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-11-04 01:03:38 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
 2024-11-04 10:41:30 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
 2024-11-04 10:41:30 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 12372 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
 2024-11-04 10:41:30 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"

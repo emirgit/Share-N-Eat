@@ -15,5 +15,7 @@ public interface PostService {
     List<PostResponse> getPostsForUser();
     List<PostResponse> searchPosts(String query);
     String returnProfilePhoto();
+
+    List<PostResponse> getPostsForCurrentUserInRange(int start, int end);
 }
 
