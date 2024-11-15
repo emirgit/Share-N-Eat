@@ -4,9 +4,11 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
+import gtu.codybuilders.shareneat.service.AdminProductRequestService;
 import gtu.codybuilders.shareneat.service.ProductService;
 import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
 import gtu.codybuilders.shareneat.util.AuthUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +17,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
+@AllArgsConstructor
 public class AdminController {
 
     private final UserServiceImpl userService;
     private final ProductService productService;
-
-    public AdminController(UserServiceImpl userService, ProductService productService) {
-        this.userService = userService;
-        this.productService = productService;
-    }
+    private final AdminProductRequestService adminProductRequestService;
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -71,8 +70,14 @@ public class AdminController {
     }
     */
 
-    //admin product operations
+    //admin product request operations
+    @GetMapping("/product-requests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllProductRequests() {
+        return ResponseEntity.ok(adminProductRequestService.getAll());
+    }
 
+    //admin product operations
     @PostMapping("/products")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addProduct(@RequestBody ProductRequestDTO productRequest) {
