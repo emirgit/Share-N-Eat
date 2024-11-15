@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
     //returns all products stored in database, without ids
     @GetMapping("/getAll")

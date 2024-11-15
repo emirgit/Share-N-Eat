@@ -1,8 +1,10 @@
 package gtu.codybuilders.shareneat.controller;
 
 
+import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
+import gtu.codybuilders.shareneat.service.ProductService;
 import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,11 @@ import java.util.Optional;
 public class AdminController {
 
     private final UserServiceImpl userService;
+    private final ProductService productService;
 
-    public AdminController(UserServiceImpl userService) {
+    public AdminController(UserServiceImpl userService, ProductService productService) {
         this.userService = userService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -66,4 +70,29 @@ public class AdminController {
         return ResponseEntity.ok("User upgraded to admin");
     }
     */
+
+    //admin product operations
+
+    @PostMapping("/products")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> addProduct(@RequestBody ProductRequestDTO productRequest) {
+        productService.createProduct(productRequest);
+        return ResponseEntity.ok("Product added successfully");
+    }
+
+    @PutMapping("/products/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> editProduct(@PathVariable Long productId, @RequestBody ProductRequestDTO productRequest) {
+        productService.updateProduct(productRequest, productId);
+        return ResponseEntity.ok("Product updated successfully");
+    }
+
+    @DeleteMapping("/products/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> removeProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok("Product removed successfully");
+    }
+
+
 }

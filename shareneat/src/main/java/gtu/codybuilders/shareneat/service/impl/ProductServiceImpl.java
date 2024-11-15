@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void createProduct(ProductRequestDTO productRequestDTO) {
         Product product = modelMapper.map(productRequestDTO, Product.class);
+        product.setCreated(Instant.now());
         productRepository.save(product);
     }
 
@@ -114,11 +116,11 @@ public class ProductServiceImpl implements ProductService {
 
         product.setName(productRequestDTO.getName());
         product.setBrand(productRequestDTO.getBrand());
-
-        product.setCalories(product.getCalories());
+        product.setCalories(productRequestDTO.getCalories());
         product.setCarbohydrateGrams(productRequestDTO.getCarbohydrateGrams());
         product.setFatGrams(productRequestDTO.getFatGrams());
         product.setProteinGrams(productRequestDTO.getProteinGrams());
+        product.setSugarGrams(productRequestDTO.getSugarGrams());
 
         productRepository.save(product);
     }

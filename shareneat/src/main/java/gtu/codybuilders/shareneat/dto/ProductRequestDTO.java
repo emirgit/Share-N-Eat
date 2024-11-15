@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +22,5 @@ public class ProductRequestDTO {
     private Double rating;
     private Integer ratingCount;
     private Integer numberOfComments;
-    private Instant created;
 
 }
