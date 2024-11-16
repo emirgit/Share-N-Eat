@@ -99,5 +99,50 @@ public class AdminController {
         return ResponseEntity.ok("Product removed successfully");
     }
 
+    @GetMapping("user/username_{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(userService.searchUsers(username));
+    }
+
+    @GetMapping("user/userId_{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.findUserById(userId));
+    }
+
+    @GetMapping("users/role_{role}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUsersByRole(@PathVariable Role role) {
+        return ResponseEntity.ok(userService.findByRole(role));
+    }
+
+    @GetMapping("users/status_{enabled}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getUsersByStatus(@PathVariable Boolean enabled) {
+        return ResponseEntity.ok(userService.findByEnabled(enabled));
+    }
+
+    @PutMapping("user/enable/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> enableUser(@PathVariable Long userId) {
+        userService.enableUser(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("user/disable/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> disableUser(@PathVariable Long userId) {
+        userService.disableUser(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("user/change-role/{userId}/{role}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> changeUserRole(@PathVariable Long userId, @PathVariable Role role) {
+        userService.changeUserRole(userId, role);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

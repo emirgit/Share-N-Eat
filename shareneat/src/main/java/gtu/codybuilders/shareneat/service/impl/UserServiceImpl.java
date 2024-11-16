@@ -3,7 +3,9 @@ package gtu.codybuilders.shareneat.service.impl;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.exception.UserAlreadyExistsException;
+import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
+import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.PasswordResetTokenRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
@@ -191,4 +193,36 @@ public class UserServiceImpl implements UserService {
         // Return the file path or URL if needed
         return filePath.toString();
     }
+
+    @Override
+    public List<User> findByRole(Role role) {
+        return repository.findByRole(role).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<User> findByEnabled(Boolean enabled) {
+        return repository.findByEnabled(enabled).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public void enableUser(Long userId) {
+        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setEnabled(true);
+        repository.save(user);
+    }
+
+    @Override
+    public void disableUser(Long userId) {
+        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setEnabled(false);
+        repository.save(user);
+    }
+
+    @Override
+    public void changeUserRole(Long userId, Role role) {
+        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setRole(role);
+        repository.save(user);
+    }
+
 }

@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.repository;
 
+import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Added for SearchController
     List<User> findByUsernameContainingIgnoreCase(String query);
+
+    Optional<List<User>> findByRole(Role role);
+
+    Optional<List<User>> findByEnabled(Boolean enabled);
 }
