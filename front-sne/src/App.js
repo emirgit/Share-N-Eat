@@ -20,10 +20,12 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/verify-reset" element={<PrivateRoute element={ForgotPassword} />} />
-        <Route path="/reset-password" element={<PrivateRoute element={ResetPassword} />} />
+        <Route path="/auth/login" element={<LoginPage />} />
+        <Route path="/auth/register" element={<RegisterPage />} />
+        <Route path="/auth/forgot/password" element={<PrivateRoute element={ForgotPassword} />} />
+        <Route path="/auth/reset/password" element={<PrivateRoute element={ResetPassword} />} />
+        <Route path="/auth/verify/account" element={<PrivateRoute element={ResetPassword} />} />
+
 
         {/* Protected Routes */}
         <Route path="/" element={<PrivateRoute element={MainPage} />} />

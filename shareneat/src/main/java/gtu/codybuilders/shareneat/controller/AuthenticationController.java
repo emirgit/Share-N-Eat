@@ -115,7 +115,7 @@ public class AuthenticationController {
             }
 
             // Create a reset link including the token
-            String resetLink = "http://localhost:8080/reset-password?token=" + token;
+            String resetLink = "http://localhost:3000/auth/reset/password?token=" + token;
 
             // Send the reset link to the user's email
             emailSenderService.sendPasswordResetEmail(email, resetLink);

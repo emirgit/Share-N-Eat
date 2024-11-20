@@ -67,13 +67,13 @@ const LoginPage = () => {
                         {/* Forget Password and Register Links */}
                         <div className="flex justify-between text-sm text-blue-500 mb-4">
                             <span 
-                                onClick={() => navigate('/verify-reset')} 
+                                onClick={() => navigate('/auth/forgot/password')} 
                                 className="cursor-pointer hover:underline"
                             >
                                 Forget Password?
                             </span>
                             <span 
-                                onClick={() => navigate('/register')} 
+                                onClick={() => navigate('/auth/register')} 
                                 className="cursor-pointer hover:underline"
                             >
                                 Don't have an account?

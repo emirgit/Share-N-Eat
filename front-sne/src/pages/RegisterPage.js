@@ -13,13 +13,13 @@ const RegisterPage = () => {
         e.preventDefault();
         try {
             // Send a POST request to register the user
-            await axios.post('http://localhost:8080/register', {
+            await axios.post('http://localhost:8080/auth/register', {
                 username: username,
                 email: email,
                 password: password,
             });
             setError(''); // Clear any error messages
-            navigate('/login'); // Redirect to LoginPage after successful registration
+            navigate('/auth/login'); // Redirect to LoginPage after successful registration
         } catch (err) {
             // Handle validation or server errors
             setError(err.response?.data?.message || 'Registration failed. Please try again.');

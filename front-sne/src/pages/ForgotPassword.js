@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
-    const navigate = useNavigate();
 
-    const handleVerify = (e) => {
+    const handleVerify = async (e) => {
         e.preventDefault();
-        // Here, you could add API call logic for email verification if needed.
-        navigate('/reset-password'); // Redirect to ResetPassword page
+        alert("Please wait response to come...")
+        try {
+            const response = await fetch(`http://localhost:8080/auth/forgot/password/${encodeURIComponent(email)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            // Check if the response is successful
+            if (response.ok) {
+                // Extract the response as plain text
+                const data = await response.text();
+                alert(data); // Display the response message
+            } else {
+                // Extract the error message as plain text
+                const errorData = await response.text();
+                alert(errorData); // Show error message
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        }
     };
 
     return (

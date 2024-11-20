@@ -71,6 +71,6 @@ public class User{
 
     private Instant lastLogin; // Track last login time
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private PasswordResetToken passwordResetToken;
 }

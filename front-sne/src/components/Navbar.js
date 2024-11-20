@@ -78,7 +78,7 @@ const Navbar = () => {
     // Logout function to navigate to Login Page
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/auth/login');
         setIsDropdownOpen(false);
         setIsSubMenuOpen(false);
     };

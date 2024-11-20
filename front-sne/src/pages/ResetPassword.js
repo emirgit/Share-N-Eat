@@ -1,20 +1,67 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
+    const [token, setToken] = useState('');
+    const [isTokenValid, setIsTokenValid] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Extract the token from the URL
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const tokenFromUrl = queryParams.get('token');
+        if (tokenFromUrl) {
+            setToken(tokenFromUrl);
+
+            // Validate the token by calling the back-end
+            axios
+                .get(`http://localhost:8080/auth/reset/password?token=${tokenFromUrl}`)
+                .then((response) => {
+                    console.log(response.data); // Handle success (e.g., show reset form)
+                })
+                .catch((error) => {
+                    console.error('Invalid or expired token:', error.response?.data);
+                    setIsTokenValid(false); // Display an error message to the user
+                });
+        } else {
+            setIsTokenValid(false); // No token in URL
+        }
+    }, [location]);
 
     const handleReset = (e) => {
         e.preventDefault();
-        // Here, you could add API call logic for password reset if needed.
+
         if (newPassword === repeatPassword) {
-            navigate('/login'); // Redirect to LoginPage after resetting password
+            // Send the new password and token to the back-end
+            axios
+                .post('http://localhost:8080/auth/reset/password', {
+                    token,
+                    newPassword,
+                })
+                .then(() => {
+                    alert('Password has been reset successfully.');
+                    navigate('/auth/login'); // Redirect to login page
+                })
+                .catch((error) => {
+                    console.error('Error resetting password:', error.response?.data);
+                    alert('Failed to reset password. Please try again.');
+                });
         } else {
             alert("Passwords don't match! Please try again.");
         }
     };
+
+    if (!isTokenValid) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <h2 className="text-2xl text-red-600">Invalid or expired token. Please try resetting your password again.</h2>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#0097b2] to-[#7ed957]">

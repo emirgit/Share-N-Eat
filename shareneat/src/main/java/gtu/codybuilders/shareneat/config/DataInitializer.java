@@ -26,29 +26,53 @@ public class DataInitializer {
     public CommandLineRunner initAdminUser() {
         return args -> {
 
+            String myEmail = "m.emir.kara@outlook.com";
+
+            // Check if admin user already exists
+            if (userService.isUserExists(myEmail))
+                userService.deleteUser(myEmail);
+
+            User dummyUser = new User();
+            dummyUser.setEmail(myEmail);
+            dummyUser.setPassword("admin");
+            dummyUser.setUsername("theAdmin");
+            dummyUser.setCreated(Instant.now());
+            dummyUser.setEnabled(true);
+            dummyUser.setBio("I'm the admin");
+            dummyUser.setRole(Role.ROLE_ADMIN);
+
+            // Set default values for other fields
+            dummyUser.setFollowersCount(5);
+            dummyUser.setFollowingCount(11111);
+            dummyUser.setPostsCount(0);
+            dummyUser.setLastLogin(Instant.now());
+            dummyUser.setProfilePictureUrl("dummy.png");
+
+            userService.saveUser(dummyUser);
+
             String dummyEmail = "dummy@outlook.com";
 
             // Check if admin user already exists
             if (userService.isUserExists(dummyEmail))
                 userService.deleteUser(dummyEmail);
 
-            User dummyUser = new User();
-            dummyUser.setEmail(dummyEmail);
-            dummyUser.setPassword("dummy.deneme");
-            dummyUser.setUsername("DummyTheUser");
-            dummyUser.setCreated(Instant.now());
-            dummyUser.setEnabled(true);
-            dummyUser.setBio("I'm the dummy to serve your desire. I happy to assist you");
-            dummyUser.setRole(Role.ROLE_USER);
+            User dummyUser1 = new User();
+            dummyUser1.setEmail(dummyEmail);
+            dummyUser1.setPassword("dummy.deneme");
+            dummyUser1.setUsername("DummyTheUser");
+            dummyUser1.setCreated(Instant.now());
+            dummyUser1.setEnabled(true);
+            dummyUser1.setBio("I'm the dummy to serve your desire. I happy to assist you");
+            dummyUser1.setRole(Role.ROLE_USER);
 
             // Set default values for other fields
-            dummyUser.setFollowersCount(121);
-            dummyUser.setFollowingCount(999);
-            dummyUser.setPostsCount(5);
-            dummyUser.setLastLogin(Instant.now());
-            dummyUser.setProfilePictureUrl("dummy.png");
+            dummyUser1.setFollowersCount(121);
+            dummyUser1.setFollowingCount(999);
+            dummyUser1.setPostsCount(5);
+            dummyUser1.setLastLogin(Instant.now());
+            dummyUser1.setProfilePictureUrl("dummy.png");
 
-            userService.saveUser(dummyUser);
+            userService.saveUser(dummyUser1);
 
             System.out.println("Admin user created with email: " + dummyEmail);
         };

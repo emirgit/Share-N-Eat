@@ -96,7 +96,12 @@ public class UserServiceImpl implements UserService {
 
         // Check for an existing token and delete it if found
         Optional<PasswordResetToken> existingToken = tokenRepository.findByUser(user);
-        existingToken.ifPresent(tokenRepository::delete); // Delete any existing token for the user
+
+        if (existingToken.isPresent()){
+            // User was not saved to database again, the bidirectional relationship deleted manually
+            existingToken.get().getUser().setPasswordResetToken(null);
+            tokenRepository.delete(existingToken.get());
+        }
 
         // Generate a new token
         String newToken = UUID.randomUUID().toString();
@@ -127,8 +132,12 @@ public class UserServiceImpl implements UserService {
 
         PasswordResetToken passwordResetToken = validateToken(token);
 
+
         User user = passwordResetToken.getUser();
-        User savedUser = changePassword(user, newPassword);
+        // change the password, break the relationship and save the user
+        user.setPassword(passwordEncoder.encode(newPassword));
+        passwordResetToken.getUser().setPasswordResetToken(null);
+        User savedUser = repository.save(user);
 
         // Invalidate the token after successful password reset
         tokenRepository.delete(passwordResetToken);
