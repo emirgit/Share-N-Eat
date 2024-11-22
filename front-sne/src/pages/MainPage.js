@@ -1,41 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RecipeCard from '../components/RecipeCard';
 import UploadSection from '../components/UploadSection';
-import ramenImg from '../assets/ramen.jpeg';
-import userImg from '../assets/profilepic-shrneat.png'
-
 
 const MainPage = () => {
-    const sampleUser1 = {
-        profilePic: userImg,
-        name: 'QualifiedUser',
-        followStatus: 'Qualified',
-        isQualified: true
-    };
+    // State to hold posts from the backend
+    const [posts, setPosts] = useState([]);
 
-    const sampleRecipe1 = {
-        image: ramenImg,
-        title: 'A Bowl of Ramen',
-        protein: 13,
-        carbs: 26,
-        fat: 5,
-        likes: 12,
-        comments: 4,
-        calories: 560
-    };
+    // Fetch posts from the backend when the component mounts
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const token = localStorage.getItem('token'); // Get token from localStorage
+                const response = await fetch('http://localhost:8080/api/post', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Send the token in the Authorization header
+                    },
+                });
 
-    const sampleRecipe2 = {
-        image: ramenImg,
-        title: 'Fresh Salad Bowl',
-        protein: 8,
-        carbs: 12,
-        fat: 4,
-        likes: 8,
-        comments: 3,
-        calories: 220
-    };
+                if (!response.ok) {
+                    throw new Error('Failed to fetch posts');
+                }
+
+                const data = await response.json();
+                setPosts(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -55,9 +52,32 @@ const MainPage = () => {
                     {/* Feed Section */}
                     <div className="flex justify-center mt-4">
                         <div className="w-full max-w-4xl">
-                            <RecipeCard user={sampleUser1} recipe={sampleRecipe1} />
-                            <RecipeCard user={sampleUser1} recipe={sampleRecipe2} />
-                            {/* Add more RecipeCard components as needed */}
+                            {posts.length > 0 ? (
+                                posts.map((post) => (
+                                    <RecipeCard
+                                        key={post.postId}
+                                        user={{
+                                            profilePic: `http://localhost:8080/api/post/images/${post.username}.jpg`, // Profile picture path
+                                            name: post.username,
+                                            followStatus: 'Qualified', // Adjust this if needed
+                                            isQualified: true, // Adjust this if needed
+                                        }}
+                                        recipe={{
+                                            imageUrl: `http://localhost:8080${post.imageUrl}`, // Use imageUrl from PostResponse
+                                            title: post.postName,
+                                            description: post.description,
+                                            protein: post.protein,
+                                            carbs: post.carbs,
+                                            fat: post.fat,
+                                            likes: post.likeCount,
+                                            comments: post.totalRatersRegular + post.totalRatersExpert,
+                                            calories: post.calories,
+                                        }}
+                                    />
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500">No posts available.</p>
+                            )}
                         </div>
                     </div>
                 </div>

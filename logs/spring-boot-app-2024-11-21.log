@@ -1,0 +1,4 @@
+2024-11-21 00:05:27 - g.c.s.service.impl.UserServiceImpl - User registered successfully: emirtr852816@hotmail.com
+2024-11-21 00:05:53 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-11-21 00:05:53 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-11-21 00:05:53 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

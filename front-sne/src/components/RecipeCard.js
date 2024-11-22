@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 
 const Star = ({ color }) => (
@@ -15,19 +15,47 @@ const Star = ({ color }) => (
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Yellow for fat, claret red for protein, blue for carbs
 
 const RecipeCard = ({ user, recipe }) => {
+    const [imageUrl, setImageUrl] = useState(null);
+
     const pieData = [
         { name: 'Fat', value: recipe.fat },
         { name: 'Protein', value: recipe.protein },
         { name: 'Carbs', value: recipe.carbs }
     ];
 
+    useEffect(() => {
+        // Fetch the image from the backend using imageUrl
+        const fetchImage = async () => {
+            try {
+                const token = localStorage.getItem('token'); // Get JWT token from localStorage
+                const response = await fetch(`${recipe.imageUrl}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const image = URL.createObjectURL(blob);
+                    setImageUrl(image); // Set image URL for displaying
+                } else {
+                    console.error("Failed to load image");
+                }
+            } catch (error) {
+                console.error("Error fetching image:", error);
+            }
+        };
+
+        fetchImage();
+    }, [recipe.imageUrl]); // Fetch image when recipe imageUrl changes
+
     return (
         <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl">
             {/* User Info */}
             <div className="flex items-center p-4 border-b border-gray-200">
-                <img 
-                    src={user.profilePic} 
-                    alt="User" 
+                <img
+                    src={user.profilePic}
+                    alt="User"
                     className="w-10 h-10 rounded-full"
                 />
                 <div className="ml-3 flex-1">
@@ -41,14 +69,16 @@ const RecipeCard = ({ user, recipe }) => {
             <div className="p-4 text-gray-700">
                 <p>{recipe.description || "This is a delicious recipe that you will love. Try it out and enjoy the flavors!"}</p>
             </div>
-            
+
             {/* Recipe Image */}
-            <img 
-                src={recipe.image} 
-                alt={recipe.title} 
-                className="w-full h-64 object-cover"
-            />
-            
+            {imageUrl && (
+                <img
+                    src={imageUrl}
+                    alt={recipe.title}
+                    className="w-full max-h-96 object-contain rounded-md mb-3"
+                />
+            )}
+
             {/* Recipe Details with Stars, Pie Chart, and Macros */}
             <div className="p-4 flex items-center">
                 {/* Rating Stars */}

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const UploadSection = () => {
+<<<<<<< Updated upstream
     const navigate = useNavigate();
 
     const handleUploadClick = () => {
@@ -18,6 +19,166 @@ const UploadSection = () => {
             <div className="w-full max-w-4xl bg-gray-100 p-8 rounded-lg shadow-md flex items-center justify-center">
                 <FontAwesomeIcon icon={faPlus} className="text-gray-500 text-5xl" />
             </div>
+=======
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [carbs, setCarbs] = useState('');
+    const [protein, setProtein] = useState('');
+    const [fat, setFat] = useState('');
+    const [calories, setCalories] = useState('');
+    const [image, setImage] = useState(null);
+
+    const handleUploadClick = () => {
+        setIsExpanded(true);
+    };
+
+    const handleCancel = () => {
+        setIsExpanded(false);
+        setTitle('');
+        setDescription('');
+        setCarbs('');
+        setProtein('');
+        setFat('');
+        setCalories('');
+        setImage(null);
+    };
+
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
+    const handleSubmit = async () => {
+        if (!image) {
+            alert('Please upload an image!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('postName', title);
+        formData.append('description', description);
+        formData.append('carbs', carbs || 0); // Default to 0 if empty
+        formData.append('protein', protein || 0);
+        formData.append('fat', fat || 0);
+        formData.append('calories', calories || 0);
+        formData.append('image', image);
+
+        try {
+            const token = localStorage.getItem('token'); // Assuming a token is stored in local storage
+            const response = await fetch('http://localhost:8080/api/post/create', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('Post created successfully!');
+                handleCancel(); // Reset the form
+            } else {
+                const error = await response.text();
+                alert(`Error: ${error}`);
+            }
+        } catch (error) {
+            console.error('Error creating post:', error);
+            alert('An unexpected error occurred.');
+        }
+    };
+
+    return (
+        <div className="flex items-center justify-center w-full my-4">
+            {!isExpanded && (
+                <div
+                    className="transition-all duration-300 ease-in-out w-full max-w-4xl bg-gray-100 p-8 rounded-lg shadow-md cursor-pointer"
+                    onClick={handleUploadClick}
+                >
+                    <div className="flex items-center justify-center">
+                        <FontAwesomeIcon icon={faPlus} className="text-gray-500 text-5xl" />
+                    </div>
+                </div>
+            )}
+
+            {isExpanded && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
+                        <div className="flex flex-col items-center">
+                            <h2 className="text-lg font-semibold mb-4">Create a New Post</h2>
+                            <input
+                                type="text"
+                                placeholder="Enter title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                className="w-full p-2 mb-3 border rounded-md"
+                            />
+                            <textarea
+                                placeholder="Enter description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="w-full p-2 mb-3 border rounded-md"
+                            />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="mb-3"
+                            />
+                            {image && (
+                                <img
+                                    src={URL.createObjectURL(image)}
+                                    alt="Preview"
+                                    className="w-full max-h-96 object-contain rounded-md mb-3"
+                                />
+                            )}
+                            <div className="w-full grid grid-cols-2 gap-4">
+                                <input
+                                    type="number"
+                                    placeholder="Carbs (g)"
+                                    value={carbs}
+                                    onChange={(e) => setCarbs(e.target.value)}
+                                    className="p-2 border rounded-md"
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Protein (g)"
+                                    value={protein}
+                                    onChange={(e) => setProtein(e.target.value)}
+                                    className="p-2 border rounded-md"
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Fat (g)"
+                                    value={fat}
+                                    onChange={(e) => setFat(e.target.value)}
+                                    className="p-2 border rounded-md"
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Calories"
+                                    value={calories}
+                                    onChange={(e) => setCalories(e.target.value)}
+                                    className="p-2 border rounded-md"
+                                />
+                            </div>
+                            <div className="flex justify-end w-full space-x-4 mt-4">
+                                <button
+                                    onClick={handleCancel}
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSubmit}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                >
+                                    Post
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+>>>>>>> Stashed changes
         </div>
     );
 };
