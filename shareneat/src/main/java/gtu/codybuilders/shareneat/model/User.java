@@ -58,6 +58,10 @@ public class User{
     
     @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Follow> following; // Users this user is following
+
+    @OneToMany(mappedBy = "sharedUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Share> shares;
+
     
 
 
