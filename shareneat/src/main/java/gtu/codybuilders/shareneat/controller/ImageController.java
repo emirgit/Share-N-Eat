@@ -20,8 +20,8 @@ public class ImageController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String filePath = imageService.saveImage(file);
-            return ResponseEntity.ok(filePath);
+            String imageName = imageService.saveImage(file);
+            return ResponseEntity.ok(imageName);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error saving image");
         }

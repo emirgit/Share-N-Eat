@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -51,10 +52,10 @@ public class ProductController {
     }
 
     //saves a new product into database
-    @PostMapping()
+    @PostMapping(consumes = "multipart/form-data")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
-        productService.createProduct(productRequestDTO);
+    public void createProduct(@RequestPart("product") ProductRequestDTO productRequestDTO, @RequestPart("file") MultipartFile file) {
+        productService.createProduct(productRequestDTO, file);
     }
 
     @DeleteMapping("/{productId}")

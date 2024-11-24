@@ -5,12 +5,15 @@ import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
 import gtu.codybuilders.shareneat.model.Product;
 import gtu.codybuilders.shareneat.repository.ProductRepository;
+import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
+    private ImageService imageService;
 
     //@Autowired
     private final ModelMapper modelMapper;
@@ -96,10 +100,23 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    private void bindImageWithProduct(Product product,MultipartFile file) {
+
+        try {
+            String fileName = imageService.saveImage(file);
+            product.setImageUrl(fileName);
+        }catch (IOException e) {
+            System.out.println("Error saving image : product ID : " + product.getId());
+        }
+
+    }
+
     @Override
-    public void createProduct(ProductRequestDTO productRequestDTO) {
+    public void createProduct(ProductRequestDTO productRequestDTO, MultipartFile file) {
         Product product = modelMapper.map(productRequestDTO, Product.class);
         product.setCreated(Instant.now());
+
+        this.bindImageWithProduct(product,file);
         productRepository.save(product);
     }
 
