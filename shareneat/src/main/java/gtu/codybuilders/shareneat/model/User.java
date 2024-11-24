@@ -61,8 +61,9 @@ public class User{
 
     @OneToMany(mappedBy = "sharedUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Share> shares;
-
     
+    @OneToMany(mappedBy = "likedUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Like> likes;
 
 
     // New fields for social media features

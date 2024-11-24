@@ -20,7 +20,6 @@ public class Post {
     private String postName;
     @Lob
     private String description;
-    private String url;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
@@ -30,6 +29,14 @@ public class Post {
     private Double averageRateRegular;
     private Integer totalRatersExpert;
     private Integer totalRatersRegular;
+
+    private String imageUrl;
+
+    // Nutritional Information
+    private Integer carbs;   // Carbohydrates in grams
+    private Integer protein; // Protein in grams
+    private Integer fat;     // Fat in grams
+    private Integer calories; // Total calories
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;

@@ -17,7 +17,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,16 +34,29 @@ public class PostServiceImpl implements PostService{
     private final PostMapper postMapper;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ImageServiceImpl imageService;
 
     @Override
-    public void save(PostRequest postRequest) {
+    public void save(PostRequest postRequest, MultipartFile image) {
         Long userId = AuthUtil.getUserId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
-        Post createdPost =  postMapper.mapToPost(postRequest, user);
+
+        String imageUrl = null;
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                imageUrl = imageService.saveImage(image);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save image for post", e);
+            }
+        }
+
+        Post createdPost =  postMapper.mapToPost(postRequest, user, imageUrl);
         postRepository.save(createdPost);
     } 
+
 
     @Override
     public void delete(Long postId) {
@@ -57,7 +72,10 @@ public class PostServiceImpl implements PostService{
 
         existingPost.setPostName(postRequest.getPostName());
         existingPost.setDescription(postRequest.getDescription());
-        existingPost.setUrl(postRequest.getUrl());
+        existingPost.setFat(postRequest.getFat());
+        existingPost.setCarbs(postRequest.getCarbs());
+        existingPost.setProtein(postRequest.getProtein());
+        existingPost.setCalories(postRequest.getCalories());
 
         postRepository.save(existingPost);
     }

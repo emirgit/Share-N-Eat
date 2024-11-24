@@ -5,8 +5,10 @@ import gtu.codybuilders.shareneat.dto.PostResponse;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface PostService {
-    void save(PostRequest postRequest);
+    void save(PostRequest postRequest, MultipartFile image);
     void delete(Long postId);
     void update(Long postId, PostRequest postRequest);
     List<PostResponse> getAllPosts(); 
