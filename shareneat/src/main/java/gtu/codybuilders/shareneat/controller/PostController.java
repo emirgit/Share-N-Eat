@@ -1,7 +1,6 @@
 package gtu.codybuilders.shareneat.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -20,15 +20,15 @@ public class PostController {
 
     private final PostServiceImpl postService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<Void> createPost(
-            @RequestBody PostRequest postRequest,
-            @RequestParam("image") MultipartFile image) {
+        @Valid @ModelAttribute PostRequest postRequest,  // JSON part
+        @RequestParam("image") MultipartFile image             // File part
+    ) {
         postService.save(postRequest, image);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-
+    
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.delete(postId);
