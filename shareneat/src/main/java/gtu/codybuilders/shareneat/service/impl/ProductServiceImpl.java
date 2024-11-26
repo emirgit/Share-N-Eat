@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
     private void bindImageWithProduct(Product product,MultipartFile file) {
 
         try {
-            String fileName = imageService.saveImage(file);
+            String fileName = imageService.saveImage(file, "products");
             product.setImageUrl(fileName);
         }catch (IOException e) {
             System.out.println("Error saving image : product ID : " + product.getId());

@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService{
 
         if (image != null && !image.isEmpty()) {
             try {
-                imageUrl = imageService.saveImage(image);
+                imageUrl = imageService.saveImage(image, "posts");
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save image for post", e);
             }

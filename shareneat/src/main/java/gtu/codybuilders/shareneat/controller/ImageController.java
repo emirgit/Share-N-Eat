@@ -17,19 +17,21 @@ public class ImageController {
 
     private final ImageService imageService;
 
+
+    //will be removed later for security reasons
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String imageName = imageService.saveImage(file);
+            String imageName = imageService.saveImage(file, "default");
             return ResponseEntity.ok(imageName);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error saving image");
         }
     }
 
-    @GetMapping("/{filename}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
-        Resource image = imageService.loadImage(filename);
+    @GetMapping("/{directoryName}/{filename}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename,@PathVariable String directoryName) {
+        Resource image = imageService.loadImage(filename,directoryName);
 
         if (image.exists() && image.isReadable()) {
             return ResponseEntity.ok()
@@ -40,9 +42,9 @@ public class ImageController {
         }
     }
 
-    @DeleteMapping("/{filename}")
-    public ResponseEntity<Void> deleteImage(@PathVariable String filename) {
-        imageService.deleteImage(filename);
+    @DeleteMapping("/{directoryName}/{filename}")
+    public ResponseEntity<Void> deleteImage(@PathVariable String filename, @PathVariable String directoryName) {
+        imageService.deleteImage(filename,directoryName);
         return ResponseEntity.ok().build();
     }
 }

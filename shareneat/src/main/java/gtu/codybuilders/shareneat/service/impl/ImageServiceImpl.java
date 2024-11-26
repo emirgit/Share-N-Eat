@@ -18,13 +18,14 @@ public class ImageServiceImpl implements ImageService {
 
     private final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "static", "images");
 
+    // THE DIRECTORY NAME MUST BE SPECIFIED WHEN USED IN ANOTHER SERVICE
     @Override
-    public String saveImage(MultipartFile file) throws IOException {
+    public String saveImage(MultipartFile file, String directoryName) throws IOException {
         Files.createDirectories(UPLOAD_DIR);
 
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-        Path filePath = UPLOAD_DIR.resolve(fileName);
+        Path filePath = UPLOAD_DIR.resolve(directoryName).resolve(fileName);
 
         Files.write(filePath, file.getBytes());
 
@@ -32,9 +33,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Resource loadImage(String filename) {
+    public Resource loadImage(String filename, String directoryName) {
         try {
-            Path filePath = UPLOAD_DIR.resolve(filename);
+            Path filePath = UPLOAD_DIR.resolve(directoryName).resolve(filename);
             return new UrlResource(filePath.toUri());
         } catch (IOException e) {
             return null;
@@ -42,9 +43,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImage(String filename) {
+    public void deleteImage(String filename, String directoryName) {
         try {
-            Path filePath = UPLOAD_DIR.resolve(filename);
+            Path filePath = UPLOAD_DIR.resolve(directoryName).resolve(filename);
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
             // Handle error
