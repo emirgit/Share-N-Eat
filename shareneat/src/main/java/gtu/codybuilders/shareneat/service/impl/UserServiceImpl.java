@@ -9,18 +9,17 @@ import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.PasswordResetTokenRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
+import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,14 +28,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"),"shareneat", "src", "main", "resources", "static", "images");
-
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetTokenRepository tokenRepository;
-
+    private final ImageService imageService;
 
     @Override
     public User saveUser(User user) {
@@ -175,23 +172,22 @@ public class UserServiceImpl implements UserService {
     }
 
     public String saveProfilePhoto(User user, MultipartFile file) throws IOException {
-        // Ensure the upload directory exists
-        Files.createDirectories(UPLOAD_DIR);
 
-        // Generate a unique file name
-        String fileName = user.getUsername() + "_" + file.getOriginalFilename(); // can be changed
-        Path filePath = UPLOAD_DIR.resolve(fileName);
-
-        System.out.println(filePath);
-        // Save the file to the file system
-        Files.write(filePath, file.getBytes());
-
-        // Update the user's profile picture path in the database
-        user.setProfilePictureUrl(fileName); // Save only the file name or relative path
+        String imageName = imageService.saveImage(file, "users");
+        user.setProfilePictureUrl(imageName); // Save only the file name
         repository.save(user);
 
         // Return the file path or URL if needed
-        return filePath.toString();
+        return imageName;
+    }
+
+    @Override
+    public Resource getProfilePhoto(Long userId){
+        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        String imageName = user.getProfilePictureUrl();
+        return imageService.loadImage(imageName, "users");
+
     }
 
     @Override

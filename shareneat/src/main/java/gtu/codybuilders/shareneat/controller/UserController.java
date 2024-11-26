@@ -7,7 +7,6 @@ import gtu.codybuilders.shareneat.service.UserService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -40,38 +36,6 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/my-account/profile-picture")
-    public ResponseEntity<Resource> getUserProfilePicture() {
-        Optional<User> userOptional = userService.findUserById(AuthUtil.getUserId());
-
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        User user = userOptional.get();
-        String profilePictureFilename = user.getProfilePictureUrl();
-
-        // Use the default image if the user doesn't have a profile picture
-        if (profilePictureFilename == null || profilePictureFilename.isEmpty()) {
-            profilePictureFilename = defaultProfilePictureUrl;
-        }
-
-        try {
-            Path imagePath = Paths.get("shareneat/src/main/resources/static/images/", profilePictureFilename);
-            Resource image = new UrlResource(imagePath.toUri());
-
-            if (image.exists() || image.isReadable()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG) // Adjust media type if needed
-                        .body(image);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (MalformedURLException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PutMapping("/my-account")
     public ResponseEntity<UserProfileDTO> updateUser(@RequestBody UserProfileRequestDTO userProfileRequestDTO) {
 
@@ -87,6 +51,19 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/my-account/profile-picture")
+    public ResponseEntity<Resource> getUserProfilePictureOfCurrentUser() {
+
+        Resource image = userService.getProfilePhoto(AuthUtil.getUserId());
+        if (image == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // Adjust media type if needed
+                .body(image);
+    }
+
+
     @GetMapping("/{userId}/profile-picture")
     public ResponseEntity<Resource> getUserProfilePicture(@PathVariable Long userId) {
         Optional<User> userOptional = userService.findUserById(userId);
@@ -95,28 +72,13 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        User user = userOptional.get();
-        String profilePictureFilename = user.getProfilePictureUrl();
-
-        // Use the default image if the user doesn't have a profile picture
-        if (profilePictureFilename == null || profilePictureFilename.isEmpty()) {
-            profilePictureFilename = defaultProfilePictureUrl;
-        }
-
-        try {
-            Path imagePath = Paths.get("src/main/resources/static/images/", profilePictureFilename);
-            Resource image = new UrlResource(imagePath.toUri());
-
-            if (image.exists() || image.isReadable()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG) // Adjust media type if needed
-                        .body(image);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (MalformedURLException e) {
+        Resource image = userService.getProfilePhoto(userId);
+        if (image == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // Adjust media type if needed
+                .body(image);
     }
 
     @PutMapping("/my-account/upload-photo")

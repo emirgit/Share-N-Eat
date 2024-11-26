@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
             String fileName = imageService.saveImage(file, "products");
             product.setImageUrl(fileName);
         }catch (IOException e) {
-            System.out.println("Error saving image : product ID : " + product.getId());
+            System.out.println("Error saving image");
         }
 
     }

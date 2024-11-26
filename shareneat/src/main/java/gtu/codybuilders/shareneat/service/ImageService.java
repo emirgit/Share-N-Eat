@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface ImageService {
+    //returns the filename of the saved image
     String saveImage(MultipartFile file, String directoryName) throws IOException;
     Resource loadImage(String filename, String directoryName);
     void deleteImage(String filename, String directoryName);

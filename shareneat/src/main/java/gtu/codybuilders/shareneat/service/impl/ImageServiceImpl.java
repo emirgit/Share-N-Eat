@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 @AllArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "static", "images");
+    private final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "shareneat","src", "main", "resources", "static", "images");
 
     // THE DIRECTORY NAME MUST BE SPECIFIED WHEN USED IN ANOTHER SERVICE
     @Override
