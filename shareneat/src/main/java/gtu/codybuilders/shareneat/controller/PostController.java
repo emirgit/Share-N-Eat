@@ -1,26 +1,37 @@
 package gtu.codybuilders.shareneat.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping(PathConstants.API_POST)
 @AllArgsConstructor
 public class PostController {
 
     private final PostServiceImpl postService;
 
-    @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
-        postService.save(postRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<String> createPost(
+            @Valid @ModelAttribute PostRequest postRequest,
+            @RequestParam("image") MultipartFile image) {
+        postService.save(postRequest, image);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully!");
     }
 
     @DeleteMapping("/{postId}")
@@ -38,7 +49,25 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         List<PostResponse> posts = postService.getAllPosts();
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+        return ResponseEntity.ok(posts); // Return 200 OK with the list of posts
+    }
+
+    @GetMapping("/images/{filename}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        try {
+            Path imagePath = Paths.get(System.getProperty("user.dir"), "shareneat", "src", "main", "resources", "static", "images", filename);
+            Resource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG) // Adjust based on file type
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{postId}")

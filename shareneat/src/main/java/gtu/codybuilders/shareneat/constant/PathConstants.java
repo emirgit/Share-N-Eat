@@ -15,6 +15,11 @@ public class PathConstants {
 
     public static final String FORGOT_PASSWORD_EMAIL_VAR = FORGOT_PASSWORD + "/{email}";
 
+    // Post
+    public static final String API = "/api";
+
+    public static final String API_POST = API + "/post";
+
     /*
     public static final String USER = "/user";
     public static final String FOLLOWERS_USER_ID = "/followers/{userId}";

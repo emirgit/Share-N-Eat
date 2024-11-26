@@ -57,7 +57,7 @@ public class UserController {
         }
 
         try {
-            Path imagePath = Paths.get("shareneat/src/main/resources/static/images/", profilePictureFilename);
+            Path imagePath = Paths.get("shareneat/src/main/resources/static/images/profilePicture", profilePictureFilename);
             Resource image = new UrlResource(imagePath.toUri());
 
             if (image.exists() || image.isReadable()) {

@@ -14,9 +14,14 @@ import java.time.Instant;
 public class PostResponse {
     private Long postId;           
     private String postName;       
-    private String description;   
-    private String url;            
-    private String username;       
+    private String description;
+    private String imageUrl; // Relative URL or file path for the associated image
+    private String username;
+    // Nutritional Information
+    private Integer carbs;   // Carbohydrates in grams
+    private Integer protein; // Protein in grams
+    private Integer fat;     // Fat in grams
+    private Integer calories; // Total calories
     private Instant createdDate;
     private Integer likeCount; 
     private Double averageRateExpert;
