@@ -3,6 +3,7 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class ProductController {
     //saves a new product into database
     @PostMapping(consumes = "multipart/form-data")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createProduct(@RequestPart("product") ProductRequestDTO productRequestDTO, @RequestPart("file") MultipartFile file) {
+    public void createProduct(@Valid @ModelAttribute ProductRequestDTO productRequestDTO, @RequestPart("file") MultipartFile file) {
         productService.createProduct(productRequestDTO, file);
     }
 
