@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.controller;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.service.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -22,16 +23,16 @@ public class ImageController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String imageName = imageService.saveImage(file, "default");
+            String imageName = imageService.saveImage(file, PathConstants.UPLOAD_DIR_DEFAULT);
             return ResponseEntity.ok(imageName);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error saving image");
         }
     }
 
-    @GetMapping("/{directoryName}/{filename}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename,@PathVariable String directoryName) {
-        Resource image = imageService.loadImage(filename,directoryName);
+    @GetMapping("/{filename}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        Resource image = imageService.loadImage(filename,PathConstants.UPLOAD_DIR_DEFAULT);
 
         if (image.exists() && image.isReadable()) {
             return ResponseEntity.ok()
@@ -42,9 +43,9 @@ public class ImageController {
         }
     }
 
-    @DeleteMapping("/{directoryName}/{filename}")
-    public ResponseEntity<Void> deleteImage(@PathVariable String filename, @PathVariable String directoryName) {
-        imageService.deleteImage(filename,directoryName);
+    @DeleteMapping("/{filename}")
+    public ResponseEntity<Void> deleteImage(@PathVariable String filename) {
+        imageService.deleteImage(filename,PathConstants.UPLOAD_DIR_DEFAULT);
         return ResponseEntity.ok().build();
     }
 }

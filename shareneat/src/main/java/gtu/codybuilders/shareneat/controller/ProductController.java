@@ -5,6 +5,7 @@ import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,12 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable long productId){
         ProductResponseDTO productResponseDTO = productService.getProductById(productId);
         return ResponseEntity.ok(productResponseDTO);
+    }
+
+    @GetMapping("/getImage/{productId}")
+    public ResponseEntity<Resource> getImage(@PathVariable Long productId){
+        Resource image = productService.getImage(productId);
+        return ResponseEntity.ok(image);
     }
 
     @GetMapping("/search")

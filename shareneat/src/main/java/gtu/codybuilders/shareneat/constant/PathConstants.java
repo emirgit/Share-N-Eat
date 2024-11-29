@@ -1,5 +1,8 @@
 package gtu.codybuilders.shareneat.constant;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class PathConstants {
 
 
@@ -14,6 +17,27 @@ public class PathConstants {
     public static final String RESET_PASSWORD = RESET + PASSWORD;
 
     public static final String FORGOT_PASSWORD_EMAIL_VAR = FORGOT_PASSWORD + "/{email}";
+
+
+    //image upload paths
+    private static final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "shareneat","src", "main", "resources", "static", "images");
+    //public Path uploadDir() {return UPLOAD_DIR;}
+
+    public static final Path UPLOAD_DIR_DEFAULT = UPLOAD_DIR.resolve("default");
+//    public static Path uploadDirDefault() {return UPLOAD_DIR_DEFAULT;}
+
+    public static final Path UPLOAD_DIR_USER = UPLOAD_DIR.resolve("users");
+//    public static Path uploadDirUser() {return UPLOAD_DIR_USER;}
+
+    public static final Path UPLOAD_DIR_PRODUCT = UPLOAD_DIR.resolve("products");
+//    public static Path uploadDirProduct() {return UPLOAD_DIR_PRODUCT;}
+
+    public static final Path UPLOAD_DIR_POST = UPLOAD_DIR.resolve("posts");
+//    public static Path uploadDirPost() {return UPLOAD_DIR_POST;}
+
+    public static final String defaultProductImage = "default_product.jpg";
+    public static final String defaultUserImage = "default_user.jpg";
+    public static final String defaultPostImage = "default_post.jpg";
 
     /*
     public static final String USER = "/user";

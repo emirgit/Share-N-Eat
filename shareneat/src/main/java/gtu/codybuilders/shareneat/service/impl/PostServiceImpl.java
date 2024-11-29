@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service.impl;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
@@ -13,7 +14,6 @@ import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService{
     
         if (image != null && !image.isEmpty()) {
             try {
-                imageUrl = imageService.saveImage(image, "posts");
+                    imageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_POST);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save image for post", e);
             }

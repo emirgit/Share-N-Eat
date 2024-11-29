@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service.impl;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.exception.UserAlreadyExistsException;
@@ -171,9 +172,10 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
     public String saveProfilePhoto(User user, MultipartFile file) throws IOException {
 
-        String imageName = imageService.saveImage(file, "users");
+        String imageName = imageService.saveImage(file, PathConstants.UPLOAD_DIR_USER);
         user.setProfilePictureUrl(imageName); // Save only the file name
         repository.save(user);
 
@@ -186,7 +188,7 @@ public class UserServiceImpl implements UserService {
         User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         String imageName = user.getProfilePictureUrl();
-        return imageService.loadImage(imageName, "users");
+        return imageService.loadImage(imageName, PathConstants.UPLOAD_DIR_USER);
 
     }
 
