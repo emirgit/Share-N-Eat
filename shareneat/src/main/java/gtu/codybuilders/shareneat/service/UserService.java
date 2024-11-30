@@ -5,6 +5,7 @@ import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -35,6 +36,8 @@ public interface UserService {
     User updateUserProfile(UserProfileRequestDTO userRequestDTO, Long userId);
 
     String saveProfilePhoto(User user, MultipartFile file) throws IOException;
+
+    Resource getProfilePhoto(Long userId);
 
     List<User> findByRole(Role role);
 

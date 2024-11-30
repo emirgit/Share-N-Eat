@@ -29,12 +29,19 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public void createFollow(FollowDto followDto) {
         Long userId = AuthUtil.getUserId();
-
+    
         User follower = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Follower not found !"));
         User followed = userRepository.findById(followDto.getFollowedId())
                 .orElseThrow(() -> new UserNotFoundException("Followed not found !"));
-
+    
+        // Increment counters
+        follower.setFollowingCount((follower.getFollowingCount() == null ? 0 : follower.getFollowingCount()) + 1);
+        followed.setFollowersCount((followed.getFollowersCount() == null ? 0 : followed.getFollowersCount()) + 1);
+    
+        userRepository.save(follower); // Save updated follower
+        userRepository.save(followed); // Save updated followed user
+    
         Follow follow = followmapper.mapToFollow(followDto, follower, followed);
         followRepository.save(follow);
     }
@@ -43,8 +50,24 @@ public class FollowServiceImpl implements FollowService {
     public void deleteFollow(Long followId) {
         Follow follow = followRepository.findById(followId)
                 .orElseThrow(() -> new FollowNotFoundException("Follow not found with id: " + followId));
+        
+        User follower = follow.getFollower();
+        User followed = follow.getFollowed();
+    
+        // Decrement counters
+        if (follower.getFollowingCount() != null && follower.getFollowingCount() > 0) {
+            follower.setFollowingCount(follower.getFollowingCount() - 1);
+        }
+        if (followed.getFollowersCount() != null && followed.getFollowersCount() > 0) {
+            followed.setFollowersCount(followed.getFollowersCount() - 1);
+        }
+    
+        userRepository.save(follower); // Save updated follower
+        userRepository.save(followed); // Save updated followed user
+    
         followRepository.delete(follow);
     }
+    
 
     @Override
     public List<FollowDto> getFollowersOfUser() {

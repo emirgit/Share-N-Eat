@@ -16,10 +16,6 @@ public class PostMapper {
         return Post.builder()
                 .postName(postRequest.getPostName())
                 .description(postRequest.getDescription())
-                .fat(postRequest.getFat() != null ? postRequest.getFat() : 0) // Default to 0 if null
-                .carbs(postRequest.getCarbs() != null ? postRequest.getCarbs() : 0)
-                .protein(postRequest.getProtein() != null ? postRequest.getProtein() : 0)
-                .calories(postRequest.getCalories() != null ? postRequest.getCalories() : 0)
                 .user(user)
                 .createdDate(Instant.now())
                 .imageUrl(imageUrl) // Associate the uploaded image's URL
@@ -28,6 +24,10 @@ public class PostMapper {
                 .averageRateRegular(0.0) // Default to 0.0 as Double
                 .totalRatersExpert(0) // Default to 0 as no expert raters initially
                 .totalRatersRegular(0) // Default to 0 as no regular raters initially
+                .carbs(postRequest.getCarbs() != null ? postRequest.getCarbs() : 0)
+                .protein(postRequest.getProtein() != null ? postRequest.getProtein() : 0)
+                .fat(postRequest.getFat() != null ? postRequest.getFat() : 0) // Default to 0 if null
+                .calories(postRequest.getCalories() != null ? postRequest.getCalories() : 0)
                 .build();
     }
 

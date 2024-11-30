@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service.impl;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
@@ -13,7 +14,6 @@ import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -39,31 +39,45 @@ public class PostServiceImpl implements PostService{
     @Override
     public void save(PostRequest postRequest, MultipartFile image) {
         Long userId = AuthUtil.getUserId();
-
+    
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
-
+    
         String imageUrl = null;
-
+    
         if (image != null && !image.isEmpty()) {
             try {
-                imageUrl = imageService.saveImage(image);
+                    imageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_POST);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save image for post", e);
             }
         }
-
-        Post createdPost =  postMapper.mapToPost(postRequest, user, imageUrl);
-        postRepository.save(createdPost);
-    } 
-
-
+    
+        Post createdPost = postMapper.mapToPost(postRequest, user, imageUrl);
+    
+        // Increment postsCount
+        user.setPostsCount((user.getPostsCount() == null ? 0 : user.getPostsCount()) + 1);
+        userRepository.save(user); // Save the updated user
+    
+        postRepository.save(createdPost); // Save the new post
+    }
+    
     @Override
     public void delete(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
-        postRepository.delete(post);
+    
+        User user = post.getUser(); // Get the user who owns the post
+    
+        // Decrement postsCount
+        if (user.getPostsCount() != null && user.getPostsCount() > 0) {
+            user.setPostsCount(user.getPostsCount() - 1);
+        }
+        userRepository.save(user); // Save the updated user
+    
+        postRepository.delete(post); // Delete the post
     }
+    
 
     @Override
     public void update(Long postId, PostRequest postRequest) {

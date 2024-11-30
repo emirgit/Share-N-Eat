@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service.impl;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
@@ -9,6 +10,7 @@ import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +45,12 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDTO getProductById(long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
         return modelMapper.map(product, ProductResponseDTO.class);
+    }
+
+    @Override
+    public Resource getImage(Long productId){
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
+        return imageService.loadImage(product.getImageUrl(), PathConstants.UPLOAD_DIR_PRODUCT);
     }
 
     @Override
@@ -100,13 +108,17 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    private void bindImageWithProduct(Product product,MultipartFile file) {
+    private void bindImageWithProduct(Product product, MultipartFile file) {
 
+        if (file == null) {
+            product.setImageUrl(PathConstants.defaultProductImage);
+            return;
+        }
         try {
-            String fileName = imageService.saveImage(file);
+            String fileName = imageService.saveImage(file, PathConstants.UPLOAD_DIR_PRODUCT);
             product.setImageUrl(fileName);
         }catch (IOException e) {
-            System.out.println("Error saving image : product ID : " + product.getId());
+            System.out.println("Error saving image");
         }
 
     }

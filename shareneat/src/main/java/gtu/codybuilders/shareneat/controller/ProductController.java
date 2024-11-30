@@ -3,7 +3,9 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,12 @@ public class ProductController {
         return ResponseEntity.ok(productResponseDTO);
     }
 
+    @GetMapping("/getImage/{productId}")
+    public ResponseEntity<Resource> getImage(@PathVariable Long productId){
+        Resource image = productService.getImage(productId);
+        return ResponseEntity.ok(image);
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String keyword) {
         List<ProductResponseDTO> productResponseDTOS = productService.searchProducts(keyword);
@@ -54,7 +62,7 @@ public class ProductController {
     //saves a new product into database
     @PostMapping(consumes = "multipart/form-data")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createProduct(@RequestPart("product") ProductRequestDTO productRequestDTO, @RequestPart("file") MultipartFile file) {
+    public void createProduct(@Valid @ModelAttribute ProductRequestDTO productRequestDTO, @RequestPart("file") MultipartFile file) {
         productService.createProduct(productRequestDTO, file);
     }
 
@@ -65,6 +73,7 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //IMAGE UPDATE WILL BE IMPLEMENTED LATER
     @PutMapping("/{productId}")
     public ResponseEntity<Void> update(@RequestBody ProductRequestDTO productRequestDTO, @PathVariable long productId){
         productService.updateProduct(productRequestDTO, productId);
