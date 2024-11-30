@@ -2,12 +2,13 @@ package gtu.codybuilders.shareneat.service;
 
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface PostService {
-    public void save(PostRequest postRequest, MultipartFile image);
+    void save(PostRequest postRequest, MultipartFile image);
     void delete(Long postId);
     void update(Long postId, PostRequest postRequest);
     List<PostResponse> getAllPosts(); 

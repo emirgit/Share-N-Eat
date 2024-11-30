@@ -13,34 +13,24 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
-
-    @NotBlank(message = "The post name cannot be empty or NULL.")
+    @NotBlank(message = "The postname cannot be empty or NULL.")
     private String postName;
-
     @Lob
     private String description;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
-
     private Instant createdDate;
-
     private Integer likeCount;
-
     private Double averageRateExpert;
-
     private Double averageRateRegular;
-
     private Integer totalRatersExpert;
-
     private Integer totalRatersRegular;
 
-    private String imageUrl; // Relative URL or file path for the associated image
+    private String imageUrl;
 
     // Nutritional Information
     private Integer carbs;   // Carbohydrates in grams

@@ -13,16 +13,13 @@ import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,47 +34,28 @@ public class PostServiceImpl implements PostService{
     private final PostMapper postMapper;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
-    // Directory to store images
-    private final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "shareneat", "src", "main", "resources", "static", "images");
+    private final ImageServiceImpl imageService;
 
     @Override
     public void save(PostRequest postRequest, MultipartFile image) {
         Long userId = AuthUtil.getUserId();
 
-        // Fetch the authenticated user
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
 
-        // Initialize imageUrl (can be null if no image is provided)
         String imageUrl = null;
 
-        // Handle image upload
         if (image != null && !image.isEmpty()) {
             try {
-                // Create the upload directory if it doesn't exist
-                Files.createDirectories(UPLOAD_DIR);
-
-                // Generate a unique file name
-                String fileName = user.getUsername() + "_" + Instant.now().toEpochMilli() + "_" + image.getOriginalFilename();
-                Path filePath = UPLOAD_DIR.resolve(fileName);
-
-                // Save the image to the file system
-                Files.write(filePath, image.getBytes());
-
-                // Save the relative file path as the image URL
-                imageUrl = "/api/post/images/" + fileName;
+                imageUrl = imageService.saveImage(image);
             } catch (IOException e) {
-                throw new RuntimeException("Failed to save image", e);
+                throw new RuntimeException("Failed to save image for post", e);
             }
         }
 
-        // Map PostRequest to Post entity
-        Post post = postMapper.mapToPost(postRequest, user, imageUrl);
-
-        // Save the post
-        postRepository.save(post);
-    }
+        Post createdPost =  postMapper.mapToPost(postRequest, user, imageUrl);
+        postRepository.save(createdPost);
+    } 
 
 
     @Override
@@ -94,7 +72,10 @@ public class PostServiceImpl implements PostService{
 
         existingPost.setPostName(postRequest.getPostName());
         existingPost.setDescription(postRequest.getDescription());
-        //existingPost.setUrl(postRequest.getUrl());
+        existingPost.setFat(postRequest.getFat());
+        existingPost.setCarbs(postRequest.getCarbs());
+        existingPost.setProtein(postRequest.getProtein());
+        existingPost.setCalories(postRequest.getCalories());
 
         postRepository.save(existingPost);
     }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostRequest {
-
+    
     @NotBlank(message = "Post Name cannot be empty or null")
     @Size(max = 100, message = "Post Name cannot exceed 100 characters")
     private String postName;

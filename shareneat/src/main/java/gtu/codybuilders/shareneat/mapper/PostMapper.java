@@ -32,13 +32,6 @@ public class PostMapper {
     }
 
 
-    public PostRequest mapToDto(Post post) {
-        return PostRequest.builder()
-                .postName(post.getPostName())
-                .description(post.getDescription())
-                .build();
-    }
-
     public PostResponse mapToPostResponse(Post post) {
         return PostResponse.builder()
                 .postId(post.getPostId())
