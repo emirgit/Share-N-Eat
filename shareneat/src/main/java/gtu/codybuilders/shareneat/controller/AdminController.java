@@ -9,6 +9,7 @@ import gtu.codybuilders.shareneat.service.ProductService;
 import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -144,6 +145,5 @@ public class AdminController {
         userService.changeUserRole(userId, role);
         return ResponseEntity.ok().build();
     }
-
 
 }
