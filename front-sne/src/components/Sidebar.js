@@ -25,6 +25,10 @@ const Sidebar = () => {
                 <span className="mr-2">🔥</span>
                 <span className="text-lg font-medium">Trends</span>
             </div>
+            <div className="flex items-center mb-6 cursor-pointer" onClick={() => navigate('/products')}>
+                <span className="mr-2">🛒</span>
+                <span className="text-lg font-medium">Products</span>
+            </div>
             {/* Add more sidebar items as needed */}
         </div>
     );
