@@ -12,6 +12,7 @@ import gtu.codybuilders.shareneat.repository.PasswordResetTokenRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.UserService;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetTokenRepository tokenRepository;
     private final ImageService imageService;
+    private final UserRepository userRepository;
 
     @Override
     public User saveUser(User user) {
@@ -59,6 +61,16 @@ public class UserServiceImpl implements UserService {
         repository.delete(user.get());
     }
 
+    @Override
+    public void deleteCurrentUser(){
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+    
+        userRepository.delete(user);
+    }
+
 
     @Override
     public Optional<User> findUserByEmail(String email) {
@@ -78,6 +90,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUsernameExists(String username) {
         return repository.existsByUsername(username);
+    }
+
+    
+    @Override
+    public void changeEmail(String newEmail){
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+        
+        user.setEmail(newEmail);
+        userRepository.save(user);
     }
 
 
@@ -124,6 +148,7 @@ public class UserServiceImpl implements UserService {
 
         return optionalToken.get();
     }
+
 
     @Override
     public User resetPassword(String token, String newPassword) {

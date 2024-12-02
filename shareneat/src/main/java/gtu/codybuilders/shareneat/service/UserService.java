@@ -22,12 +22,15 @@ public interface UserService {
 
     boolean isUsernameExists(String username);
 
+    void changeEmail(String newEmail);
+
     String createPasswordResetToken(String email);
 
     PasswordResetToken validateToken(String token);
     User resetPassword(String token, String newPassword);
 
     void deleteUser(String email);
+    void deleteCurrentUser();
 
     List<User> searchUsers(String query); // Added for SearchController
 

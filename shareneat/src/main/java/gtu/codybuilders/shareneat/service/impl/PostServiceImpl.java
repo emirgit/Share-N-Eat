@@ -14,6 +14,8 @@ import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -47,10 +49,12 @@ public class PostServiceImpl implements PostService{
     
         if (image != null && !image.isEmpty()) {
             try {
-                    imageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_POST);
+                imageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_POST);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to save image for post", e);
             }
+        } else {
+            imageUrl = PathConstants.defaultPostImage;
         }
     
         Post createdPost = postMapper.mapToPost(postRequest, user, imageUrl);
@@ -92,6 +96,13 @@ public class PostServiceImpl implements PostService{
         existingPost.setCalories(postRequest.getCalories());
 
         postRepository.save(existingPost);
+    }
+
+@Override
+    public Resource getImage(Long postId){
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id : " + postId));
+        return imageService.loadImage(post.getImageUrl(), PathConstants.UPLOAD_DIR_POST);
     }
 
     @Override

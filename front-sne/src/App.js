@@ -14,6 +14,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 
 import PrivateRoute from './components/PrivateRoute'; // Make sure the path is correct
+import ProductPage from './pages/ProductPage';
 
 function App() {
   return (

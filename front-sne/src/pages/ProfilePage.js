@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import RecipeCard from '../components/RecipeCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import ramenImg from '../assets/ramen.jpeg';
+import ramenImg from '../assets/ramen.jpeg'; // Replace with actual post images from backend
 import axios from 'axios';
 
 const ProfilePage = () => {
@@ -21,21 +21,47 @@ const ProfilePage = () => {
     const [newBio, setNewBio] = useState(user.bio);
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
+    const posts = [
+        {
+            id: 1,
+            imageUrl: ramenImg,
+            title: 'Spicy Ramen',
+            protein: 20,
+            carbs: 40,
+            fat: 15,
+            calories: 400,
+            likes: 24,
+            comments: 10,
+        },
+        {
+            id: 2,
+            imageUrl: ramenImg,
+            title: 'Healthy Salad',
+            protein: 10,
+            carbs: 20,
+            fat: 5,
+            calories: 200,
+            likes: 18,
+            comments: 5,
+        },
+    ];
+
     useEffect(() => {
         const fetchUserDataAndProfilePicture = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    console.error("Authorization token is missing");
+                    console.error('Authorization token is missing');
                     return;
                 }
-                
+
+                // Fetch user details
                 const userDataResponse = await axios.get('http://localhost:8080/api/user/my-account', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                
+
                 const userData = userDataResponse.data;
                 setUser({
                     username: userData.username,
@@ -47,6 +73,7 @@ const ProfilePage = () => {
                 setNewUsername(userData.username);
                 setNewBio(userData.bio);
 
+                // Fetch profile picture
                 const profilePictureResponse = await axios.get('http://localhost:8080/api/user/my-account/profile-picture', {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -54,22 +81,13 @@ const ProfilePage = () => {
                     responseType: 'blob',
                 });
                 setProfilePictureUrl(URL.createObjectURL(profilePictureResponse.data));
-
             } catch (error) {
-                console.error("Error fetching user data or profile picture", error);
+                console.error('Error fetching user data or profile picture', error);
             }
         };
 
         fetchUserDataAndProfilePicture();
     }, []);
-    
-
-    const posts = [
-        { id: 1, imageUrl: ramenImg },
-        { id: 2, imageUrl: ramenImg },
-        { id: 3, imageUrl: ramenImg },
-        { id: 4, imageUrl: ramenImg },
-    ];
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -79,20 +97,22 @@ const ProfilePage = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                console.error("Authorization token is missing");
+                console.error('Authorization token is missing');
                 return;
             }
-            
-            console.log("Saving changes:", { newUsername, newBio });
-            
-            await axios.put('http://localhost:8080/api/user/my-account', {
-                username: newUsername,
-                bio: newBio,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+
+            await axios.put(
+                'http://localhost:8080/api/user/my-account',
+                {
+                    username: newUsername,
+                    bio: newBio,
                 },
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
             setUser({
                 ...user,
@@ -101,7 +121,7 @@ const ProfilePage = () => {
             });
             setIsEditing(false);
         } catch (error) {
-            console.error("Error saving user data", error);
+            console.error('Error saving user data', error);
         }
     };
 
@@ -111,24 +131,22 @@ const ProfilePage = () => {
             try {
                 const token = localStorage.getItem('token');
                 const formData = new FormData();
-                formData.append('profilePhoto', file); // 'profilePhoto' is the key used in the backend
-    
+                formData.append('profilePhoto', file);
+
                 // Upload the file to the backend
                 await axios.put('http://localhost:8080/api/user/my-account/upload-photo', formData, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data', // Required for file uploads
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
                     },
                 });
-    
-                // Update the profile picture preview
+
                 setProfilePictureUrl(URL.createObjectURL(file));
             } catch (error) {
-                console.error("Error uploading profile photo", error);
+                console.error('Error uploading profile photo', error);
             }
         }
     };
-    
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -136,6 +154,7 @@ const ProfilePage = () => {
             <div className="flex flex-row w-full">
                 <Sidebar />
                 <div className="flex-1 flex flex-col items-center p-8">
+                    {/* Profile Info */}
                     <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8 mb-8 flex items-start">
                         <div className="relative w-32 h-32 mr-6">
                             <img
@@ -212,22 +231,24 @@ const ProfilePage = () => {
                             )}
                         </div>
                     </div>
-                    <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+                    {/* User Posts using RecipeCard */}
+                    <div className="w-full max-w-4xl">
                         {posts.map((post) => (
-                            <div 
-                                key={post.id} 
-                                className="bg-white rounded-3xl shadow-md overflow-hidden"
-                            >
-                                <img
-                                    src={post.imageUrl}
-                                    alt="User's post"
-                                    className="w-full h-48 object-cover"
-                                />
-                                <div className="p-4">
-                                    <h3 className="text-lg font-semibold">Recipe Title</h3>
-                                    <p className="text-gray-600 text-sm">A delicious recipe to try out!</p>
-                                </div>
-                            </div>
+                            <RecipeCard
+                                key={post.id}
+                                user={user} // Pass user data
+                                recipe={{
+                                    image: post.imageUrl,
+                                    title: post.title,
+                                    protein: post.protein,
+                                    carbs: post.carbs,
+                                    fat: post.fat,
+                                    calories: post.calories,
+                                    likes: post.likes,
+                                    comments: post.comments,
+                                }}
+                            />
                         ))}
                     </div>
                 </div>

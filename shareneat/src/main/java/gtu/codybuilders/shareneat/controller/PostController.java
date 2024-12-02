@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.controller;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,12 @@ public class PostController {
     public ResponseEntity<Void> updatePost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
         postService.update(postId, postRequest);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/getImage/{posttId}")
+    public ResponseEntity<Resource> getImage(@PathVariable Long postId){
+        Resource image = postService.getImage(postId);
+        return ResponseEntity.ok(image);
     }
 
     @GetMapping
