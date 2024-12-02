@@ -9,25 +9,22 @@ import ChangePhoto from './pages/ChangeUsername';
 import ChangeDescription from './pages/ChangeDescription';
 import HelpPage from './pages/HelpPage';
 import LoginPage from './pages/LoginPage';
-
-// import ProductPage from './pages/ProductPage';
-// import ProfilePage from './pages/ProfilePage';
+import AdminPanel from './pages/AdminPanel'; // Admin Panel bileşeni eklendi
 
 function App() {
     return (
         <Router>
             <Routes>
-            <Route path="/" element={<MainPage/>} />
-            <Route path="/upload" element={<UploadPage />} />
-            <Route path="/profile" element={<ProfilePage/>} />
-            <Route path="/change-username" element={<ChangeUsername />} />
-            <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="/change-photo" element={<ChangePhoto />} />
-            <Route path="/change-description" element={<ChangeDescription />} />
-            <Route path="/help" element={<HelpPage />} />
-            <Route path="/login" element={<LoginPage />} />
-                {/* <Route path="/product" component={ProductPage} />
-                <Route path="/profile" component={ProfilePage} /> */}
+                <Route path="/" element={<MainPage />} />
+                <Route path="/upload" element={<UploadPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/change-username" element={<ChangeUsername />} />
+                <Route path="/change-password" element={<ChangePassword />} />
+                <Route path="/change-photo" element={<ChangePhoto />} />
+                <Route path="/change-description" element={<ChangeDescription />} />
+                <Route path="/help" element={<HelpPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/admin" element={<AdminPanel />} /> {/* Admin Panel rotası */}
             </Routes>
         </Router>
     );
