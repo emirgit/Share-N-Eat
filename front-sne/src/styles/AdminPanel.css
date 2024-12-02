@@ -1,0 +1,135 @@
+/* Genel Admin Panel Stilleri */
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f9f9f9;
+}
+
+.admin-panel-content {
+    display: flex;
+    flex: 1;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sağdaki Admin Sidebar */
+.admin-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #f8f8f8;
+    border-left: 1px solid #ddd;
+}
+
+/* Admin Sidebar Butonları */
+.admin-sidebar-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-sidebar-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-sidebar-button:active {
+    transform: scale(0.98);
+}
+
+/* Action Bar Stilleri */
+.action-bar {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Submit Butonu */
+.submit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Role Buttons */
+.role-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.role-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 16px; /* Daha uzun buton */
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.role-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+.respond-button {
+    display: inline-block;
+    background-color: #007bff; /* Yeşil renk */
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px; /* Kenarları yuvarlat */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.respond-button:hover {
+    background-color: #0056b3; /* Hover durumu için daha koyu bir yeşil */
+}
+
+.respond-button:active {
+    background-color: #ccc; /* Aktif durum */
+    transform: scale(0.98); /* Küçük bir tıklama efekti */
+}
