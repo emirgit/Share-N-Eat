@@ -1,25 +1,9 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axiosHelper from '../axiosHelper';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const UploadSection = () => {
-<<<<<<< Updated upstream
-    const navigate = useNavigate();
-
-    const handleUploadClick = () => {
-        navigate('/upload');
-    };
-
-    return (
-        <div 
-            className="w-full flex items-center justify-center my-4 cursor-pointer"
-            onClick={handleUploadClick}
-        >
-            <div className="w-full max-w-4xl bg-gray-100 p-8 rounded-lg shadow-md flex items-center justify-center">
-                <FontAwesomeIcon icon={faPlus} className="text-gray-500 text-5xl" />
-            </div>
-=======
     const [isExpanded, setIsExpanded] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -48,43 +32,34 @@ const UploadSection = () => {
         setImage(e.target.files[0]);
     };
 
-    const handleSubmit = async () => {
-        if (!image) {
-            alert('Please upload an image!');
-            return;
-        }
+const handleSubmit = async () => {
+    if (!image) {
+        alert('Please upload an image!');
+        return;
+    }
 
-        const formData = new FormData();
-        formData.append('postName', title);
-        formData.append('description', description);
-        formData.append('carbs', carbs || 0); // Default to 0 if empty
-        formData.append('protein', protein || 0);
-        formData.append('fat', fat || 0);
-        formData.append('calories', calories || 0);
-        formData.append('image', image);
+    const formData = new FormData();
+    formData.append('postName', title);
+    formData.append('description', description);
+    formData.append('carbs', carbs || 0); // Default to 0 if empty
+    formData.append('protein', protein || 0);
+    formData.append('fat', fat || 0);
+    formData.append('calories', calories || 0);
+    formData.append('image', image);
 
-        try {
-            const token = localStorage.getItem('token'); // Assuming a token is stored in local storage
-            const response = await fetch('http://localhost:8080/api/post/create', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
+    try {
+        await axiosHelper('/posts', 'POST', formData, {
+            'Content-Type': 'multipart/form-data', // Ensure correct header for form data
+        });
 
-            if (response.ok) {
-                alert('Post created successfully!');
-                handleCancel(); // Reset the form
-            } else {
-                const error = await response.text();
-                alert(`Error: ${error}`);
-            }
-        } catch (error) {
-            console.error('Error creating post:', error);
-            alert('An unexpected error occurred.');
-        }
-    };
+        alert('Post created successfully!');
+        handleCancel(); // Reset the form
+    } catch (error) {
+        console.error('Error creating post:', error);
+        alert('An unexpected error occurred.');
+    }
+};
+
 
     return (
         <div className="flex items-center justify-center w-full my-4">
@@ -178,7 +153,6 @@ const UploadSection = () => {
                     </div>
                 </div>
             )}
->>>>>>> Stashed changes
         </div>
     );
 };

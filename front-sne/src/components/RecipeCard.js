@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axiosHelper from '../axiosHelper';
 import { PieChart, Pie, Cell } from 'recharts';
 
 const Star = ({ color }) => (
@@ -24,30 +25,22 @@ const RecipeCard = ({ user, recipe }) => {
     ];
 
     useEffect(() => {
-        // Fetch the image from the backend using imageUrl
         const fetchImage = async () => {
             try {
-                const token = localStorage.getItem('token'); // Get JWT token from localStorage
-                const response = await fetch(`${recipe.imageUrl}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                const response = await axiosHelper(recipe.imageUrl, 'GET', null, {
+                    responseType: 'blob', // Ensure the response is a blob for the image
                 });
-
-                if (response.ok) {
-                    const blob = await response.blob();
-                    const image = URL.createObjectURL(blob);
-                    setImageUrl(image); // Set image URL for displaying
-                } else {
-                    console.error("Failed to load image");
-                }
+    
+                const image = URL.createObjectURL(response); // Create an object URL for the blob
+                setImageUrl(image); // Set image URL for displaying
             } catch (error) {
                 console.error("Error fetching image:", error);
             }
         };
-
+    
         fetchImage();
     }, [recipe.imageUrl]); // Fetch image when recipe imageUrl changes
+    
 
     return (
         <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl">

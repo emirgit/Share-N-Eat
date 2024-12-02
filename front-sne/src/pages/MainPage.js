@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RecipeCard from '../components/RecipeCard';
 import UploadSection from '../components/UploadSection';
+import axiosHelper from '../axiosHelper';
 
 const MainPage = () => {
     // State to hold posts from the backend
@@ -12,27 +13,17 @@ const MainPage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const token = localStorage.getItem('token'); // Get token from localStorage
-                const response = await fetch('http://localhost:8080/api/post', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`, // Send the token in the Authorization header
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch posts');
-                }
-
-                const data = await response.json();
-                setPosts(data);
+                // Use the axiosHelper to fetch posts
+                const data = await axiosHelper('/posts', 'GET'); // The token is automatically handled by axiosHelper
+                setPosts(data); // Set the retrieved posts in the state
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
         };
 
-        fetchPosts();
+        fetchPosts(); // Call the fetchPosts function when the component mounts
     }, []);
+
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosHelper from '../axiosHelper';
 import logo from '../assets/logo.png';
 
 const Navbar = () => {
@@ -14,21 +14,18 @@ const Navbar = () => {
         useEffect(() => {
             const fetchProfilePicture = async () => {
                 try {
-                    const token = localStorage.getItem('token');
-                    const response = await axios.get('http://localhost:8080/api/user/my-account/profile-picture', {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                        responseType: 'blob',
+                    const profilePictureResponse = await axiosHelper('/user/my-account/profile-picture', 'GET', null, {
+                        responseType: 'blob', // To handle the image blob
                     });
-                    setProfilePictureUrl(URL.createObjectURL(response.data));
+                    setProfilePictureUrl(URL.createObjectURL(profilePictureResponse)); // Create an object URL for the image
                 } catch (error) {
                     console.error("Failed to fetch profile picture", error);
                 }
             };
-    
+        
             fetchProfilePicture();
         }, []);
+        
     
 
     // Toggle dropdown visibility
