@@ -2,11 +2,11 @@ package gtu.codybuilders.shareneat.service;
 
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
-
-import java.util.List;
-
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PostService {
     void save(PostRequest postRequest, MultipartFile image);
@@ -21,5 +21,8 @@ public interface PostService {
     String returnProfilePhoto();
 
     List<PostResponse> getPostsForCurrentUserInRange(int start, int end);
+
+    List<PostResponse> filterPosts(Map<String, String> filters);
+
 }
 

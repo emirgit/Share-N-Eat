@@ -1,18 +1,18 @@
 package gtu.codybuilders.shareneat.controller;
 
+import gtu.codybuilders.shareneat.dto.PostRequest;
+import gtu.codybuilders.shareneat.dto.PostResponse;
+import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import gtu.codybuilders.shareneat.dto.PostRequest;
-import gtu.codybuilders.shareneat.dto.PostResponse;
-import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/posts")
@@ -77,5 +77,12 @@ public class PostController {
         List<PostResponse> posts = postService.getPostsForUser();
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
-    
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<PostResponse>> filterPosts(@RequestParam Map<String, String> filters){
+        List<PostResponse> posts = postService.filterPosts(filters);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+
 }
