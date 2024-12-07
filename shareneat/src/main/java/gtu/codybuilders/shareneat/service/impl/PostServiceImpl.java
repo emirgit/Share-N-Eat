@@ -14,18 +14,15 @@ import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +34,7 @@ public class PostServiceImpl implements PostService{
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ImageServiceImpl imageService;
+
 
     @Override
     public void save(PostRequest postRequest, MultipartFile image) {
@@ -211,6 +209,27 @@ public class PostServiceImpl implements PostService{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
         return user.getProfilePictureUrl();
+    }
+
+    /*
+        the same algorithm with filterProducts method in ProductServiceImpl.
+        but only the difference is the mapper object, postMapper instead of modelMapper.
+        so, filterProduct method in ProductServiceImpl tested and filterPosts method should work correctly.
+        note: if it is not working correctly, the problem is not about the algorithm probably, it is about the mapper object.
+    */
+    @Override
+    public List<PostResponse> filterPosts(Map<String, String> filters){
+        Specification<Post> spec = Specification.where(null);
+
+        for (Map.Entry<String, String> filter : filters.entrySet()) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get(filter.getKey()), filter.getValue()));
+        }
+
+        List<Post> posts = postRepository.findAll(spec);
+        return posts.stream()
+                .map(postMapper::mapToPostResponse)
+                .collect(Collectors.toList());
     }
     
 

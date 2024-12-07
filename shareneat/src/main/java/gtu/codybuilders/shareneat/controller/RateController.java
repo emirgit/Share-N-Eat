@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,4 +31,11 @@ public class RateController {
         rateService.unrate(postId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/current-user-rate/{postId}")
+    public ResponseEntity<Double> getCurrentUserRate(@PathVariable Long postId) {
+        Double rate = rateService.getCurrentUserRate(postId);
+        return ResponseEntity.ok(rate);
+    }
+
 }

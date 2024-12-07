@@ -119,6 +119,26 @@ public class RateServiceImpl implements RateService{
         return updatedAverage;
     }
 
+    @Override
+    @Transactional
+    public Double getCurrentUserRate(Long postId) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with ID - " + postId));
+
+        Optional<Rate> existingRate = rateRepository.findTopByPostAndUserOrderByRateIdDesc(post, user);
+
+        if (existingRate.isPresent()) {
+            return existingRate.get().getRating();
+        } else {
+            return 0.0; // Return 0.0 if no rating exists
+        }
+    }
+
     private Rate mapToRate(RateDto rateDto, Post post) {
         Long userId = AuthUtil.getUserId();
 

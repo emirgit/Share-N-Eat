@@ -115,4 +115,35 @@ public class FollowServiceImpl implements FollowService {
                                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isCurrentUserFollower(Long userId) {
+        Long currentUserId = AuthUtil.getUserId();
+
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new UserNotFoundException("Current user not found!"));
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Target user not found!"));
+
+        // Check if current user is a follower of the target user
+        return followRepository.findAllByFollowed(targetUser)
+                .stream()
+                .anyMatch(follow -> follow.getFollower().getUserId().equals(currentUserId));
+    }
+
+    @Override
+    public boolean isCurrentUserFollowing(Long userId) {
+        Long currentUserId = AuthUtil.getUserId();
+        
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new UserNotFoundException("Current user not found!"));
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Target user not found!"));
+
+        // Check if current user is following the target user
+        return followRepository.findAllByFollower(currentUser)
+                .stream()
+                .anyMatch(follow -> follow.getFollowed().getUserId().equals(userId));
+    }
+
+
 }
