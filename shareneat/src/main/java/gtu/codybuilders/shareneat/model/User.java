@@ -65,6 +65,8 @@ public class User{
     @OneToMany(mappedBy = "likedUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Like> likes;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Feedback> feedback;
 
     // New fields for social media features
     private String profilePictureUrl; // URL to the user's profile picture

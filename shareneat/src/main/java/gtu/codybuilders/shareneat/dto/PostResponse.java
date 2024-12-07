@@ -15,6 +15,7 @@ public class PostResponse {
     private Long postId;           
     private String postName;       
     private String description;
+    // It is not required temproraily
     private String imageUrl; // Relative URL or file path for the associated image
     private String username;
     // Nutritional Information

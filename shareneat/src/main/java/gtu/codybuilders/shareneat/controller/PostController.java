@@ -42,7 +42,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getImage/{posttId}")
+    @GetMapping("/getImage/{postId}")
     public ResponseEntity<Resource> getImage(@PathVariable Long postId){
         Resource image = postService.getImage(postId);
         return ResponseEntity.ok(image);

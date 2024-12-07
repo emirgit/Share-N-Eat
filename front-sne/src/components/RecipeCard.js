@@ -1,90 +1,162 @@
 import React, { useState, useEffect } from 'react';
+import ReactRating from 'react-rating'; // Import the library
 import axiosHelper from '../axiosHelper';
 import { PieChart, Pie, Cell } from 'recharts';
 
-const Star = ({ color }) => (
-    <svg
-        className={`w-5 h-5 ${color}`}
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.971a1 1 0 00.95.69h4.172c.969 0 1.371 1.24.588 1.81l-3.375 2.453a1 1 0 00-.364 1.118l1.286 3.971c.3.921-.755 1.688-1.54 1.118l-3.375-2.453a1 1 0 00-1.175 0l-3.375 2.453c-.784.57-1.84-.197-1.54-1.118l1.286-3.971a1 1 0 00-.364-1.118L2.58 9.398c-.784-.57-.381-1.81.588-1.81h4.172a1 1 0 00.95-.69l1.286-3.971z" />
-    </svg>
-);
+const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Colors for Pie Chart
 
-const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Yellow for fat, claret red for protein, blue for carbs
+const RecipeCard = ({ post }) => {
+    const {
+        postId,
+        postName,
+        description,
+        username,
+        fat,
+        protein,
+        carbs,
+        calories,
+        likeCount,
+        averageRateExpert,
+        averageRateRegular,
+        totalRatersExpert,
+        totalRatersRegular,
+    } = post;
 
-const RecipeCard = ({ user, recipe }) => {
-    const [imageUrl, setImageUrl] = useState(null);
+    const [recipeImage, setRecipeImage] = useState(null);
+    const [profileImage, setProfileImage] = useState(null);
+    const [liked, setLiked] = useState(false); // State for Like Button
 
-    const pieData = [
-        { name: 'Fat', value: recipe.fat },
-        { name: 'Protein', value: recipe.protein },
-        { name: 'Carbs', value: recipe.carbs }
-    ];
-
+    // Fetch Recipe Image
     useEffect(() => {
-        const fetchImage = async () => {
+        const fetchRecipeImage = async () => {
             try {
-                const response = await axiosHelper(recipe.imageUrl, 'GET', null, {
-                    responseType: 'blob', // Ensure the response is a blob for the image
+                const response = await axiosHelper(`/posts/getImage/${postId}`, 'GET', null, {
+                    responseType: 'blob',
                 });
-    
-                const image = URL.createObjectURL(response); // Create an object URL for the blob
-                setImageUrl(image); // Set image URL for displaying
+                setRecipeImage(URL.createObjectURL(response));
             } catch (error) {
-                console.error("Error fetching image:", error);
+                console.error('Error fetching recipe image:', error);
             }
         };
-    
-        fetchImage();
-    }, [recipe.imageUrl]); // Fetch image when recipe imageUrl changes
-    
+
+        if (postId) fetchRecipeImage();
+    }, [postId]);
+
+    // Fetch User Profile Image
+    useEffect(() => {
+        const fetchProfileImage = async () => {
+            try {
+                const response = await axiosHelper(
+                    `/user/${username}/profile-picture`, // Updated URL for user profile picture
+                    'GET',
+                    null,
+                    { responseType: 'blob' }
+                );
+                setProfileImage(URL.createObjectURL(response));
+            } catch (error) {
+                console.error('Error fetching profile image:', error);
+            }
+        };
+
+        if (username) fetchProfileImage();
+    }, [username]);
+
+    // Handle Like Button Click
+    const handleLike = () => {
+        setLiked(!liked); // Toggle like state
+        console.log(`Post ID ${postId}: Liked state is now`, !liked);
+        // TODO: Implement backend logic to send the like state to the backend
+    };
+
+    // Handle Share Button Click
+    const handleShare = () => {
+        console.log(`Post ID ${postId}: Share button clicked`);
+        // TODO: Implement backend logic to handle sharing
+    };
+
+    // Handle Comments Button Click
+    const handleComments = () => {
+        console.log(`Post ID ${postId}: Comments button clicked`);
+        // TODO: Redirect or open modal for comments section
+    };
+
+    // Handle Follow Button Click
+    const handleFollow = () => {
+        console.log(`User ${username}: Follow button clicked`);
+        // TODO: Implement backend logic to handle follow/unfollow
+    };
+
+    const pieData = [
+        { name: 'Fat', value: fat },
+        { name: 'Protein', value: protein },
+        { name: 'Carbs', value: carbs },
+    ];
 
     return (
         <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl">
             {/* User Info */}
             <div className="flex items-center p-4 border-b border-gray-200">
                 <img
-                    src={user.profilePic}
+                    src={profileImage}
                     alt="User"
                     className="w-10 h-10 rounded-full"
                 />
                 <div className="ml-3 flex-1">
-                    <div className="font-semibold">{user.name}</div>
-                    <div className="text-sm text-gray-500">{user.followStatus}</div>
+                    <div className="font-semibold">{username}</div>
+                    <div className="text-sm text-gray-500">Qualified</div>
                 </div>
-                <button className="text-blue-500">Follow</button>
+                <button className="text-blue-500" onClick={handleFollow}>
+                    Follow
+                </button>
             </div>
 
             {/* Description Section */}
             <div className="p-4 text-gray-700">
-                <p>{recipe.description || "This is a delicious recipe that you will love. Try it out and enjoy the flavors!"}</p>
+                <p>{description || 'This is a delicious recipe that you will love. Try it out and enjoy the flavors!'}</p>
             </div>
 
             {/* Recipe Image */}
-            {imageUrl && (
+            {recipeImage && (
                 <img
-                    src={imageUrl}
-                    alt={recipe.title}
+                    src={recipeImage}
+                    alt={postName}
                     className="w-full max-h-96 object-contain rounded-md mb-3"
                 />
             )}
 
-            {/* Recipe Details with Stars, Pie Chart, and Macros */}
+            {/* Recipe Details */}
             <div className="p-4 flex items-center">
-                {/* Rating Stars */}
                 <div className="flex flex-col items-start mr-4">
-                    <div className="flex mb-1">
-                        {[...Array(5)].map((_, i) => (
-                            <Star key={i} color="text-blue-500" />
-                        ))}
+                    {/* Expert Rating */}
+                    <div className="flex items-center mb-1">
+                        <ReactRating
+                            initialRating={averageRateExpert}
+                            readonly={false} // Make the stars editable
+                            emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
+                            fullSymbol={<span className="text-green-500 text-2xl">★</span>}
+                            fractions={2} // Supports half stars
+                            onChange={(newRating) => {
+                                console.log(`Expert Rating for Post ID ${postId}:`, newRating);
+                                // TODO: Implement backend logic to save expert rating
+                            }}
+                        />
+                        <span className="ml-2 text-gray-500 text-sm">{totalRatersExpert} rated</span>
                     </div>
-                    <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                            <Star key={i} color="text-yellow-500" />
-                        ))}
+
+                    {/* Regular Rating */}
+                    <div className="flex items-center mb-1">
+                        <ReactRating
+                            initialRating={averageRateRegular}
+                            readonly={false} // Make the stars editable
+                            emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
+                            fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
+                            fractions={2}
+                            onChange={(newRating) => {
+                                console.log(`Regular Rating for Post ID ${postId}:`, newRating);
+                                // TODO: Implement backend logic to save regular rating
+                            }}
+                        />
+                        <span className="ml-2 text-gray-500 text-sm">{totalRatersRegular} rated</span>
                     </div>
                 </div>
 
@@ -104,19 +176,19 @@ const RecipeCard = ({ user, recipe }) => {
                     </Pie>
                 </PieChart>
 
-                {/* Vertical Text for Macros */}
+                {/* Macros */}
                 <div className="flex flex-col ml-4 text-sm text-gray-600">
                     <div className="flex items-center mb-1">
-                        <span>🍗</span> <span className="ml-1">{recipe.protein}g protein</span>
+                        <span>🍗</span> <span className="ml-1">{protein}g protein</span>
                     </div>
                     <div className="flex items-center mb-1">
-                        <span>🍞</span> <span className="ml-1">{recipe.carbs}g carbs</span>
+                        <span>🍞</span> <span className="ml-1">{carbs}g carbs</span>
                     </div>
                     <div className="flex items-center mb-1">
-                        <span>🥓</span> <span className="ml-1">{recipe.fat}g fat</span>
+                        <span>🥓</span> <span className="ml-1">{fat}g fat</span>
                     </div>
                     <div className="mt-2 text-center">
-                        {recipe.calories} kcal
+                        {calories} kcal
                     </div>
                 </div>
             </div>
@@ -124,10 +196,14 @@ const RecipeCard = ({ user, recipe }) => {
             {/* Interactions */}
             <div className="flex items-center justify-between p-4 border-t border-gray-200">
                 <div className="flex space-x-4">
-                    <button>👍 {recipe.likes}</button>
-                    <button>💬 {recipe.comments}</button>
+                    <button onClick={handleLike}>
+                        {liked ? '💔 Unlike' : '👍 Like'} {likeCount}
+                    </button>
+                    <button onClick={handleComments}>💬 Comments</button>
                 </div>
-                <button className="text-blue-500">Share</button>
+                <button className="text-blue-500" onClick={handleShare}>
+                    Share
+                </button>
             </div>
         </div>
     );

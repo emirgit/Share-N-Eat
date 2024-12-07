@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import ramenImg from '../assets/ramen.jpeg';
 import axiosHelper from '../axiosHelper';
+import RecipeCard from '../components/RecipeCard';
 
 const ProfilePage = () => {
     const [user, setUser] = useState({
@@ -15,15 +14,17 @@ const ProfilePage = () => {
         followers: 0,
         following: 0,
     });
-
+    const [userPosts, setUserPosts] = useState([]); // State for user's posts
     const [isEditing, setIsEditing] = useState(false);
-    const [newUsername, setNewUsername] = useState(user.username);
-    const [newBio, setNewBio] = useState(user.bio);
+    const [newUsername, setNewUsername] = useState('');
+    const [newBio, setNewBio] = useState('');
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
+    // Fetch user data and their posts
     useEffect(() => {
-        const fetchUserDataAndProfilePicture = async () => {
+        const fetchUserDataAndPosts = async () => {
             try {
+                // Fetch user data
                 const userData = await axiosHelper('/user/my-account', 'GET');
                 setUser({
                     username: userData.username,
@@ -34,27 +35,23 @@ const ProfilePage = () => {
                 });
                 setNewUsername(userData.username);
                 setNewBio(userData.bio);
-    
-                const profilePictureResponse = await axiosHelper('/user/my-account/profile-picture', 'GET', null, {
-                    responseType: 'blob', // To handle the image blob
+
+                // Fetch profile picture
+                const profilePictureResponse = await axiosHelper('/user/my-account/range', 'GET', null, {
+                    responseType: 'blob',
                 });
                 setProfilePictureUrl(URL.createObjectURL(profilePictureResponse));
+
+                // Fetch user's posts
+                const posts = await axiosHelper('/posts/current-user', 'GET');
+                setUserPosts(posts);
             } catch (error) {
-                console.error("Error fetching user data or profile picture", error);
+                console.error('Error fetching user data or posts', error);
             }
         };
-    
-        fetchUserDataAndProfilePicture();
-    }, []);
-    
-    
 
-    const posts = [
-        { id: 1, imageUrl: ramenImg },
-        { id: 2, imageUrl: ramenImg },
-        { id: 3, imageUrl: ramenImg },
-        { id: 4, imageUrl: ramenImg },
-    ];
+        fetchUserDataAndPosts();
+    }, []);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -66,37 +63,34 @@ const ProfilePage = () => {
                 username: newUsername,
                 bio: newBio,
             });
-            setUser({
-                ...user,
+            setUser((prev) => ({
+                ...prev,
                 username: newUsername,
                 bio: newBio,
-            });
+            }));
             setIsEditing(false);
         } catch (error) {
-            console.error("Error saving user data", error);
+            console.error('Error saving user data', error);
         }
     };
-    
 
     const handlePhotoChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
             try {
                 const formData = new FormData();
-                formData.append('profilePhoto', file); // 'profilePhoto' is the key used in the backend
-    
+                formData.append('profilePhoto', file);
+
                 await axiosHelper('/user/my-account/upload-photo', 'PUT', formData, {
-                    'Content-Type': 'multipart/form-data', // Required for file uploads
+                    'Content-Type': 'multipart/form-data',
                 });
-    
-                setProfilePictureUrl(URL.createObjectURL(file)); // Update the profile picture preview
+
+                setProfilePictureUrl(URL.createObjectURL(file));
             } catch (error) {
-                console.error("Error uploading profile photo", error);
+                console.error('Error uploading profile photo', error);
             }
         }
     };
-    
-    
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -104,6 +98,7 @@ const ProfilePage = () => {
             <div className="flex flex-row w-full">
                 <Sidebar />
                 <div className="flex-1 flex flex-col items-center p-8">
+                    {/* Profile Section */}
                     <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8 mb-8 flex items-start">
                         <div className="relative w-32 h-32 mr-6">
                             <img
@@ -180,23 +175,18 @@ const ProfilePage = () => {
                             )}
                         </div>
                     </div>
-                    <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        {posts.map((post) => (
-                            <div 
-                                key={post.id} 
-                                className="bg-white rounded-3xl shadow-md overflow-hidden"
-                            >
-                                <img
-                                    src={post.imageUrl}
-                                    alt="User's post"
-                                    className="w-full h-48 object-cover"
-                                />
-                                <div className="p-4">
-                                    <h3 className="text-lg font-semibold">Recipe Title</h3>
-                                    <p className="text-gray-600 text-sm">A delicious recipe to try out!</p>
-                                </div>
-                            </div>
-                        ))}
+
+                    {/* User's Posts Feed */}
+                    <div className="w-full max-w-4xl space-y-6">
+                        {userPosts.length > 0 ? (
+                            userPosts.map((post) => (
+                                <RecipeCard key={post.postId} post={post} />
+                            ))
+                        ) : (
+                            <p className="text-center text-gray-500">
+                                No posts available for this user.
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

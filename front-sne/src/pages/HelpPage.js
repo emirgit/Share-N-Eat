@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import axiosHelper from '../axiosHelper'; // Assuming axiosHelper is correctly set up
 
 const HelpPage = () => {
     const [message, setMessage] = useState('');
     const [faqOpen, setFaqOpen] = useState(null); // State to control open FAQ item
+    const [feedbackSent, setFeedbackSent] = useState(false); // State to show success message
 
     const faqs = [
         { question: 'How do I change my username?', answer: 'Go to Settings > Change Username to update your username.' },
@@ -14,11 +16,26 @@ const HelpPage = () => {
         { question: 'Who can see my profile?', answer: 'Your profile is visible to all registered users of the platform.' },
     ];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Logic to send message to admin
-        console.log('Message sent to admin:', message);
-        setMessage(''); // Clear message input after submission
+        if (message.trim() === '') {
+            alert('Please enter a message before submitting.');
+            return;
+        }
+
+        try {
+            // Send the feedback message to the backend
+            await axiosHelper('/feedbacks/sendFeedback', 'POST', message, {
+                'Content-Type': 'text/plain', // Required since the backend expects plain text
+            });
+
+            setFeedbackSent(true); // Show a success message
+            setMessage(''); // Clear the input field after submission   
+            setTimeout(() => setFeedbackSent(false), 3000); // Remove success message after 3 seconds
+        } catch (error) {
+            console.error('Error sending feedback:', error);
+            alert('An error occurred while sending your message. Please try again later.');
+        }
     };
 
     const toggleFaq = (index) => {
@@ -52,6 +69,11 @@ const HelpPage = () => {
                                 Send Message
                             </button>
                         </form>
+                        {feedbackSent && (
+                            <p className="text-green-500 mt-4 text-center">
+                                Your message has been sent successfully!
+                            </p>
+                        )}
                     </div>
 
                     {/* FAQ Section */}

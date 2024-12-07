@@ -15,6 +15,7 @@ import ResetPassword from './pages/ResetPassword';
 
 import PrivateRoute from './components/PrivateRoute'; // Make sure the path is correct
 import ProductPage from './pages/ProductPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
         <Route path="/change-photo" element={<PrivateRoute element={ChangePhoto} />} />
         <Route path="/change-description" element={<PrivateRoute element={ChangeDescription} />} />
         <Route path="/help" element={<PrivateRoute element={HelpPage} />} />
+        <Route path="/products" element={<PrivateRoute element={ProductPage} />} />
+        <Route path="/settings" element={<PrivateRoute element={SettingsPage} />} />
         
 
       </Routes>

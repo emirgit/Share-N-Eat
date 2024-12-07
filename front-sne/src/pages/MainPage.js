@@ -6,31 +6,33 @@ import UploadSection from '../components/UploadSection';
 import axiosHelper from '../axiosHelper';
 
 const MainPage = () => {
-    // State to hold posts from the backend
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState([]); // State to hold posts from the backend
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
 
     // Fetch posts from the backend when the component mounts
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                // Use the axiosHelper to fetch posts
-                const data = await axiosHelper('/posts', 'GET'); // The token is automatically handled by axiosHelper
-                setPosts(data); // Set the retrieved posts in the state
+                const data = await axiosHelper('/posts', 'GET'); // Retrieve posts using axiosHelper
+                setPosts(data); // Set the retrieved posts in state
             } catch (error) {
                 console.error('Error fetching posts:', error);
+                setError('Failed to load posts. Please try again later.');
+            } finally {
+                setLoading(false); // Mark loading as complete
             }
         };
 
-        fetchPosts(); // Call the fetchPosts function when the component mounts
+        fetchPosts(); // Call the fetchPosts function
     }, []);
-
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             {/* Navbar */}
             <Navbar />
 
-            {/* Main Content with Sidebar and Feed */}
+            {/* Main Content */}
             <div className="flex flex-row">
                 {/* Sidebar */}
                 <Sidebar />
@@ -40,34 +42,32 @@ const MainPage = () => {
                     {/* Upload Section */}
                     <UploadSection />
 
+                    {/* Loading State */}
+                    {loading && (
+                        <p className="text-center text-gray-500 mt-4">Loading posts...</p>
+                    )}
+
+                    {/* Error State */}
+                    {error && (
+                        <p className="text-center text-red-500 mt-4">{error}</p>
+                    )}
+
                     {/* Feed Section */}
                     <div className="flex justify-center mt-4">
                         <div className="w-full max-w-4xl">
-                            {posts.length > 0 ? (
+                            {!loading && posts.length > 0 ? (
                                 posts.map((post) => (
                                     <RecipeCard
                                         key={post.postId}
-                                        user={{
-                                            profilePic: `http://localhost:8080/api/post/images/${post.username}.jpg`, // Profile picture path
-                                            name: post.username,
-                                            followStatus: 'Qualified', // Adjust this if needed
-                                            isQualified: true, // Adjust this if needed
-                                        }}
-                                        recipe={{
-                                            imageUrl: `http://localhost:8080${post.imageUrl}`, // Use imageUrl from PostResponse
-                                            title: post.postName,
-                                            description: post.description,
-                                            protein: post.protein,
-                                            carbs: post.carbs,
-                                            fat: post.fat,
-                                            likes: post.likeCount,
-                                            comments: post.totalRatersRegular + post.totalRatersExpert,
-                                            calories: post.calories,
-                                        }}
+                                        post={post} // Pass the entire post object
                                     />
                                 ))
                             ) : (
-                                <p className="text-center text-gray-500">No posts available.</p>
+                                !loading && (
+                                    <p className="text-center text-gray-500">
+                                        No posts available.
+                                    </p>
+                                )
                             )}
                         </div>
                     </div>
@@ -78,3 +78,4 @@ const MainPage = () => {
 };
 
 export default MainPage;
+    

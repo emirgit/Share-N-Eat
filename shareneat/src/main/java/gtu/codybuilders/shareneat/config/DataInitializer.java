@@ -42,8 +42,8 @@ public class DataInitializer {
             dummyUser.setRole(Role.ROLE_ADMIN);
 
             // Set default values for other fields
-            dummyUser.setFollowersCount(5);
-            dummyUser.setFollowingCount(11111);
+            dummyUser.setFollowersCount(0);
+            dummyUser.setFollowingCount(0);
             dummyUser.setPostsCount(0);
             dummyUser.setLastLogin(Instant.now());
             dummyUser.setProfilePictureUrl("dummy.png");

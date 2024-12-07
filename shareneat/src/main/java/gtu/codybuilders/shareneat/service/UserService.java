@@ -52,5 +52,5 @@ public interface UserService {
 
     void changeUserRole(Long userId, Role role);
 
-    
+    Optional<User> findUserByUsername(String username);
 }

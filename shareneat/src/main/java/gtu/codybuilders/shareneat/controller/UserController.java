@@ -64,7 +64,25 @@ public class UserController {
     }
 
 
-    @GetMapping("/{userId}/profile-picture")
+    @GetMapping("/{username}/profile-picture")
+    public ResponseEntity<Resource> getUserProfilePicture(@PathVariable String username) {
+        Optional<User> userOptional = userService.findUserByUsername(username);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource image = userService.getProfilePhoto(userOptional.get().getUserId());
+        if (image == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // Adjust media type if needed
+                .body(image);
+    }
+
+    /*
+        @GetMapping("/{userId}/profile-picture")
     public ResponseEntity<Resource> getUserProfilePicture(@PathVariable Long userId) {
         Optional<User> userOptional = userService.findUserById(userId);
 
@@ -81,6 +99,7 @@ public class UserController {
                 .body(image);
     }
 
+     */
     @PutMapping("/my-account/upload-photo")
     public ResponseEntity<String> uploadProfilePhoto(@RequestParam("profilePhoto") MultipartFile file) {
         Optional<User> userOptional = userService.findUserById(AuthUtil.getUserId());
