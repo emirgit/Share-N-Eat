@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -112,6 +113,16 @@ public class UserController {
             return ResponseEntity.ok(filePath); // Return the path or URL of the saved photo
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving profile photo");
+        }
+    }
+
+    @GetMapping("/my-account/roles")
+    public ResponseEntity<List<String>> getUserRoles() {
+        try {
+            List<String> roles = AuthUtil.getUserRoles();
+            return ResponseEntity.ok(roles);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 

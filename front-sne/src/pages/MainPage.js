@@ -1,3 +1,4 @@
+// src/pages/MainPage.js
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -9,6 +10,9 @@ const MainPage = () => {
     const [posts, setPosts] = useState([]); // State to hold posts from the backend
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
+    const [roles, setRoles] = useState([]); // State to hold user roles
+    const [rolesLoading, setRolesLoading] = useState(true); // Loading state for roles
+    const [rolesError, setRolesError] = useState(null); // Error state for roles
 
     // Fetch posts from the backend when the component mounts
     useEffect(() => {
@@ -25,6 +29,23 @@ const MainPage = () => {
         };
 
         fetchPosts(); // Call the fetchPosts function
+    }, []);
+
+    // Fetch user roles when the component mounts
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const data = await axiosHelper('/user/my-account/roles', 'GET'); // Endpoint to fetch user roles
+                setRoles(data); // Set the retrieved roles in state
+            } catch (error) {
+                console.error('Error fetching user roles:', error);
+                setRolesError('Failed to load user roles.');
+            } finally {
+                setRolesLoading(false); // Mark roles loading as complete
+            }
+        };
+
+        fetchRoles(); // Call the fetchRoles function
     }, []);
 
     return (
@@ -52,18 +73,29 @@ const MainPage = () => {
                         <p className="text-center text-red-500 mt-4">{error}</p>
                     )}
 
+                    {/* Loading Roles */}
+                    {rolesLoading && (
+                        <p className="text-center text-gray-500 mt-4">Loading user roles...</p>
+                    )}
+
+                    {/* Error Loading Roles */}
+                    {rolesError && (
+                        <p className="text-center text-red-500 mt-4">{rolesError}</p>
+                    )}
+
                     {/* Feed Section */}
                     <div className="flex justify-center mt-4">
                         <div className="w-full max-w-4xl">
-                            {!loading && posts.length > 0 ? (
+                            {!loading && !rolesLoading && posts.length > 0 ? (
                                 posts.map((post) => (
                                     <RecipeCard
                                         key={post.postId}
                                         post={post} // Pass the entire post object
+                                        userRoles={roles} // Pass user roles to RecipeCard
                                     />
                                 ))
                             ) : (
-                                !loading && (
+                                !loading && !rolesLoading && (
                                     <p className="text-center text-gray-500">
                                         No posts available.
                                     </p>
@@ -78,4 +110,3 @@ const MainPage = () => {
 };
 
 export default MainPage;
-    

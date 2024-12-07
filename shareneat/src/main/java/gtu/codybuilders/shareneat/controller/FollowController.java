@@ -17,6 +17,8 @@ public class FollowController {
 
     private final FollowService followService;
 
+
+
     // Create a follow relationship
     @PostMapping("/follow")
     public ResponseEntity<Void> followUser(@RequestBody FollowDto followDto) {

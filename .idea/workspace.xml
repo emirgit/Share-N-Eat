@@ -5,26 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7077bcda-2784-45d2-9b21-10e6c2f431bc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-sne/src/components/RecipeCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/RecipeCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/HelpPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/HelpPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-sne/src/pages/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/MainPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/spring-boot-app-2024-11-12.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/spring-boot-app-2024-11-16.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/spring-boot-app-2024-11-20.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/spring-boot-app-2024-11-21.log" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/spring-boot-app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/spring-boot-app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/config/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/FollowController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/PostResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/PostResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/util/AuthUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/util/AuthUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,16 +47,16 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;sprint__prototype&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lenovo/Documents/GitHub/PerformanceGUI&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "sprint__prototype",
+    "last_opened_file_path": "C:/Users/Lenovo/Documents/GitHub/Share-N-Eat",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="gtu.codybuilders.shareneat.dto" />

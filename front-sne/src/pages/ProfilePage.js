@@ -37,7 +37,7 @@ const ProfilePage = () => {
                 setNewBio(userData.bio);
 
                 // Fetch profile picture
-                const profilePictureResponse = await axiosHelper('/user/my-account/range', 'GET', null, {
+                const profilePictureResponse = await axiosHelper('user/my-account/profile-picture', 'GET', null, {
                     responseType: 'blob',
                 });
                 setProfilePictureUrl(URL.createObjectURL(profilePictureResponse));

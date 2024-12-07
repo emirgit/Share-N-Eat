@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Share-N-Eat.iml" filepath="$PROJECT_DIR$/.idea/Share-N-Eat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/shareneat/shareneat.iml" filepath="$PROJECT_DIR$/shareneat/shareneat.iml" />
     </modules>
   </component>
 </project>

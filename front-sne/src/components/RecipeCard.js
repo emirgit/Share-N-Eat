@@ -1,3 +1,4 @@
+// src/components/RecipeCard.js
 import React, { useState, useEffect } from 'react';
 import ReactRating from 'react-rating'; // Import the library
 import axiosHelper from '../axiosHelper';
@@ -5,7 +6,7 @@ import { PieChart, Pie, Cell } from 'recharts';
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Colors for Pie Chart
 
-const RecipeCard = ({ post }) => {
+const RecipeCard = ({ post, userRoles }) => {
     const {
         postId,
         postName,
@@ -25,6 +26,11 @@ const RecipeCard = ({ post }) => {
     const [recipeImage, setRecipeImage] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [liked, setLiked] = useState(false); // State for Like Button
+    const [currentLikeCount, setCurrentLikeCount] = useState(likeCount); // State for like count
+    const [loadingLike, setLoadingLike] = useState(false); // State to manage like button loading
+
+    // Determine user roles
+    const isUser = userRoles.includes('ROLE_USER');
 
     // Fetch Recipe Image
     useEffect(() => {
@@ -61,11 +67,41 @@ const RecipeCard = ({ post }) => {
         if (username) fetchProfileImage();
     }, [username]);
 
+    // Fetch Initial Like Status
+    useEffect(() => {
+        const fetchLikeStatus = async () => {
+            try {
+                const isLiked = await axiosHelper(`/likes/status/${postId}`, 'GET');
+                setLiked(isLiked);
+            } catch (error) {
+                console.error('Error fetching like status:', error);
+            }
+        };
+
+        fetchLikeStatus();
+    }, [postId]);
+
     // Handle Like Button Click
-    const handleLike = () => {
-        setLiked(!liked); // Toggle like state
-        console.log(`Post ID ${postId}: Liked state is now`, !liked);
-        // TODO: Implement backend logic to send the like state to the backend
+    const handleLike = async () => {
+        setLoadingLike(true);
+        try {
+            if (liked) {
+                // If already liked, send DELETE request to unlike
+                await axiosHelper(`/likes/${postId}`, 'DELETE');
+                setLiked(false);
+                setCurrentLikeCount((prev) => prev - 1);
+            } else {
+                // If not liked, send POST request to like
+                await axiosHelper(`/likes/${postId}`, 'POST');
+                setLiked(true);
+                setCurrentLikeCount((prev) => prev + 1);
+            }
+        } catch (error) {
+            console.error('Error toggling like:', error);
+            alert('An error occurred while updating your like. Please try again.');
+        } finally {
+            setLoadingLike(false);
+        }
     };
 
     // Handle Share Button Click
@@ -103,7 +139,9 @@ const RecipeCard = ({ post }) => {
                 />
                 <div className="ml-3 flex-1">
                     <div className="font-semibold">{username}</div>
-                    <div className="text-sm text-gray-500">Qualified</div>
+                    <div className="text-sm text-gray-500">
+                        {isUser ? 'User' : 'Expert'}
+                    </div>
                 </div>
                 <button className="text-blue-500" onClick={handleFollow}>
                     Follow
@@ -131,32 +169,50 @@ const RecipeCard = ({ post }) => {
                     <div className="flex items-center mb-1">
                         <ReactRating
                             initialRating={averageRateExpert}
-                            readonly={false} // Make the stars editable
+                            readonly={isUser} // Make readonly if user is ROLE_USER
                             emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
                             fullSymbol={<span className="text-green-500 text-2xl">★</span>}
                             fractions={2} // Supports half stars
                             onChange={(newRating) => {
-                                console.log(`Expert Rating for Post ID ${postId}:`, newRating);
-                                // TODO: Implement backend logic to save expert rating
+                                if (!isUser) {
+                                    console.log(`Expert Rating for Post ID ${postId}:`, newRating);
+                                    // TODO: Implement backend logic to save expert rating
+                                }
                             }}
                         />
-                        <span className="ml-2 text-gray-500 text-sm">{totalRatersExpert} rated</span>
+                        {!isUser && (
+                            <span className="ml-2 text-gray-500 text-sm">{totalRatersExpert} rated</span>
+                        )}
+                        {isUser && (
+                            <span className="ml-2 text-gray-400 text-sm flex items-center">
+                                <span className="mr-1">Locked</span> 🔒
+                            </span>
+                        )}
                     </div>
 
                     {/* Regular Rating */}
                     <div className="flex items-center mb-1">
                         <ReactRating
                             initialRating={averageRateRegular}
-                            readonly={false} // Make the stars editable
+                            readonly={!isUser} // Make readonly if not ROLE_USER
                             emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
                             fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
                             fractions={2}
                             onChange={(newRating) => {
-                                console.log(`Regular Rating for Post ID ${postId}:`, newRating);
-                                // TODO: Implement backend logic to save regular rating
+                                if (isUser) {
+                                    console.log(`Regular Rating for Post ID ${postId}:`, newRating);
+                                    // TODO: Implement backend logic to save regular rating
+                                }
                             }}
                         />
-                        <span className="ml-2 text-gray-500 text-sm">{totalRatersRegular} rated</span>
+                        {isUser && (
+                            <span className="ml-2 text-gray-500 text-sm">{totalRatersRegular} rated</span>
+                        )}
+                        {!isUser && (
+                            <span className="ml-2 text-gray-400 text-sm flex items-center">
+                                <span className="mr-1">Locked</span> 🔒
+                            </span>
+                        )}
                     </div>
                 </div>
 
@@ -196,10 +252,17 @@ const RecipeCard = ({ post }) => {
             {/* Interactions */}
             <div className="flex items-center justify-between p-4 border-t border-gray-200">
                 <div className="flex space-x-4">
-                    <button onClick={handleLike}>
-                        {liked ? '💔 Unlike' : '👍 Like'} {likeCount}
+                    <button 
+                        onClick={handleLike} 
+                        disabled={loadingLike}
+                        className={`flex items-center ${liked ? 'text-red-500' : 'text-blue-500'} 
+                                   ${loadingLike ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                    >
+                        {liked ? '💔 Unlike' : '👍 Like'} {currentLikeCount}
                     </button>
-                    <button onClick={handleComments}>💬 Comments</button>
+                    <button onClick={handleComments} className="flex items-center text-blue-500">
+                        💬 Comments
+                    </button>
                 </div>
                 <button className="text-blue-500" onClick={handleShare}>
                     Share
@@ -207,6 +270,7 @@ const RecipeCard = ({ post }) => {
             </div>
         </div>
     );
+
 };
 
 export default RecipeCard;
