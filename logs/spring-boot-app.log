@@ -1,887 +1,110 @@
-2024-12-01 15:56:35 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 15:56:35 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 3280 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 15:56:35 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 15:56:35 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 15:56:35 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 15:56:37 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 15:56:37 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 168 ms. Found 15 JPA repository interfaces.
-2024-12-01 15:56:38 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 15:56:38 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 15:56:38 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 15:56:38 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 15:56:38 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 15:56:38 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2856 ms
-2024-12-01 15:56:38 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 15:56:38 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 15:56:38 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 15:56:39 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 15:56:39 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 15:56:39 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4b7d00a6
-2024-12-01 15:56:39 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 15:56:39 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 15:56:41 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 15:56:41 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 15:56:42 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 15:56:43 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 15:56:43 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 15:56:45 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 15:56:45 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 15:56:45 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 15:56:45 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 10.263 seconds (process running for 11.172)
-2024-12-01 15:56:46 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 18:29:21 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 18:29:22 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 2996 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 18:29:22 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 18:29:22 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 18:29:22 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 18:29:23 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 18:29:23 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 180 ms. Found 15 JPA repository interfaces.
-2024-12-01 18:29:24 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 18:29:24 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 18:29:24 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 18:29:24 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 18:29:24 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 18:29:24 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2483 ms
-2024-12-01 18:29:24 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 18:29:24 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 18:29:25 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 18:29:25 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 18:29:25 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 18:29:25 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@50cf8446
-2024-12-01 18:29:25 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 18:29:25 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 18:29:27 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 18:29:27 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 18:29:27 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 18:29:28 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 18:29:29 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 18:29:30 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 18:29:30 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 18:29:30 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 18:29:30 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.665 seconds (process running for 9.356)
-2024-12-01 18:29:30 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 18:39:31 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 18:39:31 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 6492 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 18:39:31 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 18:39:31 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 18:39:31 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 18:39:32 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 18:39:32 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 136 ms. Found 15 JPA repository interfaces.
-2024-12-01 18:39:33 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 18:39:33 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 18:39:33 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 18:39:33 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 18:39:33 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 18:39:33 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2206 ms
-2024-12-01 18:39:33 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 18:39:33 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 18:39:34 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 18:39:34 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 18:39:34 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 18:39:34 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4616d98e
-2024-12-01 18:39:34 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 18:39:34 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 18:39:36 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 18:39:36 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 18:39:37 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 18:39:38 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 18:39:38 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 18:39:39 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 18:39:39 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 18:39:39 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 18:39:39 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 9.034 seconds (process running for 9.581)
-2024-12-01 18:39:40 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 19:44:01 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:44:01 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 24712 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:44:01 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:44:02 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:44:02 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:44:03 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:44:03 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 162 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:44:04 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:44:04 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:44:04 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:44:04 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:44:04 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:44:04 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2304 ms
-2024-12-01 19:44:04 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:44:04 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:44:04 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:44:05 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:44:05 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:44:05 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1071e1d9
-2024-12-01 19:44:05 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:44:05 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:44:06 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:44:07 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:44:07 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:44:08 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:44:08 - o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController' defined in file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\UserController.class]: Unsatisfied dependency expressed through constructor parameter 2: No qualifying bean of type 'java.lang.String' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2024-12-01 19:44:08 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:44:08 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-12-01 19:44:08 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-12-01 19:44:08 - o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2024-12-01 19:44:08 - o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2024-12-01 19:44:08 - o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 2 of constructor in gtu.codybuilders.shareneat.controller.UserController required a bean of type 'java.lang.String' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'java.lang.String' in your configuration.
-
-2024-12-01 19:45:00 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:45:00 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 9828 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:45:00 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:45:01 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:45:01 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:45:02 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:45:02 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 133 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:45:03 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:45:03 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:45:03 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:45:03 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:45:03 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:45:03 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2211 ms
-2024-12-01 19:45:03 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:45:03 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:45:03 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:45:04 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:45:04 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:45:04 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@22d54fc5
-2024-12-01 19:45:04 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:45:04 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:45:05 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:45:06 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:45:06 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:45:07 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:45:07 - o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController' defined in file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\UserController.class]: Unsatisfied dependency expressed through constructor parameter 2: No qualifying bean of type 'java.lang.String' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2024-12-01 19:45:07 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:45:07 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-12-01 19:45:07 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-12-01 19:45:07 - o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2024-12-01 19:45:07 - o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2024-12-01 19:45:07 - o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 2 of constructor in gtu.codybuilders.shareneat.controller.UserController required a bean of type 'java.lang.String' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'java.lang.String' in your configuration.
-
-2024-12-01 19:45:41 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:45:41 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 23524 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:45:41 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:45:41 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:45:41 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:45:42 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:45:42 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 136 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:45:43 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:45:43 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:45:43 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:45:43 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:45:43 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:45:43 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2182 ms
-2024-12-01 19:45:44 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:45:44 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:45:44 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:45:44 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:45:44 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:45:44 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6852a022
-2024-12-01 19:45:44 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:45:44 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:45:46 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:45:46 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:45:47 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:45:47 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:45:48 - o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController' defined in file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\UserController.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'java.lang.String' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2024-12-01 19:45:48 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:45:48 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-12-01 19:45:48 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-12-01 19:45:48 - o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2024-12-01 19:45:48 - o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2024-12-01 19:45:48 - o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 1 of constructor in gtu.codybuilders.shareneat.controller.UserController required a bean of type 'java.lang.String' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'java.lang.String' in your configuration.
-
-2024-12-01 19:46:09 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:46:09 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 14192 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:46:09 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:46:09 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:46:09 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:46:10 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:46:10 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 156 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:46:11 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:46:11 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:46:11 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:46:11 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:46:12 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:46:12 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2330 ms
-2024-12-01 19:46:12 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:46:12 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:46:12 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:46:12 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:46:12 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:46:13 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@190be123
-2024-12-01 19:46:13 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:46:13 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:46:14 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:46:14 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:46:15 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:46:15 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:46:16 - o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController' defined in file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\UserController.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'java.lang.String' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2024-12-01 19:46:16 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:46:16 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-12-01 19:46:16 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-12-01 19:46:16 - o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2024-12-01 19:46:16 - o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2024-12-01 19:46:16 - o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 1 of constructor in gtu.codybuilders.shareneat.controller.UserController required a bean of type 'java.lang.String' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'java.lang.String' in your configuration.
-
-2024-12-01 19:47:06 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:47:06 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 18292 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:47:06 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:47:06 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:47:06 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:47:07 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:47:07 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 144 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:47:08 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:47:08 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:47:08 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:47:08 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:47:08 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:47:08 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2110 ms
-2024-12-01 19:47:09 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:47:09 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:47:09 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:47:09 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:47:09 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:47:09 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1240902d
-2024-12-01 19:47:09 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:47:09 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:47:11 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:47:11 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:47:12 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:47:12 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:47:13 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 19:47:14 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 19:47:14 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:47:14 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 19:47:14 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.379 seconds (process running for 8.937)
-2024-12-01 19:47:15 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 19:52:38 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:52:38 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 4200 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:52:38 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:52:38 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:52:38 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:52:39 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:52:39 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 141 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:52:40 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:52:40 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:52:40 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:52:40 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:52:41 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:52:41 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2295 ms
-2024-12-01 19:52:41 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:52:41 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:52:41 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:52:41 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:52:41 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:52:42 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4bc371f7
-2024-12-01 19:52:42 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:52:42 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:52:43 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:52:43 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:52:44 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:52:44 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:52:45 - o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userController' defined in file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\UserController.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'java.lang.String' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-2024-12-01 19:52:45 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:52:45 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-12-01 19:52:45 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-12-01 19:52:45 - o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2024-12-01 19:52:45 - o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2024-12-01 19:52:45 - o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Parameter 1 of constructor in gtu.codybuilders.shareneat.controller.UserController required a bean of type 'java.lang.String' that could not be found.
-
-
-Action:
-
-Consider defining a bean of type 'java.lang.String' in your configuration.
-
-2024-12-01 19:57:03 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 19:57:03 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 18644 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 19:57:03 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 19:57:03 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 19:57:03 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 19:57:04 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 19:57:04 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 138 ms. Found 16 JPA repository interfaces.
-2024-12-01 19:57:05 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 19:57:05 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:57:05 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 19:57:05 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 19:57:05 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 19:57:05 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2151 ms
-2024-12-01 19:57:05 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 19:57:05 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 19:57:05 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 19:57:06 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 19:57:06 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 19:57:06 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@59c48008
-2024-12-01 19:57:06 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 19:57:06 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 19:57:07 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 19:57:08 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 19:57:08 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 19:57:09 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 19:57:09 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 19:57:10 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 19:57:10 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 19:57:10 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 19:57:10 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.162 seconds (process running for 8.746)
-2024-12-01 19:57:11 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 21:12:42 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 21:12:42 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 26724 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 21:12:42 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 21:12:42 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 21:12:42 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 21:12:43 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 21:12:43 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 137 ms. Found 16 JPA repository interfaces.
-2024-12-01 21:12:44 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 21:12:44 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:12:44 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 21:12:44 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 21:12:44 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 21:12:44 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2198 ms
-2024-12-01 21:12:44 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 21:12:44 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 21:12:44 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 21:12:45 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 21:12:45 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 21:12:45 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3b3acd19
-2024-12-01 21:12:45 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 21:12:45 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 21:12:46 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 21:12:47 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:12:47 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 21:12:48 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 21:12:48 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 21:12:49 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 21:12:49 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:12:49 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 21:12:49 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.306 seconds (process running for 8.831)
-2024-12-01 21:12:50 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 21:15:18 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 21:15:18 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 25288 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 21:15:18 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 21:15:18 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 21:15:18 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 21:15:19 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 21:15:19 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 143 ms. Found 16 JPA repository interfaces.
-2024-12-01 21:15:20 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 21:15:20 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:15:20 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 21:15:20 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 21:15:20 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 21:15:20 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2195 ms
-2024-12-01 21:15:21 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 21:15:21 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 21:15:21 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 21:15:21 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 21:15:21 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 21:15:21 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@11d6bdc8
-2024-12-01 21:15:21 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 21:15:21 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 21:15:23 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 21:15:23 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:15:24 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 21:15:24 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 21:15:25 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 21:15:26 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 21:15:26 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:15:26 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 21:15:26 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.221 seconds (process running for 8.77)
-2024-12-01 21:15:26 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 21:16:29 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-12-01 21:16:29 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2024-12-01 21:16:29 - o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2024-12-01 21:17:28 - o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.multipart.support.MissingServletRequestPartException: Required part 'image' is not present.]
-2024-12-01 21:19:43 - o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingPathVariableException: Required URI template variable 'postId' for method parameter type Long is not present]
-2024-12-01 21:20:46 - o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
-2024-12-01 21:20:46 - o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:20:46 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:20:46 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2024-12-01 21:20:46 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2024-12-01 21:20:46 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 25288 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 21:20:46 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 21:20:46 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 21:20:46 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 84 ms. Found 16 JPA repository interfaces.
-2024-12-01 21:20:47 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 21:20:47 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:20:47 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 21:20:47 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 21:20:47 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 21:20:47 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 635 ms
-2024-12-01 21:20:47 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 21:20:47 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 21:20:47 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 21:20:47 - com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
-2024-12-01 21:20:47 - com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@35d97a78
-2024-12-01 21:20:47 - com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
-2024-12-01 21:20:47 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 21:20:47 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 21:20:48 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:20:48 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 21:20:48 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 21:20:48 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 21:20:48 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:20:48 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 21:20:48 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 2.445 seconds (process running for 331.386)
-2024-12-01 21:20:49 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 21:20:49 - o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
-2024-12-01 21:20:52 - o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
-2024-12-01 21:20:52 - o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:20:52 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:20:52 - com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
-2024-12-01 21:20:52 - com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
-2024-12-01 21:20:52 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 25288 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 21:20:52 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 21:20:52 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 21:20:52 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 56 ms. Found 16 JPA repository interfaces.
-2024-12-01 21:20:53 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 21:20:53 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:20:53 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 21:20:53 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 21:20:53 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 21:20:53 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 455 ms
-2024-12-01 21:20:53 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 21:20:53 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 21:20:53 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 21:20:53 - com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
-2024-12-01 21:20:53 - com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@2618304a
-2024-12-01 21:20:53 - com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
-2024-12-01 21:20:53 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 21:20:53 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 21:20:53 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:20:53 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 21:20:54 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 21:20:54 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 21:20:54 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:20:54 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 21:20:54 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 1.592 seconds (process running for 336.659)
-2024-12-01 21:20:54 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 21:20:54 - o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
-2024-12-01 21:21:07 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-12-01 21:21:07 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2024-12-01 21:21:07 - o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
-2024-12-01 21:21:07 - o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
-io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
-	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:579)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:364)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:830)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractAllClaims(JwtServiceImpl.java:76)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractClaim(JwtServiceImpl.java:67)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractUserEmail(JwtServiceImpl.java:62)
-	at gtu.codybuilders.shareneat.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:43)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1575)
-2024-12-01 21:21:12 - o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
-io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
-	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:579)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:364)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:830)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractAllClaims(JwtServiceImpl.java:76)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractClaim(JwtServiceImpl.java:67)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractUserEmail(JwtServiceImpl.java:62)
-	at gtu.codybuilders.shareneat.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:43)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1575)
-2024-12-01 21:21:14 - o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
-io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
-	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:579)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:364)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:830)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractAllClaims(JwtServiceImpl.java:76)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractClaim(JwtServiceImpl.java:67)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractUserEmail(JwtServiceImpl.java:62)
-	at gtu.codybuilders.shareneat.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:43)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1575)
-2024-12-01 21:21:23 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 21:21:23 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 5684 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 21:21:23 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 21:21:24 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 21:21:24 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 21:21:25 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 21:21:25 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 160 ms. Found 16 JPA repository interfaces.
-2024-12-01 21:21:26 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 21:21:26 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:21:26 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 21:21:26 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 21:21:26 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 21:21:26 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2678 ms
-2024-12-01 21:21:27 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 21:21:27 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 21:21:27 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 21:21:27 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 21:21:27 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 21:21:27 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@67eee45f
-2024-12-01 21:21:27 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 21:21:28 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 21:21:29 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 21:21:29 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:21:30 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 21:21:31 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 21:21:31 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 21:21:32 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 21:21:32 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:21:32 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 21:21:32 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 9.332 seconds (process running for 9.921)
-2024-12-01 21:21:33 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
-2024-12-01 21:21:37 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2024-12-01 21:21:37 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2024-12-01 21:21:37 - o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2024-12-01 21:22:39 - o.a.c.c.C.[.[.[.[dispatcherServlet] - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
-io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
-	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:579)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:364)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:830)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractAllClaims(JwtServiceImpl.java:76)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractClaim(JwtServiceImpl.java:67)
-	at gtu.codybuilders.shareneat.service.impl.JwtServiceImpl.extractUserEmail(JwtServiceImpl.java:62)
-	at gtu.codybuilders.shareneat.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:43)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
-	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
-	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
-	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
-	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
-	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195)
-	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
-	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
-	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230)
-	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
-	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1575)
-2024-12-01 21:23:22 - o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingPathVariableException: Required URI template variable 'postId' for method parameter type Long is not present]
-2024-12-01 21:29:46 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2024-12-01 21:29:46 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 22572 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
-2024-12-01 21:29:46 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
-2024-12-01 21:29:46 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2024-12-01 21:29:46 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2024-12-01 21:29:47 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-12-01 21:29:47 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 146 ms. Found 16 JPA repository interfaces.
-2024-12-01 21:29:48 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2024-12-01 21:29:48 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:29:48 - o.a.catalina.core.StandardService - Starting service [Tomcat]
-2024-12-01 21:29:48 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
-2024-12-01 21:29:48 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2024-12-01 21:29:48 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2389 ms
-2024-12-01 21:29:49 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-12-01 21:29:49 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-12-01 21:29:49 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2024-12-01 21:29:49 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-12-01 21:29:49 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2024-12-01 21:29:50 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@511baeb8
-2024-12-01 21:29:50 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2024-12-01 21:29:50 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-12-01 21:29:51 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-12-01 21:29:51 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-12-01 21:29:52 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2024-12-01 21:29:53 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-12-01 21:29:53 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-12-01 21:29:54 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2024-12-01 21:29:54 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2024-12-01 21:29:54 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2024-12-01 21:29:54 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 9.116 seconds (process running for 9.857)
-2024-12-01 21:29:55 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
+2024-12-07 09:11:40 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-07 09:11:40 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 14280 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
+2024-12-07 09:11:40 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-12-07 09:11:40 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-07 09:11:40 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-07 09:11:40 - o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to read candidate component class: file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\ImageController.class]
+2024-12-07 09:11:40 - o.s.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to read candidate component class: file [C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\ImageController.class]
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.scanCandidateComponents(ClassPathScanningCandidateComponentProvider.java:510)
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.findCandidateComponents(ClassPathScanningCandidateComponentProvider.java:351)
+	at org.springframework.context.annotation.ClassPathBeanDefinitionScanner.doScan(ClassPathBeanDefinitionScanner.java:277)
+	at org.springframework.context.annotation.ComponentScanAnnotationParser.parse(ComponentScanAnnotationParser.java:128)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:306)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:246)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:165)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:417)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:607)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at gtu.codybuilders.shareneat.ShareneatApplication.main(ShareneatApplication.java:12)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.nio.file.FileSystemException: C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes\gtu\codybuilders\shareneat\controller\ImageController.class: Dosya başka bir işlem tarafından kullanıldığından bu işlem dosyaya erişemiyor
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:234)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432)
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:420)
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160)
+	at org.springframework.core.io.FileSystemResource.getInputStream(FileSystemResource.java:193)
+	at org.springframework.core.type.classreading.SimpleMetadataReader.getClassReader(SimpleMetadataReader.java:54)
+	at org.springframework.core.type.classreading.SimpleMetadataReader.<init>(SimpleMetadataReader.java:48)
+	at org.springframework.core.type.classreading.SimpleMetadataReaderFactory.getMetadataReader(SimpleMetadataReaderFactory.java:103)
+	at org.springframework.core.type.classreading.CachingMetadataReaderFactory.getMetadataReader(CachingMetadataReaderFactory.java:122)
+	at org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider.scanCandidateComponents(ClassPathScanningCandidateComponentProvider.java:470)
+	... 23 common frames omitted
+2024-12-07 09:12:04 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-07 09:12:04 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 20440 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
+2024-12-07 09:12:04 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-12-07 09:12:04 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-07 09:12:04 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-07 09:12:05 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-07 09:12:05 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 135 ms. Found 16 JPA repository interfaces.
+2024-12-07 09:12:06 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-07 09:12:06 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-07 09:12:06 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-07 09:12:06 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-07 09:12:06 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-07 09:12:06 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2183 ms
+2024-12-07 09:12:06 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-07 09:12:07 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-07 09:12:07 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-07 09:12:07 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-07 09:12:07 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-07 09:12:07 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@11d1b846
+2024-12-07 09:12:07 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-07 09:12:07 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-07 09:12:09 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-07 09:12:09 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07 09:12:09 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-07 09:12:10 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-12-07 09:12:10 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-07 09:12:11 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-12-07 09:12:11 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-07 09:12:11 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-12-07 09:12:11 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 8.085 seconds (process running for 8.655)
+2024-12-07 09:12:12 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com
+2024-12-07 09:53:00 - o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-07 09:53:00 - g.c.shareneat.ShareneatApplication - Starting ShareneatApplication using Java 23.0.1 with PID 15544 (C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat\shareneat\target\classes started by emrek in C:\Users\emrek\OneDrive\Masaüstü\project\Share-N-Eat)
+2024-12-07 09:53:00 - g.c.shareneat.ShareneatApplication - No active profile set, falling back to 1 default profile: "default"
+2024-12-07 09:53:01 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-07 09:53:01 - o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-07 09:53:02 - o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-07 09:53:02 - o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 135 ms. Found 16 JPA repository interfaces.
+2024-12-07 09:53:03 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-07 09:53:03 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-07 09:53:03 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-07 09:53:03 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-07 09:53:03 - o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-07 09:53:03 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2118 ms
+2024-12-07 09:53:03 - o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-07 09:53:03 - org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-07 09:53:03 - o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-07 09:53:03 - o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-07 09:53:03 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-07 09:53:04 - com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1071e1d9
+2024-12-07 09:53:04 - com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-07 09:53:04 - org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-12-07 09:53:05 - o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-07 09:53:05 - o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-07 09:53:06 - o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-07 09:53:06 - o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-12-07 09:53:07 - o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-07 09:53:08 - o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-12-07 09:53:08 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-07 09:53:08 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-12-07 09:53:08 - g.c.shareneat.ShareneatApplication - Started ShareneatApplication in 7.968 seconds (process running for 8.494)
+2024-12-07 09:53:08 - g.c.s.service.impl.UserServiceImpl - User registered successfully: dummy@outlook.com

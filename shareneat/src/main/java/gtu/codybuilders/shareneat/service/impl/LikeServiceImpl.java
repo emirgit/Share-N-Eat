@@ -96,5 +96,18 @@ public class LikeServiceImpl implements LikeService{
                 .map(like -> postMapper.mapToPostResponse(like.getLikedPost()))
                 .toList();
     }
+
+    @Override
+    public boolean isPostLikedByCurrentUser(Long postId) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
+
+        return likeRepository.existsByLikedUserAndLikedPost(user, post);
+    }
+
     
 }

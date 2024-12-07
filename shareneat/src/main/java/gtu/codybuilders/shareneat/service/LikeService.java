@@ -9,4 +9,5 @@ public interface LikeService {
     void delete(Long postId);
     List<PostResponse> getAllLikesCurrentUser();
     List<PostResponse> getAllLikesByUserId(Long userId);
+    boolean isPostLikedByCurrentUser(Long postId);
 }

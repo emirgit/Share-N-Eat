@@ -19,4 +19,9 @@ public interface FollowService {
 
     List<FollowDto> getFollowersByUserId(Long userId);
     List<FollowDto> getFollowedsByUserId(Long userId);
+
+    // Method to check if the current user is a follower of a specific user
+    boolean isCurrentUserFollower(Long userId);
+    // Method to check if the current user is following a specific user
+    boolean isCurrentUserFollowing(Long userId);
 }

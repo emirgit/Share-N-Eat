@@ -34,6 +34,12 @@ public class LikeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/status/{postId}")
+    public ResponseEntity<Boolean> getLikeStatusForPost(@PathVariable Long postId) {
+        boolean isLiked = likeService.isPostLikedByCurrentUser(postId);
+        return new ResponseEntity<>(isLiked, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<PostResponse>> getLikesCurrentUser() {
         List<PostResponse> posts = likeService.getAllLikesCurrentUser();

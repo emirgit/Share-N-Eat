@@ -30,7 +30,19 @@ public class FollowController {
         followService.deleteFollow(followId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
+    @GetMapping("/current-user/{userId}/is-follower")
+    public ResponseEntity<Boolean> isCurrentUserFollower(@PathVariable Long userId) {
+        boolean isFollower = followService.isCurrentUserFollower(userId);
+        return ResponseEntity.ok(isFollower);
+    }
+
+    @GetMapping("/current-user/{userId}/is-following")
+    public ResponseEntity<Boolean> isCurrentUserFollowing(@PathVariable Long userId) {
+        boolean isFollowing = followService.isCurrentUserFollowing(userId);
+        return ResponseEntity.ok(isFollowing);
+    }
+
     // Get all followers of a user
     @GetMapping("/current-user/followers")
     public ResponseEntity<List<FollowDto>> getFollowers() {
