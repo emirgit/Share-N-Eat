@@ -12,6 +12,7 @@ import gtu.codybuilders.shareneat.repository.PostRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
+import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -22,8 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static gtu.codybuilders.shareneat.constant.FunctionalConstants.*;
 
 @Service
 @AllArgsConstructor
@@ -129,16 +133,30 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostResponse> getPostsForCurrentUserInRange(int start, int end) {
-        Long userId = AuthUtil.getUserId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+    public List<PostResponse> getPostsByUsernameInRange(String username, int page) {
 
-        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(start, end - start));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(page, PROFILE_PAGE_POST_LOAD_SIZE));
+
         return posts.stream()
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PostResponse> getPostsForCurrentUserInRange(int page) {
+        Long userId = AuthUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(page, PROFILE_PAGE_POST_LOAD_SIZE));
+        return posts.stream()
+                .map(postMapper::mapToPostResponse)
+                .collect(Collectors.toList());
+    }
+
+
 
     
     @Override
@@ -149,7 +167,7 @@ public class PostServiceImpl implements PostService{
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
         // Step 2: Fetch posts from followeds (limit 2)
-        List<Post> followedPosts = postRepository.findPostsByFollowedUsers(currentUser.getUserId(), PageRequest.of(0, 2));
+        List<Post> followedPosts = postRepository.findPostsByFollowedUsers(currentUser.getUserId(), PageRequest.of(0, MAIN_PAGE_POST_LOAD_FROM_FOLLOWED_SIZE));
     
         // Step 3: Track selected post IDs to avoid duplicates across all sources
         Set<Long> selectedPostIds = followedPosts.stream()
@@ -157,27 +175,27 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toSet());
     
         // Step 4: Fetch the top 20 highest-rated posts for both regular and expert ratings, and ensure no overlap with followedPosts
-        List<Post> topRatedRegularPosts = postRepository.findTop20ByOrderByAverageRateRegularDesc(PageRequest.of(0, 20));
-        List<Post> topRatedExpertPosts = postRepository.findTop20ByOrderByAverageRateExpertDesc(PageRequest.of(0, 20));
+        List<Post> topRatedRegularPosts = postRepository.findTop20ByOrderByAverageRateRegularDesc(PageRequest.of(0, 20)); //HARD CODED 20 FOR NOW
+        List<Post> topRatedExpertPosts = postRepository.findTop20ByOrderByAverageRateExpertDesc(PageRequest.of(0, 20)); //HARD CODED 20 FOR NOW
     
         Collections.shuffle(topRatedRegularPosts);
         Collections.shuffle(topRatedExpertPosts);
     
         List<Post> randomTopRatedRegularPosts = topRatedRegularPosts.stream()
                 .filter(post -> selectedPostIds.add(post.getPostId())) // Only add unique posts
-                .limit(2)
+                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_RATED_REGULAR_SIZE)
                 .collect(Collectors.toList());
     
         List<Post> randomTopRatedExpertPosts = topRatedExpertPosts.stream()
                 .filter(post -> selectedPostIds.add(post.getPostId())) // Only add unique posts
-                .limit(2)
+                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_RATED_EXPERT_SIZE)
                 .collect(Collectors.toList());
     
         // Step 5: Fetch remaining random posts from the last 100, ensuring no duplicates
         List<Post> recentPosts = postRepository.findTop100ByOrderByCreatedDateDesc();
         Collections.shuffle(recentPosts);
     
-        int remainingCount = 10 - followedPosts.size() - randomTopRatedRegularPosts.size() - randomTopRatedExpertPosts.size();
+        int remainingCount = MAIN_PAGE_POST_LOAD_SIZE - followedPosts.size() - randomTopRatedRegularPosts.size() - randomTopRatedExpertPosts.size();
         List<Post> randomPosts = recentPosts.stream()
                 .filter(post -> selectedPostIds.add(post.getPostId())) // Only add unique posts
                 .limit(remainingCount)
@@ -216,7 +234,9 @@ public class PostServiceImpl implements PostService{
         but only the difference is the mapper object, postMapper instead of modelMapper.
         so, filterProduct method in ProductServiceImpl tested and filterPosts method should work correctly.
         note: if it is not working correctly, the problem is not about the algorithm probably, it is about the mapper object.
-    */
+
+        THIS IS THE EXACT MATCH FILTER
+
     @Override
     public List<PostResponse> filterPosts(Map<String, String> filters){
         Specification<Post> spec = Specification.where(null);
@@ -231,6 +251,80 @@ public class PostServiceImpl implements PostService{
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
     }
+    */
+
+    //THIS IS THE ENCHANTED FILTER
+    @Override
+    public List<PostResponse> filterPosts(Map<String, String> filters) {
+        Specification<Post> spec = Specification.where(null);
+
+        for (Map.Entry<String, String> filter : filters.entrySet()) {
+            switch (filter.getKey()) {
+                case "trending":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThan(root.get("likeCount"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "following":
+                    Long userId = AuthUtil.getUserId();
+                    spec = spec.and((root, query, criteriaBuilder) -> {
+                        Join<Post, User> userJoin = root.join("user");
+                        return criteriaBuilder.equal(userJoin.get("userId"), userId);
+                    });
+                    break;
+                case "mostRecent":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThan(root.get("createdDate"), Instant.now().minusSeconds(Long.parseLong(filter.getValue()))));
+                    break;
+                case "minCarbs":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("carbs"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "maxCarbs":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.lessThanOrEqualTo(root.get("carbs"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "minProtein":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("protein"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "minFat":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("fat"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "maxFat":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.lessThanOrEqualTo(root.get("fat"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "minCalories":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("calories"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "maxCalories":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.lessThanOrEqualTo(root.get("calories"), Integer.parseInt(filter.getValue())));
+                    break;
+                case "minAverageRateExpert":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("averageRateExpert"), Double.parseDouble(filter.getValue())));
+                    break;
+                case "minAverageRateRegular":
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("averageRateRegular"), Double.parseDouble(filter.getValue())));
+                    break;
+
+                default:
+                    spec = spec.and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.equal(root.get(filter.getKey()), filter.getValue()));
+                    break;
+            }
+        }
+
+        List<Post> posts = postRepository.findAll(spec);
+        return posts.stream()
+                .map(postMapper::mapToPostResponse)
+                .collect(Collectors.toList());
+    }
+
     
 
 }

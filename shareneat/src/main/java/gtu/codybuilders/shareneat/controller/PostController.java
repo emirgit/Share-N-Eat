@@ -42,7 +42,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getImage/{posttId}")
+    @GetMapping("/getImage/{postId}")
     public ResponseEntity<Resource> getImage(@PathVariable Long postId){
         Resource image = postService.getImage(postId);
         return ResponseEntity.ok(image);
@@ -66,11 +66,20 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+    //current user profile page feed
     @GetMapping("/current-user/range")
-    public ResponseEntity<List<PostResponse>> getPostsForCurrentUserInRange(@RequestParam int start, @RequestParam int end) {
-        List<PostResponse> posts = postService.getPostsForCurrentUserInRange(start, end);
+    public ResponseEntity<List<PostResponse>> getPostsForCurrentUserInRange(@RequestParam int page) {
+        List<PostResponse> posts = postService.getPostsForCurrentUserInRange(page);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
+    //user profile page feed
+    @GetMapping("/by-user/{username}/range")
+    public ResponseEntity<List<PostResponse>> getPostsByUsernameInRange(@PathVariable String username, @RequestParam int page) {
+        List<PostResponse> posts = postService.getPostsByUsernameInRange(username, page);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
 
     @GetMapping("/current-user")
     public ResponseEntity<List<PostResponse>> getPostsForUser() {
