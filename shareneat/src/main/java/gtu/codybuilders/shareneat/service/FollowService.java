@@ -5,23 +5,27 @@ import java.util.List;
 
 public interface FollowService {
 
-    // Method to create a follow relationship
+    // Method to create a follow relationship using usernames
     void createFollow(FollowDto followDto);
 
-    // Method to delete a follow relationship
-    void deleteFollow(Long followId);
+    // Method to delete a follow relationship using usernames
+    void deleteFollow(FollowDto followDto);
 
-    // Method to get a list of all followers as FollowDto of a specific user
+    // Method to get a list of all followers as FollowDto of the current user
     List<FollowDto> getFollowersOfUser();
 
-    // Method to get a list of all followings as FollowDto of a specific user
+    // Method to get a list of all followings as FollowDto of the current user
     List<FollowDto> getFollowedsOfUser();
 
-    List<FollowDto> getFollowersByUserId(Long userId);
-    List<FollowDto> getFollowedsByUserId(Long userId);
+    // Method to get followers by a specific username
+    List<FollowDto> getFollowersByUsername(String username);
 
-    // Method to check if the current user is a follower of a specific user
-    boolean isCurrentUserFollower(Long userId);
-    // Method to check if the current user is following a specific user
-    boolean isCurrentUserFollowing(Long userId);
+    // Method to get followeds by a specific username
+    List<FollowDto> getFollowedsByUsername(String username);
+
+    // Method to check if the current user is a follower of a specific user by username
+    boolean isCurrentUserFollower(String username);
+
+    // Method to check if the current user is following a specific user by username
+    boolean isCurrentUserFollowing(String username);
 }

@@ -3,7 +3,6 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.dto.FollowDto;
 import gtu.codybuilders.shareneat.service.FollowService;
 import lombok.AllArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,6 @@ public class FollowController {
 
     private final FollowService followService;
 
-
-
     // Create a follow relationship
     @PostMapping("/follow")
     public ResponseEntity<Void> followUser(@RequestBody FollowDto followDto) {
@@ -27,47 +24,51 @@ public class FollowController {
     }
 
     // Delete a follow relationship
-    @DeleteMapping("/unfollow/{followId}")
-    public ResponseEntity<Void> unfollowUser(@PathVariable Long followId) {
-        followService.deleteFollow(followId);
+    @DeleteMapping("/unfollow")
+    public ResponseEntity<Void> unfollowUser(@RequestBody FollowDto followDto) {
+        followService.deleteFollow(followDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/current-user/{userId}/is-follower")
-    public ResponseEntity<Boolean> isCurrentUserFollower(@PathVariable Long userId) {
-        boolean isFollower = followService.isCurrentUserFollower(userId);
+    // Check if the current user is a follower of a specific user by username
+    @GetMapping("/current-user/{username}/is-follower")
+    public ResponseEntity<Boolean> isCurrentUserFollower(@PathVariable String username) {
+        boolean isFollower = followService.isCurrentUserFollower(username);
         return ResponseEntity.ok(isFollower);
     }
 
-    @GetMapping("/current-user/{userId}/is-following")
-    public ResponseEntity<Boolean> isCurrentUserFollowing(@PathVariable Long userId) {
-        boolean isFollowing = followService.isCurrentUserFollowing(userId);
+    // Check if the current user is following a specific user by username
+    @GetMapping("/current-user/{username}/is-following")
+    public ResponseEntity<Boolean> isCurrentUserFollowing(@PathVariable String username) {
+        boolean isFollowing = followService.isCurrentUserFollowing(username);
         return ResponseEntity.ok(isFollowing);
     }
 
-    // Get all followers of a user
+    // Get all followers of the current user
     @GetMapping("/current-user/followers")
     public ResponseEntity<List<FollowDto>> getFollowers() {
         List<FollowDto> followers = followService.getFollowersOfUser();
         return ResponseEntity.ok(followers);
     }
 
-    // Get all followeds of a user
+    // Get all followeds of the current user
     @GetMapping("/current-user/followed")
     public ResponseEntity<List<FollowDto>> getFollowed() {
         List<FollowDto> followed = followService.getFollowedsOfUser();
-        return ResponseEntity.ok(followed); 
+        return ResponseEntity.ok(followed);
     }
 
-    @GetMapping("/user/{userId}/followers")
-    public ResponseEntity<List<FollowDto>> getFollowersByUserId(@PathVariable Long userId) {
-        List<FollowDto> followers = followService.getFollowersByUserId(userId);
+    // Get all followers of a specific user by username
+    @GetMapping("/user/{username}/followers")
+    public ResponseEntity<List<FollowDto>> getFollowersByUsername(@PathVariable String username) {
+        List<FollowDto> followers = followService.getFollowersByUsername(username);
         return ResponseEntity.ok(followers);
     }
 
-    @GetMapping("/user/{userId}/followed")
-    public ResponseEntity<List<FollowDto>> getFollowedsByUserId(@PathVariable Long userId) {
-        List<FollowDto> followed = followService.getFollowedsByUserId(userId);
+    // Get all followeds of a specific user by username
+    @GetMapping("/user/{username}/followed")
+    public ResponseEntity<List<FollowDto>> getFollowedsByUsername(@PathVariable String username) {
+        List<FollowDto> followed = followService.getFollowedsByUsername(username);
         return ResponseEntity.ok(followed);
     }
 }

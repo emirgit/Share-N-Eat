@@ -45,12 +45,13 @@ public class UserController {
         return ResponseEntity.ok(updatedUserProfileDTO);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserProfileDTO> getUser(@PathVariable Long userId) {
-        Optional<User> user = userService.findUserById(userId);
+    @GetMapping("/{username}")
+    public ResponseEntity<UserProfileDTO> getUser(@PathVariable String username) {
+        Optional<User> user = userService.findUserByUsername(username);
         return user.map(u -> ResponseEntity.ok(userService.convertToUserProfileDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
     @GetMapping("/my-account/profile-picture")
     public ResponseEntity<Resource> getUserProfilePictureOfCurrentUser() {

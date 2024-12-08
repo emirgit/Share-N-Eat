@@ -32,7 +32,8 @@ function App() {
         {/* Protected Routes */}
         <Route path="/" element={<PrivateRoute element={MainPage} />} />
         <Route path="/upload" element={<PrivateRoute element={UploadPage} />} />
-        <Route path="/profile" element={<PrivateRoute element={ProfilePage} />} />
+        <Route path="/profile" element={<ProfilePage />} /> {/* Own Profile */}
+        <Route path="/profile/:username" element={<ProfilePage />} /> {/* Other's Profile */}
         <Route path="/change-username" element={<PrivateRoute element={ChangeUsername} />} />
         <Route path="/change-password" element={<PrivateRoute element={ChangePassword} />} />
         <Route path="/change-photo" element={<PrivateRoute element={ChangePhoto} />} />

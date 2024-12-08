@@ -32,6 +32,7 @@ public class User{
     private String password;
     private Instant created;
     private boolean enabled;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

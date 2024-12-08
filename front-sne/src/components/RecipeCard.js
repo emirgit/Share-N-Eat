@@ -1,8 +1,9 @@
 // src/components/RecipeCard.js
 import React, { useState, useEffect } from 'react';
-import ReactRating from 'react-rating'; // Import the library
+import ReactRating from 'react-rating';
 import axiosHelper from '../axiosHelper';
 import { PieChart, Pie, Cell } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Colors for Pie Chart
 
@@ -23,11 +24,20 @@ const RecipeCard = ({ post, userRoles }) => {
         totalRatersRegular,
     } = post;
 
+    const navigate = useNavigate();
     const [recipeImage, setRecipeImage] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
-    const [liked, setLiked] = useState(false); // State for Like Button
-    const [currentLikeCount, setCurrentLikeCount] = useState(likeCount); // State for like count
-    const [loadingLike, setLoadingLike] = useState(false); // State to manage like button loading
+    const [liked, setLiked] = useState(false);
+    const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
+    const [loadingLike, setLoadingLike] = useState(false);
+
+    // Rating States
+    const [userRating, setUserRating] = useState(0); // Current user's rating
+    const [currentAverageExpert, setCurrentAverageExpert] = useState(averageRateExpert);
+    const [currentAverageRegular, setCurrentAverageRegular] = useState(averageRateRegular);
+    const [currentTotalRatersExpert, setCurrentTotalRatersExpert] = useState(totalRatersExpert);
+    const [currentTotalRatersRegular, setCurrentTotalRatersRegular] = useState(totalRatersRegular);
+    const [loadingRating, setLoadingRating] = useState(false); // State to manage rating button loading
 
     // Determine user roles
     const isUser = userRoles.includes('ROLE_USER');
@@ -53,7 +63,7 @@ const RecipeCard = ({ post, userRoles }) => {
         const fetchProfileImage = async () => {
             try {
                 const response = await axiosHelper(
-                    `/user/${username}/profile-picture`, // Updated URL for user profile picture
+                    `/user/${username}/profile-picture`,
                     'GET',
                     null,
                     { responseType: 'blob' }
@@ -81,17 +91,29 @@ const RecipeCard = ({ post, userRoles }) => {
         fetchLikeStatus();
     }, [postId]);
 
+    // Fetch Current User's Rating
+    useEffect(() => {
+        const fetchUserRating = async () => {
+            try {
+                const response = await axiosHelper(`/rates/current-user-rate/${postId}`, 'GET');
+                setUserRating(response || 0); // Set to 0 if no rating
+            } catch (error) {
+                console.error('Error fetching user rating:', error);
+            }
+        };
+
+        fetchUserRating();
+    }, [postId]);
+
     // Handle Like Button Click
     const handleLike = async () => {
         setLoadingLike(true);
         try {
             if (liked) {
-                // If already liked, send DELETE request to unlike
                 await axiosHelper(`/likes/${postId}`, 'DELETE');
                 setLiked(false);
                 setCurrentLikeCount((prev) => prev - 1);
             } else {
-                // If not liked, send POST request to like
                 await axiosHelper(`/likes/${postId}`, 'POST');
                 setLiked(true);
                 setCurrentLikeCount((prev) => prev + 1);
@@ -116,10 +138,43 @@ const RecipeCard = ({ post, userRoles }) => {
         // TODO: Redirect or open modal for comments section
     };
 
-    // Handle Follow Button Click
-    const handleFollow = () => {
-        console.log(`User ${username}: Follow button clicked`);
-        // TODO: Implement backend logic to handle follow/unfollow
+    // Handle Rating Change
+    const handleRatingChange = async (newRating) => {
+        if (loadingRating) return; // Prevent multiple clicks
+
+        setLoadingRating(true);
+        try {
+            if (userRating === newRating) {
+                // If the user selects the same rating, unrate
+                await axiosHelper(`/rates/${postId}`, 'DELETE');
+                setUserRating(0);
+                await fetchUpdatedAverages();
+            } else {
+                // Rate or update the rating
+                const rateDto = { rating: newRating, postId };
+                await axiosHelper(`/rates`, 'POST', rateDto);
+                setUserRating(newRating);
+                await fetchUpdatedAverages();
+            }
+        } catch (error) {
+            console.error('Error updating rating:', error);
+            alert('An error occurred while updating your rating. Please try again.');
+        } finally {
+            setLoadingRating(false);
+        }
+    };
+
+    // Function to fetch updated average ratings
+    const fetchUpdatedAverages = async () => {
+        try {
+            const updatedPost = await axiosHelper(`/posts/${postId}`, 'GET');
+            setCurrentAverageExpert(updatedPost.averageRateExpert);
+            setCurrentAverageRegular(updatedPost.averageRateRegular);
+            setCurrentTotalRatersExpert(updatedPost.totalRatersExpert);
+            setCurrentTotalRatersRegular(updatedPost.totalRatersRegular);
+        } catch (error) {
+            console.error('Error fetching updated averages:', error);
+        }
     };
 
     const pieData = [
@@ -136,6 +191,7 @@ const RecipeCard = ({ post, userRoles }) => {
                     src={profileImage}
                     alt="User"
                     className="w-10 h-10 rounded-full"
+                    onClick={() => navigate(`/profile/${username}`)}
                 />
                 <div className="ml-3 flex-1">
                     <div className="font-semibold">{username}</div>
@@ -143,9 +199,6 @@ const RecipeCard = ({ post, userRoles }) => {
                         {isUser ? 'User' : 'Expert'}
                     </div>
                 </div>
-                <button className="text-blue-500" onClick={handleFollow}>
-                    Follow
-                </button>
             </div>
 
             {/* Description Section */}
@@ -168,24 +221,23 @@ const RecipeCard = ({ post, userRoles }) => {
                     {/* Expert Rating */}
                     <div className="flex items-center mb-1">
                         <ReactRating
-                            initialRating={averageRateExpert}
-                            readonly={isUser} // Make readonly if user is ROLE_USER
+                            initialRating={currentAverageExpert}
+                            readonly={isUser}
                             emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
                             fullSymbol={<span className="text-green-500 text-2xl">★</span>}
-                            fractions={2} // Supports half stars
+                            fractions={2}
                             onChange={(newRating) => {
                                 if (!isUser) {
-                                    console.log(`Expert Rating for Post ID ${postId}:`, newRating);
-                                    // TODO: Implement backend logic to save expert rating
+                                    handleRatingChange(newRating);
                                 }
                             }}
                         />
                         {!isUser && (
-                            <span className="ml-2 text-gray-500 text-sm">{totalRatersExpert} rated</span>
+                            <span className="ml-2 text-gray-500 text-sm">{currentTotalRatersExpert} rated</span>
                         )}
                         {isUser && (
                             <span className="ml-2 text-gray-400 text-sm flex items-center">
-                                <span className="mr-1">Locked</span> 🔒
+                                <span className="mr-1">{currentTotalRatersExpert} rated</span> 🔒
                             </span>
                         )}
                     </div>
@@ -193,24 +245,23 @@ const RecipeCard = ({ post, userRoles }) => {
                     {/* Regular Rating */}
                     <div className="flex items-center mb-1">
                         <ReactRating
-                            initialRating={averageRateRegular}
-                            readonly={!isUser} // Make readonly if not ROLE_USER
+                            initialRating={currentAverageRegular}
+                            readonly={!isUser}
                             emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
                             fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
                             fractions={2}
                             onChange={(newRating) => {
                                 if (isUser) {
-                                    console.log(`Regular Rating for Post ID ${postId}:`, newRating);
-                                    // TODO: Implement backend logic to save regular rating
+                                    handleRatingChange(newRating);
                                 }
                             }}
                         />
                         {isUser && (
-                            <span className="ml-2 text-gray-500 text-sm">{totalRatersRegular} rated</span>
+                            <span className="ml-2 text-gray-500 text-sm">{currentTotalRatersRegular} rated</span>
                         )}
                         {!isUser && (
                             <span className="ml-2 text-gray-400 text-sm flex items-center">
-                                <span className="mr-1">Locked</span> 🔒
+                                <span className="mr-1">{currentTotalRatersRegular} rated</span> 🔒
                             </span>
                         )}
                     </div>
@@ -270,7 +321,6 @@ const RecipeCard = ({ post, userRoles }) => {
             </div>
         </div>
     );
-
 };
 
 export default RecipeCard;

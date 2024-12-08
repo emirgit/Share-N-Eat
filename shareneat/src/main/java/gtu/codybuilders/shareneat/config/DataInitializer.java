@@ -32,14 +32,38 @@ public class DataInitializer {
             if (userService.isUserExists(myEmail))
                 userService.deleteUser(myEmail);
 
+            User adminUser = new User();
+            adminUser.setEmail(myEmail);
+            adminUser.setPassword("admin");
+            adminUser.setUsername("theAdmin");
+            adminUser.setCreated(Instant.now());
+            adminUser.setEnabled(true);
+            adminUser.setBio("I'm the admin");
+            adminUser.setRole(Role.ROLE_ADMIN);
+
+            // Set default values for other fields
+            adminUser.setFollowersCount(0);
+            adminUser.setFollowingCount(0);
+            adminUser.setPostsCount(0);
+            adminUser.setLastLogin(Instant.now());
+            adminUser.setProfilePictureUrl("default-image.png");
+
+            userService.saveUser(adminUser);
+
+            String dummyEmail = "dummy@outlook.com";
+
+            // Check if dummy user already exists
+            if (userService.isUserExists(dummyEmail))
+                userService.deleteUser(dummyEmail);
+
             User dummyUser = new User();
-            dummyUser.setEmail(myEmail);
-            dummyUser.setPassword("admin");
-            dummyUser.setUsername("theAdmin");
+            dummyUser.setEmail(dummyEmail);
+            dummyUser.setPassword("dummy.deneme");
+            dummyUser.setUsername("DummyTheUser");
             dummyUser.setCreated(Instant.now());
             dummyUser.setEnabled(true);
-            dummyUser.setBio("I'm the admin");
-            dummyUser.setRole(Role.ROLE_ADMIN);
+            dummyUser.setBio("I'm the dummy to serve your desire. I'm happy to assist you");
+            dummyUser.setRole(Role.ROLE_USER);
 
             // Set default values for other fields
             dummyUser.setFollowersCount(0);
@@ -50,31 +74,33 @@ public class DataInitializer {
 
             userService.saveUser(dummyUser);
 
-            String dummyEmail = "dummy@outlook.com";
+            String dieticianEmail = "dietician@outlook.com";
 
-            // Check if admin user already exists
-            if (userService.isUserExists(dummyEmail))
-                userService.deleteUser(dummyEmail);
+            // Check if dietician user already exists
+            if (userService.isUserExists(dieticianEmail))
+                userService.deleteUser(dieticianEmail);
 
-            User dummyUser1 = new User();
-            dummyUser1.setEmail(dummyEmail);
-            dummyUser1.setPassword("dummy.deneme");
-            dummyUser1.setUsername("DummyTheUser");
-            dummyUser1.setCreated(Instant.now());
-            dummyUser1.setEnabled(true);
-            dummyUser1.setBio("I'm the dummy to serve your desire. I happy to assist you");
-            dummyUser1.setRole(Role.ROLE_USER);
+            User dieticianUser = new User();
+            dieticianUser.setEmail(dieticianEmail);
+            dieticianUser.setPassword("dietician123");
+            dieticianUser.setUsername("DieticianPro");
+            dieticianUser.setCreated(Instant.now());
+            dieticianUser.setEnabled(true);
+            dieticianUser.setBio("I’m a dietician here to share healthy eating tips.");
+            dieticianUser.setRole(Role.ROLE_EXPERT);
 
             // Set default values for other fields
-            dummyUser1.setFollowersCount(121);
-            dummyUser1.setFollowingCount(999);
-            dummyUser1.setPostsCount(5);
-            dummyUser1.setLastLogin(Instant.now());
-            dummyUser1.setProfilePictureUrl("dummy.png");
+            dieticianUser.setFollowersCount(0);
+            dieticianUser.setFollowingCount(0);
+            dieticianUser.setPostsCount(0);
+            dieticianUser.setLastLogin(Instant.now());
+            dieticianUser.setProfilePictureUrl("default-image.png");
 
-            userService.saveUser(dummyUser1);
+            userService.saveUser(dieticianUser);
 
-            System.out.println("Admin user created with email: " + dummyEmail);
+            System.out.println("Admin user created with email: " + myEmail);
+            System.out.println("Dummy user created with email: " + dummyEmail);
+            System.out.println("Dietician user created with email: " + dieticianEmail);
         };
     }
 }

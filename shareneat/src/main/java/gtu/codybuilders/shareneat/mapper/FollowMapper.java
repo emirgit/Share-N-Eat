@@ -7,25 +7,22 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
-
 @Component
 public class FollowMapper {
 
-    public Follow mapToFollow(FollowDto followdto, User follower, User followed){
+    public Follow mapToFollow(FollowDto followDto, User follower, User followed){
         return Follow.builder()
-                        .follower(follower)
-                        .followed(followed)
-                        .followedAt(Instant.now())
-                        .build();
+                .follower(follower)
+                .followed(followed)
+                .followedAt(Instant.now())
+                .build();
     }
 
     public FollowDto mapToDto(Follow follow){
         return FollowDto.builder()
-                        .id(follow.getId())
-                        .followerId(follow.getFollower().getUserId())
-                        .followedId(follow.getFollowed().getUserId())
-                        .followingDate(follow.getFollowedAt())
-                        .build();
+                .followerUsername(follow.getFollower().getUsername())
+                .followedUsername(follow.getFollowed().getUsername())
+                .build();
     }
-    
+
 }

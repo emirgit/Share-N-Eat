@@ -1,12 +1,15 @@
+// src/pages/ProfilePage.js
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import axiosHelper from '../axiosHelper';
-import RecipeCard from '../components/RecipeCard';
 
 const ProfilePage = () => {
+    const { username } = useParams(); // Extract username from URL
+    const [currentUser, setCurrentUser] = useState(null); // To store current user's info
     const [user, setUser] = useState({
         username: '',
         isCertified: false,
@@ -14,44 +17,83 @@ const ProfilePage = () => {
         followers: 0,
         following: 0,
     });
-    const [userPosts, setUserPosts] = useState([]); // State for user's posts
     const [isEditing, setIsEditing] = useState(false);
     const [newUsername, setNewUsername] = useState('');
     const [newBio, setNewBio] = useState('');
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+    const [isOwnProfile, setIsOwnProfile] = useState(false);
+    const [loading, setLoading] = useState(true); // For loading state
+    const [error, setError] = useState(null); // For error handling
+    const [isFollowing, setIsFollowing] = useState(false); // To track follow status
+    const [followLoading, setFollowLoading] = useState(false); // To prevent multiple requests
 
-    // Fetch user data and their posts
+    // Fetch current user's info
     useEffect(() => {
-        const fetchUserDataAndPosts = async () => {
+        const fetchCurrentUser = async () => {
             try {
-                // Fetch user data
-                const userData = await axiosHelper('/user/my-account', 'GET');
-                setUser({
-                    username: userData.username,
-                    isCertified: userData.isCertified,
-                    bio: userData.bio,
-                    followers: userData.followersCount,
-                    following: userData.followingCount,
-                });
-                setNewUsername(userData.username);
-                setNewBio(userData.bio);
-
-                // Fetch profile picture
-                const profilePictureResponse = await axiosHelper('user/my-account/profile-picture', 'GET', null, {
-                    responseType: 'blob',
-                });
-                setProfilePictureUrl(URL.createObjectURL(profilePictureResponse));
-
-                // Fetch user's posts
-                const posts = await axiosHelper('/posts/current-user', 'GET');
-                setUserPosts(posts);
-            } catch (error) {
-                console.error('Error fetching user data or posts', error);
+                const currentUserData = await axiosHelper('/user/my-account', 'GET');
+                setCurrentUser(currentUserData);
+            } catch (err) {
+                console.error('Error fetching current user data', err);
+                setError('Failed to fetch current user data.');
             }
         };
 
-        fetchUserDataAndPosts();
+        fetchCurrentUser();
     }, []);
+
+    // Fetch profile data based on whether it's own profile or another's
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                setLoading(true);
+                let fetchedUser;
+                let pictureResponse;
+
+                if (!username || username === currentUser?.username) {
+                    // Viewing own profile
+                    setIsOwnProfile(true);
+                    fetchedUser = await axiosHelper('/user/my-account', 'GET');
+                    pictureResponse = await axiosHelper('/user/my-account/profile-picture', 'GET', null, {
+                        responseType: 'blob',
+                    });
+                } else {
+                    // Viewing another user's profile
+                    setIsOwnProfile(false);
+                    fetchedUser = await axiosHelper(`/user/${username}`, 'GET');
+                    pictureResponse = await axiosHelper(`/user/${username}/profile-picture`, 'GET', null, {
+                        responseType: 'blob',
+                    });
+
+                    // Check if the current user is following this user
+                    const followingStatus = await axiosHelper(`/follows/current-user/${username}/is-following`, 'GET');
+                    setIsFollowing(followingStatus);
+                }
+
+                setUser({
+                    username: fetchedUser.username,
+                    isCertified: fetchedUser.isCertified,
+                    bio: fetchedUser.bio,
+                    followers: fetchedUser.followersCount,
+                    following: fetchedUser.followingCount,
+                });
+                setNewUsername(fetchedUser.username);
+                setNewBio(fetchedUser.bio);
+
+                setProfilePictureUrl(URL.createObjectURL(pictureResponse));
+                setLoading(false);
+            } catch (err) {
+                console.error('Error fetching user data', err);
+                setError('Failed to fetch user data.');
+                setLoading(false);
+            }
+        };
+
+        // Only fetch user data after current user data is available
+        if (currentUser) {
+            fetchUserData();
+        }
+    }, [username, currentUser]);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -71,12 +113,13 @@ const ProfilePage = () => {
             setIsEditing(false);
         } catch (error) {
             console.error('Error saving user data', error);
+            setError('Failed to save changes.');
         }
     };
 
     const handlePhotoChange = async (e) => {
         const file = e.target.files[0];
-        if (file) {
+        if (file && isOwnProfile) { // Only allow photo change on own profile
             try {
                 const formData = new FormData();
                 formData.append('profilePhoto', file);
@@ -88,9 +131,66 @@ const ProfilePage = () => {
                 setProfilePictureUrl(URL.createObjectURL(file));
             } catch (error) {
                 console.error('Error uploading profile photo', error);
+                setError('Failed to upload profile photo.');
             }
         }
     };
+
+    const handleFollowToggle = async () => {
+        if (followLoading) return; // Prevent multiple clicks
+    
+        setFollowLoading(true);
+        try {
+            if (isFollowing) {
+                // Unfollow the user
+                await axiosHelper('/follows/unfollow', 'DELETE', {
+                    followerUsername: currentUser.username,
+                    followedUsername: user.username,
+                });
+                setIsFollowing(false);
+    
+                // Decrease the follower count dynamically
+                setUser((prevUser) => ({
+                    ...prevUser,
+                    followers: prevUser.followers - 1,
+                }));
+            } else {
+                // Follow the user
+                await axiosHelper('/follows/follow', 'POST', {
+                    followerUsername: currentUser.username,
+                    followedUsername: user.username,
+                });
+                setIsFollowing(true);
+    
+                // Increase the follower count dynamically
+                setUser((prevUser) => ({
+                    ...prevUser,
+                    followers: prevUser.followers + 1,
+                }));
+            }
+        } catch (error) {
+            console.error('Error toggling follow status', error);
+            setError('Failed to update follow status.');
+        } finally {
+            setFollowLoading(false);
+        }
+    };
+    
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-gray-700">Loading...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-red-500">{error}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -102,28 +202,32 @@ const ProfilePage = () => {
                     <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8 mb-8 flex items-start">
                         <div className="relative w-32 h-32 mr-6">
                             <img
-                                src={profilePictureUrl}
+                                src={profilePictureUrl || '/default-profile.png'} // Fallback image
                                 alt="Profile"
                                 className="w-32 h-32 rounded-full object-cover"
                             />
-                            <div
-                                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"
-                                onClick={() => document.getElementById('fileInput').click()}
-                            >
-                                <FontAwesomeIcon icon={faCamera} className="text-white text-2xl" />
-                            </div>
-                            <input
-                                type="file"
-                                id="fileInput"
-                                accept="image/*"
-                                onChange={handlePhotoChange}
-                                className="hidden"
-                            />
+                            {isOwnProfile && (
+                                <div
+                                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                                    onClick={() => document.getElementById('fileInput').click()}
+                                >
+                                    <FontAwesomeIcon icon={faCamera} className="text-white text-2xl" />
+                                </div>
+                            )}
+                            {isOwnProfile && (
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    accept="image/*"
+                                    onChange={handlePhotoChange}
+                                    className="hidden"
+                                />
+                            )}
                         </div>
                         <div className="flex flex-col w-full">
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center">
-                                    {isEditing ? (
+                                    {isEditing && isOwnProfile ? (
                                         <input
                                             type="text"
                                             value={newUsername}
@@ -142,7 +246,7 @@ const ProfilePage = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {!isEditing && (
+                                {!isEditing && isOwnProfile && (
                                     <button
                                         onClick={handleEditClick}
                                         className="bg-blue-500 text-white px-4 py-2 rounded-lg"
@@ -150,12 +254,21 @@ const ProfilePage = () => {
                                         Edit Profile
                                     </button>
                                 )}
+                                {!isOwnProfile && (
+                                    <button
+                                        onClick={handleFollowToggle}
+                                        className={`px-4 py-2 rounded-lg ${isFollowing ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}
+                                        disabled={followLoading}
+                                    >
+                                        {followLoading ? 'Processing...' : isFollowing ? 'Unfollow' : 'Follow'}
+                                    </button>
+                                )}
                             </div>
                             <div className="text-gray-500 mt-1">
                                 {user.isCertified ? 'Certified User' : 'Not Certified'}
                             </div>
                             <div className="mt-4">
-                                {isEditing ? (
+                                {isEditing && isOwnProfile ? (
                                     <textarea
                                         value={newBio}
                                         onChange={(e) => setNewBio(e.target.value)}
@@ -165,7 +278,7 @@ const ProfilePage = () => {
                                     <p className="text-gray-700">{user.bio}</p>
                                 )}
                             </div>
-                            {isEditing && (
+                            {isEditing && isOwnProfile && (
                                 <button
                                     onClick={handleSaveChanges}
                                     className="bg-green-500 text-white px-4 py-2 rounded-lg mt-4"
@@ -176,18 +289,8 @@ const ProfilePage = () => {
                         </div>
                     </div>
 
-                    {/* User's Posts Feed */}
-                    <div className="w-full max-w-4xl space-y-6">
-                        {userPosts.length > 0 ? (
-                            userPosts.map((post) => (
-                                <RecipeCard key={post.postId} post={post} />
-                            ))
-                        ) : (
-                            <p className="text-center text-gray-500">
-                                No posts available for this user.
-                            </p>
-                        )}
-                    </div>
+                    {/* Additional Sections (e.g., User's Posts) */}
+                    {/* ... */}
                 </div>
             </div>
         </div>
