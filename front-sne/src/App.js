@@ -12,9 +12,15 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import ProductPage from './pages/ProductPage'
 
 import PrivateRoute from './components/PrivateRoute'; // Make sure the path is correct
-import ProductPage from './pages/ProductPage';
+import AdminPanel from './pages/AdminPanel';
+import PostManagement from './pages/PostManagement';
+import Support from './pages/Support';
+import SiteSettings from './pages/SiteSettings';
+import ProductManagement from './pages/ProductManagement';
+import UserManagement from './pages/UserManagement';
 import SettingsPage from './pages/SettingsPage';
 
 function App() {
@@ -41,6 +47,12 @@ function App() {
         <Route path="/help" element={<PrivateRoute element={HelpPage} />} />
         <Route path="/products" element={<PrivateRoute element={ProductPage} />} />
         <Route path="/settings" element={<PrivateRoute element={SettingsPage} />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin/posts" element={<PostManagement />} />
+        <Route path="/admin/support" element={<Support />} />
+        <Route path="/admin/settings" element={<SiteSettings />} />
+        <Route path="/admin/product" element={<ProductManagement />} />
+        <Route path="/admin/user" element={<UserManagement />} />
         
 
       </Routes>
