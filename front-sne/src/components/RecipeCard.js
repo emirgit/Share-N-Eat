@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
-
+import profilePic from '../assets/profilepic-shrneat.png';
 const Star = ({ color }) => (
     <svg
         className={`w-5 h-5 ${color}`}
@@ -12,22 +12,64 @@ const Star = ({ color }) => (
     </svg>
 );
 
-const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Yellow for fat, claret red for protein, blue for carbs
+const COLORS = ['#fbbf24', '#8b0000', '#3b82f6'];
 
 const RecipeCard = ({ user, recipe }) => {
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+    const [newComment, setNewComment] = useState('');
+    const [comments, setComments] = useState([
+        {
+            user: {
+                name: 'Alice',
+                profilePic: {profilePic},
+            },
+            text: 'This looks delicious!',
+        },
+        {
+            user: {
+                name: 'Bob',
+                profilePic: {profilePic},
+            },
+            text: 'Can’t wait to try it!',
+        },
+        {
+            user: {
+                name: 'Charlie',
+                profilePic: {profilePic},
+            },
+            text: 'Great recipe, thanks for sharing!',
+        },
+    ]);
+
     const pieData = [
         { name: 'Fat', value: recipe.fat },
         { name: 'Protein', value: recipe.protein },
-        { name: 'Carbs', value: recipe.carbs }
+        { name: 'Carbs', value: recipe.carbs },
     ];
+
+    const handleCommentSubmit = () => {
+        if (newComment.trim() !== '') {
+            setComments([
+                ...comments,
+                {
+                    user: {
+                        name: user.name,
+                        profilePic: user.profilePic,
+                    },
+                    text: newComment,
+                },
+            ]);
+            setNewComment('');
+        }
+    };
 
     return (
         <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl">
             {/* User Info */}
             <div className="flex items-center p-4 border-b border-gray-200">
-                <img 
-                    src={user.profilePic} 
-                    alt="User" 
+                <img
+                    src={user.profilePic}
+                    alt="User"
                     className="w-10 h-10 rounded-full"
                 />
                 <div className="ml-3 flex-1">
@@ -39,19 +81,18 @@ const RecipeCard = ({ user, recipe }) => {
 
             {/* Description Section */}
             <div className="p-4 text-gray-700">
-                <p>{recipe.description || "This is a delicious recipe that you will love. Try it out and enjoy the flavors!"}</p>
+                <p>{recipe.description || 'This is a delicious recipe that you will love. Try it out and enjoy the flavors!'}</p>
             </div>
-            
+
             {/* Recipe Image */}
-            <img 
-                src={recipe.image} 
-                alt={recipe.title} 
+            <img
+                src={recipe.image}
+                alt={recipe.title}
                 className="w-full h-64 object-cover"
             />
-            
+
             {/* Recipe Details with Stars, Pie Chart, and Macros */}
             <div className="p-4 flex items-center">
-                {/* Rating Stars */}
                 <div className="flex flex-col items-start mr-4">
                     <div className="flex mb-1">
                         {[...Array(5)].map((_, i) => (
@@ -64,8 +105,6 @@ const RecipeCard = ({ user, recipe }) => {
                         ))}
                     </div>
                 </div>
-
-                {/* Pie Chart */}
                 <PieChart width={80} height={80} className="mx-4">
                     <Pie
                         data={pieData}
@@ -80,8 +119,6 @@ const RecipeCard = ({ user, recipe }) => {
                         ))}
                     </Pie>
                 </PieChart>
-
-                {/* Vertical Text for Macros */}
                 <div className="flex flex-col ml-4 text-sm text-gray-600">
                     <div className="flex items-center mb-1">
                         <span>🍗</span> <span className="ml-1">{recipe.protein}g protein</span>
@@ -92,9 +129,7 @@ const RecipeCard = ({ user, recipe }) => {
                     <div className="flex items-center mb-1">
                         <span>🥓</span> <span className="ml-1">{recipe.fat}g fat</span>
                     </div>
-                    <div className="mt-2 text-center">
-                        {recipe.calories} kcal
-                    </div>
+                    <div className="mt-2 text-center">{recipe.calories} kcal</div>
                 </div>
             </div>
 
@@ -102,10 +137,51 @@ const RecipeCard = ({ user, recipe }) => {
             <div className="flex items-center justify-between p-4 border-t border-gray-200">
                 <div className="flex space-x-4">
                     <button>👍 {recipe.likes}</button>
-                    <button>💬 {recipe.comments}</button>
+                    <button onClick={() => setIsCommentsOpen(!isCommentsOpen)}>💬 {recipe.comments}</button>
                 </div>
                 <button className="text-blue-500">Share</button>
             </div>
+
+            {/* Comments Section */}
+            {isCommentsOpen && (
+                <div className="p-4 border-t border-gray-200">
+                    <div className="flex items-center mb-4">
+                        <img
+                            src={user.profilePic}
+                            alt="User"
+                            className="w-8 h-8 rounded-full mr-2"
+                        />
+                        <input
+                            type="text"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Add a comment..."
+                            className="flex-1 border rounded-full p-2 text-sm focus:outline-none"
+                        />
+                        <button
+                            onClick={handleCommentSubmit}
+                            className="ml-2 text-blue-500 font-medium"
+                        >
+                            Post
+                        </button>
+                    </div>
+                    <div className="space-y-4">
+                        {comments.map((comment, index) => (
+                            <div key={index} className="flex items-center space-x-2">
+                                <img
+                                    src={comment.user.profilePic}
+                                    alt={comment.user.name}
+                                    className="w-8 h-8 rounded-full"
+                                />
+                                <div className="text-sm text-gray-700">
+                                    <span className="font-medium">{comment.user.name}: </span>
+                                    {comment.text}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
