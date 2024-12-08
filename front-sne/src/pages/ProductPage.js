@@ -1,122 +1,146 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import ProductUpload from '../components/ProductUpload';
 import ProductCard from '../components/ProductCard';
 import CategoriesSection from '../components/CategoriesSection';
+import axiosHelper from "../axiosHelper";
 
 const ProductPage = () => {
+    const [products, setProducts] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All Products');
     const [sortOption, setSortOption] = useState('');
-    const allProducts = [
-        {
-            id: 1,
-            name: 'Milk',
-            category: 'Dairy',
-            contents: 'Lactose-Free Milk',
-            dateAdded: '2024-11-25',
-            quantity: '500ml',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 4.2,
-            nonCertifiedRating: 3.8,
-            macronutrients: { protein: 10, carbs: 5, fat: 2, calories: 100 },
-            likes: 12,
-            comments: 5,
-        },
-        {
-            id: 2,
-            name: 'Orange Juice',
-            category: 'Drinks',
-            contents: 'Freshly Squeezed Orange Juice',
-            dateAdded: '2024-11-24',
-            quantity: '1L',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 4.5,
-            nonCertifiedRating: 4.0,
-            macronutrients: { protein: 1, carbs: 20, fat: 0, calories: 80 },
-            likes: 8,
-            comments: 3,
-        },
-        {
-            id: 3,
-            name: 'Ham',
-            category: 'Deli',
-            contents: 'Smoked Ham',
-            dateAdded: '2024-11-23',
-            quantity: '300g',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 4.0,
-            nonCertifiedRating: 3.7,
-            macronutrients: { protein: 25, carbs: 0, fat: 5, calories: 200 },
-            likes: 15,
-            comments: 6,
-        },
-        {
-            id: 4,
-            name: 'Salmon',
-            category: 'Seafood',
-            contents: 'Fresh Atlantic Salmon',
-            dateAdded: '2024-11-22',
-            quantity: '200g',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 4.8,
-            nonCertifiedRating: 4.5,
-            macronutrients: { protein: 22, carbs: 0, fat: 12, calories: 250 },
-            likes: 20,
-            comments: 8,
-        },
-        {
-            id: 5,
-            name: 'Chips',
-            category: 'Junks',
-            contents: 'Classic Salted Chips',
-            dateAdded: '2024-11-21',
-            quantity: '200g',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 3.5,
-            nonCertifiedRating: 3.2,
-            macronutrients: { protein: 3, carbs: 25, fat: 15, calories: 300 },
-            likes: 10,
-            comments: 2,
-        },
-        {
-            id: 6,
-            name: 'Quinoa',
-            category: 'Grains and Legumes',
-            contents: 'Organic Quinoa',
-            dateAdded: '2024-11-20',
-            quantity: '500g',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 4.6,
-            nonCertifiedRating: 4.3,
-            macronutrients: { protein: 12, carbs: 35, fat: 5, calories: 180 },
-            likes: 18,
-            comments: 7,
-        },
-        {
-            id: 7,
-            name: 'Apple',
-            category: 'Fruits and Vegetables',
-            contents: 'Fresh Red Apple',
-            dateAdded: '2024-11-19',
-            quantity: '1kg',
-            imageUrl: 'https://via.placeholder.com/100',
-            certifiedRating: 4.9,
-            nonCertifiedRating: 4.7,
-            macronutrients: { protein: 1, carbs: 30, fat: 0, calories: 120 },
-            likes: 22,
-            comments: 9,
-        },
-    ];
 
-    const handleSort = (option) => {
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const allProducts = await axiosHelper('/products/getAll');
+                setProducts(allProducts);
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+
+    // const allProducts = [
+    //     {
+    //         id: 1,
+    //         name: 'Milk',
+    //         category: 'Dairy',
+    //         contents: 'Lactose-Free Milk',
+    //         dateAdded: '2024-11-25',
+    //         quantity: '500ml',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 4.2,
+    //         nonCertifiedRating: 3.8,
+    //         macronutrients: { protein: 10, carbs: 5, fat: 2, calories: 100 },
+    //         likes: 12,
+    //         comments: 5,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Orange Juice',
+    //         category: 'Drinks',
+    //         contents: 'Freshly Squeezed Orange Juice',
+    //         dateAdded: '2024-11-24',
+    //         quantity: '1L',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 4.5,
+    //         nonCertifiedRating: 4.0,
+    //         macronutrients: { protein: 1, carbs: 20, fat: 0, calories: 80 },
+    //         likes: 8,
+    //         comments: 3,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Ham',
+    //         category: 'Deli',
+    //         contents: 'Smoked Ham',
+    //         dateAdded: '2024-11-23',
+    //         quantity: '300g',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 4.0,
+    //         nonCertifiedRating: 3.7,
+    //         macronutrients: { protein: 25, carbs: 0, fat: 5, calories: 200 },
+    //         likes: 15,
+    //         comments: 6,
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Salmon',
+    //         category: 'Seafood',
+    //         contents: 'Fresh Atlantic Salmon',
+    //         dateAdded: '2024-11-22',
+    //         quantity: '200g',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 4.8,
+    //         nonCertifiedRating: 4.5,
+    //         macronutrients: { protein: 22, carbs: 0, fat: 12, calories: 250 },
+    //         likes: 20,
+    //         comments: 8,
+    //     },
+    //     {
+    //         id: 5,
+    //         name: 'Chips',
+    //         category: 'Junks',
+    //         contents: 'Classic Salted Chips',
+    //         dateAdded: '2024-11-21',
+    //         quantity: '200g',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 3.5,
+    //         nonCertifiedRating: 3.2,
+    //         macronutrients: { protein: 3, carbs: 25, fat: 15, calories: 300 },
+    //         likes: 10,
+    //         comments: 2,
+    //     },
+    //     {
+    //         id: 6,
+    //         name: 'Quinoa',
+    //         category: 'Grains and Legumes',
+    //         contents: 'Organic Quinoa',
+    //         dateAdded: '2024-11-20',
+    //         quantity: '500g',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 4.6,
+    //         nonCertifiedRating: 4.3,
+    //         macronutrients: { protein: 12, carbs: 35, fat: 5, calories: 180 },
+    //         likes: 18,
+    //         comments: 7,
+    //     },
+    //     {
+    //         id: 7,
+    //         name: 'Apple',
+    //         category: 'Fruits and Vegetables',
+    //         contents: 'Fresh Red Apple',
+    //         dateAdded: '2024-11-19',
+    //         quantity: '1kg',
+    //         imageUrl: 'https://via.placeholder.com/100',
+    //         certifiedRating: 4.9,
+    //         nonCertifiedRating: 4.7,
+    //         macronutrients: { protein: 1, carbs: 30, fat: 0, calories: 120 },
+    //         likes: 22,
+    //         comments: 9,
+    //     },
+    // ];
+
+    const handleSort = async (option) => {
         setSortOption(option);
+        try {
+            const sortedProducts = await axiosHelper(`/products/sortedBy${option}/asc`);
+            setProducts(sortedProducts);
+        } catch (error) {
+            console.error('Failed to sort products:', error);
+        }
     };
+
 
     const filteredProducts =
         selectedCategory === 'All Products'
-            ? allProducts
-            : allProducts.filter((product) => product.category === selectedCategory);
+            ? products
+            : products.filter((product) => product.category === selectedCategory);
 
     const sortedProducts = filteredProducts.slice().sort((a, b) => {
         switch (sortOption) {
