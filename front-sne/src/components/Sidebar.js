@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 const Sidebar = () => {
     const navigate = useNavigate();
 
+    // Mock admin check (Replace with actual auth logic)
+    //const isAdmin = true; // Replace this with real admin-check logic
+
     const handleHomeClick = () => {
         navigate('/');
     };
@@ -25,11 +28,15 @@ const Sidebar = () => {
                 <span className="mr-2">🔥</span>
                 <span className="text-lg font-medium">Trends</span>
             </div>
-            <div className="flex items-center mb-6 cursor-pointer" onClick={() => navigate('/products')}>
+            <div
+                className="flex items-center mb-6 cursor-pointer"
+                onClick={() => navigate('/products')}
+            >
                 <span className="mr-2">🛒</span>
                 <span className="text-lg font-medium">Products</span>
             </div>
-            {/* Add more sidebar items as needed */}
+
+            
         </div>
     );
 };
