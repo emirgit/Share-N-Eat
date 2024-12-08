@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ReactRating from 'react-rating';
 import axiosHelper from '../axiosHelper';
 import { PieChart, Pie, Cell } from 'recharts';
+import Comment from '../components/Comment';
 import { useNavigate } from 'react-router-dom';
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Colors for Pie Chart
@@ -30,6 +31,7 @@ const RecipeCard = ({ post, userRoles }) => {
     const [liked, setLiked] = useState(false);
     const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
     const [loadingLike, setLoadingLike] = useState(false);
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
     // Rating States
     const [userRating, setUserRating] = useState(0); // Current user's rating
@@ -41,7 +43,7 @@ const RecipeCard = ({ post, userRoles }) => {
 
     // Determine user roles
     const isUser = userRoles.includes('ROLE_USER');
-
+    
     // Fetch Recipe Image
     useEffect(() => {
         const fetchRecipeImage = async () => {
@@ -134,8 +136,7 @@ const RecipeCard = ({ post, userRoles }) => {
 
     // Handle Comments Button Click
     const handleComments = () => {
-        console.log(`Post ID ${postId}: Comments button clicked`);
-        // TODO: Redirect or open modal for comments section
+        setIsCommentsOpen(!isCommentsOpen);
     };
 
     // Handle Rating Change
@@ -319,6 +320,11 @@ const RecipeCard = ({ post, userRoles }) => {
                     Share
                 </button>
             </div>
+
+             {/* Comments Section */}
+                 {isCommentsOpen && (
+                <Comment postId={postId}/>
+            )}
         </div>
     );
 };
