@@ -18,22 +18,31 @@ public class PathConstants {
 
     public static final String FORGOT_PASSWORD_EMAIL_VAR = FORGOT_PASSWORD + "/{email}";
 
+    public static final String API = "api";
+    public static final String USERS = "/users";
+    public static final String PRODUCTS = API + "/products";
+    public static final String PRODUCTS_GET_ALL = PRODUCTS + "/getAll";
+    public static final String PRODUCT_ID = "/{productId}";
+    public static final String GET_IMAGE = "/getImage";
+    public static final String PRODUCT_GET_IMAGE = GET_IMAGE + PRODUCT_ID;
+    public static final String SEARCH = "/search";
+    public static final String FILTER = "/filter";
+    public static final String SORTED_BY = "/sortedBy{criteria}/{asc}";
+
+
+
+
 
     //image upload paths
     private static final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"), "shareneat","src", "main", "resources", "static", "images");
-    //public Path uploadDir() {return UPLOAD_DIR;}
 
     public static final Path UPLOAD_DIR_DEFAULT = UPLOAD_DIR.resolve("default");
-//    public static Path uploadDirDefault() {return UPLOAD_DIR_DEFAULT;}
 
     public static final Path UPLOAD_DIR_USER = UPLOAD_DIR.resolve("users");
-//    public static Path uploadDirUser() {return UPLOAD_DIR_USER;}
 
     public static final Path UPLOAD_DIR_PRODUCT = UPLOAD_DIR.resolve("products");
-//    public static Path uploadDirProduct() {return UPLOAD_DIR_PRODUCT;}
 
     public static final Path UPLOAD_DIR_POST = UPLOAD_DIR.resolve("posts");
-//    public static Path uploadDirPost() {return UPLOAD_DIR_POST;}
 
     public static final String defaultProductImage = "default_product.jpg";
     public static final String defaultUserImage = "default_user.jpg";

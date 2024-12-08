@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.controller;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
@@ -15,45 +16,45 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/products")
+@RequestMapping(PathConstants.PRODUCTS)
 @AllArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
     //returns all products stored in database, without ids
-    @GetMapping("/getAll")
+    @GetMapping(PathConstants.PRODUCTS_GET_ALL)
     public ResponseEntity<List<ProductResponseDTO>> getAll(){
         List<ProductResponseDTO> productResponseDTOS = productService.getAll();
         return ResponseEntity.ok(productResponseDTOS);
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping(PathConstants.PRODUCT_ID)
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable long productId){
         ProductResponseDTO productResponseDTO = productService.getProductById(productId);
         return ResponseEntity.ok(productResponseDTO);
     }
 
-    @GetMapping("/getImage/{productId}")
+    @GetMapping(PathConstants.PRODUCT_GET_IMAGE)
     public ResponseEntity<Resource> getImage(@PathVariable Long productId){
         Resource image = productService.getImage(productId);
         return ResponseEntity.ok(image);
     }
 
-    @GetMapping("/search")
+    @GetMapping(PathConstants.SEARCH)
     public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String keyword) {
         List<ProductResponseDTO> productResponseDTOS = productService.searchProducts(keyword);
         return ResponseEntity.ok(productResponseDTOS);
     }
 
-    @GetMapping("/filter")
+    @GetMapping(PathConstants.FILTER)
     public ResponseEntity<List<ProductResponseDTO>> filterProducts(@RequestParam Map<String, String> filters) {
         List<ProductResponseDTO> productResponseDTOS = productService.filterProducts(filters);
         return ResponseEntity.ok(productResponseDTOS);
     }
 
 
-    @GetMapping("/sortedBy{criteria}/{asc}") // "asc" or "desc" expected, "criteria" can be "name", "brand", "calories", "protein", "carbohydrates", "fat", "fiber" or "sugar"
+    @GetMapping(PathConstants.SORTED_BY) // "asc" or "desc" expected, "criteria" can be "name", "brand", "calories", "protein", "carbohydrates", "fat", "fiber" or "sugar"
     public ResponseEntity<List<ProductResponseDTO>> getSortedProducts(@PathVariable String criteria, @PathVariable String asc){
         List<ProductResponseDTO> productResponseDTOS = productService.getSortedProducts(criteria, asc);
         return ResponseEntity.ok(productResponseDTOS);
@@ -66,7 +67,7 @@ public class ProductController {
         productService.createProduct(productRequestDTO, file);
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping(PathConstants.PRODUCT_ID)
     //@ResponseStatus()
     public ResponseEntity<Void> delete(@PathVariable long productId){
         productService.deleteProduct(productId);
@@ -74,7 +75,7 @@ public class ProductController {
     }
 
     //IMAGE UPDATE WILL BE IMPLEMENTED LATER
-    @PutMapping("/{productId}")
+    @PutMapping(PathConstants.PRODUCT_ID)
     public ResponseEntity<Void> update(@RequestBody ProductRequestDTO productRequestDTO, @PathVariable long productId){
         productService.updateProduct(productRequestDTO, productId);
         return new ResponseEntity<>(HttpStatus.OK);
