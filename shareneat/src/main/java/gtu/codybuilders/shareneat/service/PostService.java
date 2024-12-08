@@ -20,9 +20,12 @@ public interface PostService {
     List<PostResponse> searchPosts(String query);
     String returnProfilePhoto();
 
-    List<PostResponse> getPostsForCurrentUserInRange(int start, int end);
+    List<PostResponse> getPostsForCurrentUserInRange(int page);
+
+    List<PostResponse> getPostsByUsernameInRange(String username, int page);
 
     List<PostResponse> filterPosts(Map<String, String> filters);
+
 
 }
 
