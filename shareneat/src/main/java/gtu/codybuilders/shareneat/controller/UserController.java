@@ -127,4 +127,14 @@ public class UserController {
         }
     }
 
+    @GetMapping("/my-account/username")
+    public ResponseEntity<String> getUsername() {
+        try {
+            String name = AuthUtil.getUsername();
+            return ResponseEntity.ok(name);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
 }

@@ -1,9 +1,9 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.dto.CommentDto;
-import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.exception.CommentNotFoundException;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
+import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.mapper.CommentMapper;
 import gtu.codybuilders.shareneat.model.Comment;
 import gtu.codybuilders.shareneat.model.Post;

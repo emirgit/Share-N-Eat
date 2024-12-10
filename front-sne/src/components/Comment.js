@@ -1,34 +1,60 @@
 // src/components/Comment.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axiosHelper from '../axiosHelper';
-import profilePic from '../assets/profilepic-shrneat.png'; // Fallback profile picture
+import CommentCard from './CommentCard';
 
-const Comment = ({ postId, currentUser }) => {
+const Comment = ({ postId, username }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [posting, setPosting] = useState(false);
+    const [currentUserProfilePic, setCurrentUserProfilePic] = useState(null);
 
-    // Fetch comments for the post
+    const fetchComments = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const response = await axiosHelper(`/comments/${postId}`, 'GET');
+            const fetchedComments = response || [];
+            // Enhance each comment with an isOwner flag after fetching
+            const enrichedComments = fetchedComments.map((comment) => ({
+                
+                ...comment,
+                isOwner: comment.userName === username,
+            }));
+
+            setComments(enrichedComments);
+        } catch (err) {
+            console.error('Error fetching comments:', err);
+            setError('Failed to load comments.');
+        } finally {
+            setLoading(false);
+        }
+    }, [postId, username]);
+
+    // Fetch current user's profile picture
     useEffect(() => {
-        const fetchComments = async () => {
+        const fetchProfilePicture = async () => {
             try {
-                setLoading(true);
-                const response = await axiosHelper(`/posts/${postId}/comments`, 'GET');
-                setComments(response || []);
-            } catch (err) {
-                console.error('Error fetching comments:', err);
-                setError('Failed to load comments.');
-            } finally {
-                setLoading(false);
+                const profilePictureResponse = await axiosHelper('/user/my-account/profile-picture', 'GET', null, {
+                    responseType: 'blob',
+                });
+                setCurrentUserProfilePic(URL.createObjectURL(profilePictureResponse));
+            } catch (error) {
+                console.error("Failed to fetch current user's profile picture", error);
             }
         };
 
-        fetchComments();
-    }, [postId]);
+        fetchProfilePicture();
+    }, []);
 
-    // Handle new comment submission
+    // Initial comments fetch
+    useEffect(() => {
+        fetchComments();
+    }, [fetchComments]);
+
     const handleCommentSubmit = async () => {
         if (newComment.trim() === '') return;
 
@@ -37,23 +63,14 @@ const Comment = ({ postId, currentUser }) => {
             const commentData = {
                 postId,
                 text: newComment,
-                username: currentUser.username, // Assuming currentUser has a username field
+                userName: username
             };
 
-            await axiosHelper(`/posts/${postId}/comments`, 'POST', commentData);
+            await axiosHelper('/comments', 'POST', commentData);
 
-            // Optionally, you can fetch comments again or append the new comment locally
-            setComments([
-                ...comments,
-                {
-                    user: {
-                        name: currentUser.username,
-                        profilePic: currentUser.profilePic || profilePic, // Use fallback if missing
-                    },
-                    text: newComment,
-                },
-            ]);
+            // After posting a new comment, refetch the updated list
             setNewComment('');
+            fetchComments();
         } catch (err) {
             console.error('Error posting comment:', err);
             setError('Failed to post comment.');
@@ -66,11 +83,13 @@ const Comment = ({ postId, currentUser }) => {
         <div className="p-4 border-t border-gray-200">
             {/* New Comment Input */}
             <div className="flex items-center mb-4">
-                <img
-                    src={currentUser.profilePic || profilePic}
-                    alt="User"
-                    className="w-8 h-8 rounded-full mr-2"
-                />
+                {currentUserProfilePic && (
+                    <img
+                        src={currentUserProfilePic}
+                        alt="User"
+                        className="w-8 h-8 rounded-full mr-2"
+                    />
+                )}
                 <input
                     type="text"
                     value={newComment}
@@ -97,18 +116,14 @@ const Comment = ({ postId, currentUser }) => {
                 <p className="text-gray-700">No comments yet. Be the first to comment!</p>
             ) : (
                 <div className="space-y-4">
-                    {comments.map((comment, index) => (
-                        <div key={index} className="flex items-start space-x-2">
-                            <img
-                                src={comment.user.profilePic || profilePic}
-                                alt={comment.user.name}
-                                className="w-8 h-8 rounded-full"
-                            />
-                            <div className="text-sm text-gray-700">
-                                <span className="font-medium">{comment.user.name}: </span>
-                                {comment.text}
-                            </div>
-                        </div>
+                    {comments.map((comment) => (
+                        <CommentCard
+                            key={comment.id}
+                            comment={comment}
+                            postId={postId}
+                            isOwner={comment.isOwner}
+                            onCommentChange={fetchComments}
+                        />
                     ))}
                 </div>
             )}

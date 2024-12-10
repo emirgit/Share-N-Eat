@@ -26,6 +26,20 @@ public class AuthUtil {
         throw new IllegalStateException("No authenticated user found");
     }
 
+    public static String getUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof UserPrincipal) {
+                return ((UserPrincipal) principal).getUser().getUsername();
+            }
+        }
+
+        throw new IllegalStateException("No authenticated user found");
+    }
+
     /**
      * Retrieves the authenticated user's roles.
      *

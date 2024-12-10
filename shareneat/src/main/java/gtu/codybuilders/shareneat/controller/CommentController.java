@@ -33,8 +33,8 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(params = "postId")
-    public ResponseEntity<List<CommentDto>> getAllCommentsForPost(@RequestParam Long postId) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<CommentDto>> getAllCommentsForPost(@PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(commentService.getAllCommentsForPost(postId));
     }
@@ -44,7 +44,5 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(commentService.getAllCommentsForUser());
     }
-
-
 
 }

@@ -13,6 +13,7 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ProductPage from './pages/ProductPage'
+import PostPage from './pages/PostPage';
 
 import PrivateRoute from './components/PrivateRoute'; // Make sure the path is correct
 import AdminPanel from './pages/AdminPanel';
@@ -40,6 +41,7 @@ function App() {
         <Route path="/upload" element={<PrivateRoute element={UploadPage} />} />
         <Route path="/profile" element={<ProfilePage />} /> {/* Own Profile */}
         <Route path="/profile/:username" element={<ProfilePage />} /> {/* Other's Profile */}
+        <Route path="/post/:postId" element={<PostPage />} /> {/* Other's Profile */}
         <Route path="/change-username" element={<PrivateRoute element={ChangeUsername} />} />
         <Route path="/change-password" element={<PrivateRoute element={ChangePassword} />} />
         <Route path="/change-photo" element={<PrivateRoute element={ChangePhoto} />} />
