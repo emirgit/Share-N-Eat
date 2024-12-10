@@ -22,4 +22,14 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
         mailSender.send(message);
     }
+
+    @Override
+    public void sendVerificationEmail(String toEmail, String verificationLink) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Verify Your Email Address");
+        message.setText("Click the link below to verify your email address:\n" + verificationLink);
+
+        mailSender.send(message);
+    }
 }

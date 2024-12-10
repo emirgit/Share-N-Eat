@@ -3,6 +3,8 @@ package gtu.codybuilders.shareneat.constant;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.springframework.data.domain.Range;
+
 public class PathConstants {
 
 
@@ -18,6 +20,12 @@ public class PathConstants {
 
     public static final String FORGOT_PASSWORD_EMAIL_VAR = FORGOT_PASSWORD + "/{email}";
 
+    public static final String EMAIL = "/email";
+    public static final String VERIFY = "/verify";
+    public static final String EMAIL_VERIFY = EMAIL + VERIFY;
+    public static final String EMAIL_VERIFY_REQUEST = EMAIL_VERIFY + "/request/{email}";
+    public static final String EMAIL_VERIFY_TOKEN = EMAIL_VERIFY + "/token";
+
     public static final String API = "api";
     public static final String USERS = "/users";
     public static final String PRODUCTS = API + "/products";
@@ -29,8 +37,16 @@ public class PathConstants {
     public static final String FILTER = "/filter";
     public static final String SORTED_BY = "/sortedBy{criteria}/{asc}";
 
-
-
+    public static final String POSTS = API + "/posts";
+    public static final String POST_ID = "/{postId}";
+    public static final String USERNAME = "/{username}";
+    public static final String BY_USER = "/by-user";
+    public static final String RANGE = "/range";
+    public static final String CURRENT_USER = "/current-user";
+    public static final String GET_IMAGE_BY_POST_ID = GET_IMAGE + POST_ID;
+    public static final String CURRENT_USER_RANGE = CURRENT_USER + RANGE;
+    public static final String BY_USER_USERNAME = BY_USER + USERNAME;
+    public static final String BY_USER_USERNAME_RANGE = BY_USER_USERNAME + RANGE;
 
 
     //image upload paths

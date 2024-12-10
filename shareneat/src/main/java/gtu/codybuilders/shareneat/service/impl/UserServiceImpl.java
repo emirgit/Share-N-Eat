@@ -5,9 +5,11 @@ import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.exception.UserAlreadyExistsException;
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
+import gtu.codybuilders.shareneat.model.EmailVerificationToken;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
+import gtu.codybuilders.shareneat.repository.EmailVerificationTokenRepository;
 import gtu.codybuilders.shareneat.repository.PasswordResetTokenRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.ImageService;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordResetTokenRepository tokenRepository;
     private final ImageService imageService;
     private final UserRepository userRepository;
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
     @Override
     public User saveUser(User user) {
@@ -140,7 +144,52 @@ public class UserServiceImpl implements UserService {
         return newToken;
     }
 
+    @Override
+    public String createEmailVerificationToken(String email) {
+        Optional<User> optionalUser = repository.findByEmail(email);
 
+        if (optionalUser.isEmpty()) {
+            logger.warn("Email Verification is requested for non-existing email.");
+            return ""; // Optionally return an empty string or handle silently to avoid enumeration
+        }
+
+        User user = optionalUser.get();
+
+        // Check for an existing token and delete it if found
+        Optional<EmailVerificationToken> existingToken = emailVerificationTokenRepository.findByUser(user);
+
+        if (existingToken.isPresent()){
+            // User was not saved to database again, the bidirectional relationship deleted manually
+            existingToken.get().getUser().setEmailVerificationToken(null);
+            emailVerificationTokenRepository.delete(existingToken.get());
+        }
+
+        // Generate a new token
+        String token = UUID.randomUUID().toString();
+        EmailVerificationToken verificationToken = new EmailVerificationToken(token, user);
+        emailVerificationTokenRepository.save(verificationToken);
+
+        return token;
+    }
+
+    public void verifyEmailToken(String token) {
+        // Fetch the token from the repository
+        EmailVerificationToken verificationToken = emailVerificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid or expired token"));
+
+        // Check expiration
+        if (verificationToken.getExpiryDate().isBefore(Instant.now())) {
+            throw new IllegalArgumentException("Token has expired");
+        }
+
+        // Mark user as verified
+        User user = verificationToken.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
+
+        // Optionally delete the token after verification
+        emailVerificationTokenRepository.delete(verificationToken);
+    }
 
     @Override
     public PasswordResetToken validateToken(String token) {

@@ -87,7 +87,7 @@ public class AuthenticationController {
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setCreated(Instant.now());
-        user.setEnabled(true);
+        user.setEnabled(false);
         user.setRole(Role.ROLE_USER); // Assign ROLE_USER
 
         // Set default values for other fields if necessary
@@ -137,7 +137,6 @@ public class AuthenticationController {
         }
     }
 
-
     @GetMapping(PathConstants.RESET_PASSWORD)
     public ResponseEntity<String> showResetPasswordForm(@RequestParam("token") String token) {
         try {
@@ -160,5 +159,51 @@ public class AuthenticationController {
         }
 
         return ResponseEntity.ok("Password has been reset successfully.");
+    }
+
+    @PostMapping(PathConstants.EMAIL_VERIFY_REQUEST)
+    public ResponseEntity<String> sendEmailVerification(@PathVariable String email) {
+        try {
+            // Generate an email verification token
+            String token = userService.createEmailVerificationToken(email);
+
+            if (token.isEmpty()) {
+                // Mask response to avoid email enumeration
+                return ResponseEntity.ok("If you don’t see the email in your inbox, check your spam folder. " +
+                        "If it’s not there, the email address may not match an existing account.");
+            }
+
+            // Create the verification link
+            String verificationLink = "http://localhost:3000/auth/verify/email?token=" + token;
+
+            // Send the verification email
+            emailSenderService.sendVerificationEmail(email, verificationLink);
+
+            return ResponseEntity.ok("Verification email has been sent successfully. Check your inbox or spam folder.");
+        } catch (UserNotFoundException e) {
+            // Log and respond if email is not found
+            logger.warn("Verification requested for non-existing email: {}", email);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to process request. Please try again later.");
+        } catch (Exception e) {
+            // Log any unexpected errors
+            logger.error("An unexpected error occurred during email verification request for email: {}", email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred. Please try again later.");
+        }
+    }
+
+
+    @GetMapping(PathConstants.EMAIL_VERIFY_TOKEN)
+    public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
+        try {
+            // Validate the token and verify the email
+            userService.verifyEmailToken(token);
+
+            return ResponseEntity.ok("Email has been verified successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token.");
+        } catch (Exception e) {
+            logger.error("An unexpected error occurred during email verification for token: {}", token, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred. Please try again later.");
+        }
     }
 }

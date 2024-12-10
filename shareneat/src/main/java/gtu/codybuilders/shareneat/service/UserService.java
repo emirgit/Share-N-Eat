@@ -25,6 +25,7 @@ public interface UserService {
     void changeEmail(String newEmail);
 
     String createPasswordResetToken(String email);
+    String createEmailVerificationToken(String email);
 
     PasswordResetToken validateToken(String token);
     User resetPassword(String token, String newPassword);

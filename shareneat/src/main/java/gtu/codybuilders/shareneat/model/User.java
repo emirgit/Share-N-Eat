@@ -81,4 +81,7 @@ public class User{
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private PasswordResetToken passwordResetToken;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private EmailVerificationToken emailVerificationToken;
 }

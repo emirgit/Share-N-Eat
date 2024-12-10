@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.controller;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping(PathConstants.POSTS)
 @AllArgsConstructor
 public class PostController {
 
@@ -30,19 +31,19 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
-    @DeleteMapping("/{postId}")
+    @DeleteMapping(PathConstants.POST_ID)
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.delete(postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{postId}")
+    @PutMapping(PathConstants.POST_ID)
     public ResponseEntity<Void> updatePost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
         postService.update(postId, postRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getImage/{postId}")
+    @GetMapping(PathConstants.GET_IMAGE_BY_POST_ID)
     public ResponseEntity<Resource> getImage(@PathVariable Long postId){
         Resource image = postService.getImage(postId);
         return ResponseEntity.ok(image);
@@ -54,40 +55,40 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping(PathConstants.POST_ID)
     public ResponseEntity<PostResponse> getPostById(@PathVariable Long postId) {
         PostResponse postResponse = postService.getPostById(postId);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/by-user/{username}")
+    @GetMapping(PathConstants.BY_USER_USERNAME)
     public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable String username) {
         List<PostResponse> posts = postService.getAllPostsByUser(username);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     //current user profile page feed
-    @GetMapping("/current-user/range")
+    @GetMapping(PathConstants.CURRENT_USER_RANGE)
     public ResponseEntity<List<PostResponse>> getPostsForCurrentUserInRange(@RequestParam int page) {
         List<PostResponse> posts = postService.getPostsForCurrentUserInRange(page);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     //user profile page feed
-    @GetMapping("/by-user/{username}/range")
+    @GetMapping(PathConstants.BY_USER_USERNAME_RANGE)
     public ResponseEntity<List<PostResponse>> getPostsByUsernameInRange(@PathVariable String username, @RequestParam int page) {
         List<PostResponse> posts = postService.getPostsByUsernameInRange(username, page);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
 
-    @GetMapping("/current-user")
+    @GetMapping(PathConstants.CURRENT_USER)
     public ResponseEntity<List<PostResponse>> getPostsForUser() {
         List<PostResponse> posts = postService.getPostsForUser();
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
-    @GetMapping("/filter")
+    @GetMapping(PathConstants.FILTER)
     public ResponseEntity<List<PostResponse>> filterPosts(@RequestParam Map<String, String> filters){
         List<PostResponse> posts = postService.filterPosts(filters);
         return new ResponseEntity<>(posts, HttpStatus.OK);
