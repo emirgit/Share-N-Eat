@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import axiosHelper from '../axiosHelper';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import ProductComment from "./ProductComment";
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Yellow for fat, claret red for protein, blue for carbs
 
@@ -22,7 +25,49 @@ const Star = ({ filled }) => (
     </svg>
 );
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, userRoles, currentUsername }) => {
+
+    const {
+        id,
+        name,
+        brand,
+        imageUrl,
+        calories,
+        proteinGrams,
+        carbohydrateGrams,
+        fatGrams,
+        sugarGrams,
+        rating,
+        ratingCount,
+        numberOfComments,
+        created,
+    } = product;
+
+    const navigate = useNavigate();
+    const [liked, setLiked] = useState(false);
+    const [currentLikeCount, setCurrentLikeCount] = useState(ratingCount);
+    const [loadingLike, setLoadingLike] = useState(false);
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+
+    // useEffect(() => {
+    //     const fetchLikeStatus = async () => {
+    //         try {
+    //             const isLiked = await axiosHelper(`/likes/status/${id}`, 'GET');
+    //             setLiked(isLiked);
+    //         } catch (error) {
+    //             console.error('Error fetching like status:', error);
+    //         }
+    //     };
+    //
+    //     fetchLikeStatus();
+    // }, [id]);
+
+    const handleComments = () => {
+        setIsCommentsOpen(!isCommentsOpen);
+    };
+
+
+
     const pieData = [
         { name: 'Fat', value: product.macronutrients.fat },
         { name: 'Protein', value: product.macronutrients.protein },
@@ -41,8 +86,8 @@ const ProductCard = ({ product }) => {
             {/* Left Section: Product Image and Info */}
             <div className="flex items-center">
                 <img
-                    src={product.imageUrl}
-                    alt={product.name}
+                    src={imageUrl}
+                    alt={name}
                     className="w-24 h-24 object-cover rounded-lg mr-4"
                 />
                 <div>
@@ -109,6 +154,11 @@ const ProductCard = ({ product }) => {
                     </button>
                 </div>
             </div>
+
+            {isCommentsOpen && (
+                <ProductComment productId={id} username={current} />
+            )}
+
         </div>
     );
 };

@@ -14,7 +14,7 @@ public class ProductCommentResponseDTO {
     private Long id;
     private String text;
     private Long productId;
-    private Long userId;
+    private String userName;
     private Instant createdDate;
 
 }

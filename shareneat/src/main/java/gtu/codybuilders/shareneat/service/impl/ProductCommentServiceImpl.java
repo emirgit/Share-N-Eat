@@ -14,6 +14,7 @@ import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -35,7 +36,7 @@ public class ProductCommentServiceImpl implements ProductCommentService {
             productCommentResponseDTO.setId(productComment.getId());
             productCommentResponseDTO.setText(productComment.getText());
             productCommentResponseDTO.setProductId(productComment.getProduct().getId());
-            productCommentResponseDTO.setUserId(productComment.getUser().getUserId());
+            productCommentResponseDTO.setUserName(productComment.getUser().getUsername());
             productCommentResponseDTO.setCreatedDate(productComment.getCreatedDate());
             return productCommentResponseDTO;
         }).toList();
@@ -50,8 +51,7 @@ public class ProductCommentServiceImpl implements ProductCommentService {
         productComment.setText(productCommentRequestDTO.getText());
         productComment.setProduct(product);
         productComment.setUser(userRepository.findById(AuthUtil.getUserId()).orElseThrow());
-        productComment.setCreatedDate(productCommentRequestDTO.getCreatedDate());
-
+        productComment.setCreatedDate(Instant.now());
         productCommentRepository.save(productComment);
     }
 
@@ -65,6 +65,7 @@ public class ProductCommentServiceImpl implements ProductCommentService {
     public void updateProductComment(long productCommentId, ProductCommentRequestDTO productCommentRequestDTO) {
         ProductComment productComment = productCommentRepository.findById(productCommentId).orElseThrow(() -> new ProductCommentNotFoundException("Product comment not found with id : " + productCommentId));
         productComment.setText(productCommentRequestDTO.getText());
+
         productCommentRepository.save(productComment);
     }
 }
