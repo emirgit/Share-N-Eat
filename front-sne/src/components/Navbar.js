@@ -36,7 +36,9 @@ const Navbar = () => {
 
     // Toggle sub-menu visibility for Settings
     const handleSettingsClick = () => {
-        setIsSubMenuOpen((prev) => !prev);
+        //setIsSubMenuOpen((prev) => !prev);
+        navigate('/settings');
+        setIsDropdownOpen(false); // Close dropdown after navigation
     };
 
     // Function to close dropdown and sub-menu if click is outside

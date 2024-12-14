@@ -1,199 +1,199 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import SettingsMenu from '../components/SettingsMenu';
 
 const SettingsPage = () => {
-    const [activeSection, setActiveSection] = useState('AccountPreferences'); // State to track active section
+    const [selectedMenu, setSelectedMenu] = useState('Account Preferences');
+    const [currentUsername, setCurrentUsername] = useState('currentUsername'); // Mock current username
+    const [currentEmail, setCurrentEmail] = useState('currentEmail@example.com'); // Mock current email
+    const [currentBio, setCurrentBio] = useState('This is my biography.'); // Mock current bio
+    const [username, setUsername] = useState('currentUsername'); // Form username state
+    const [email, setEmail] = useState('currentEmail@example.com'); // Form email state
+    const [bio, setBio] = useState('This is my biography.'); // Form bio state
+    const [isVerifying, setIsVerifying] = useState(false); // State to show verification step
+    const [password, setPassword] = useState(''); // State to capture password for verification
 
-    // Handler for changing sections
-    const handleSectionChange = (section) => {
-        setActiveSection(section);
+    const navigate = useNavigate();
+
+    const handleSaveChanges = () => {
+        // Check if any changes were made
+        if (username !== currentUsername || email !== currentEmail || bio !== currentBio) {
+            setIsVerifying(true); // Show the password verification step
+        } else {
+            alert('No changes detected to save.');
+        }
     };
 
-    // Components for each section
-    const AccountPreferences = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Account Preferences</h2>
-            <p className="mb-4">Update your profile information below:</p>
-            <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={() => handleSectionChange('UpdateProfile')}
-            >
-                Update Profile Information
-            </button>
-        </div>
-    );
+    const handleVerifyPassword = () => {
+        alert('Profile information updated successfully!');
+        // Update current username, email, and bio to the new values
+        setCurrentUsername(username);
+        setCurrentEmail(email);
+        setCurrentBio(bio);
+        setIsVerifying(false);
+    };
 
-    const UpdateProfile = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Update Profile</h2>
-            <form className="space-y-4">
-                <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="block w-full p-2 border rounded"
-                />
-                <input
-                    type="email"
-                    placeholder="Email Address"
-                    className="block w-full p-2 border rounded"
-                />
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                    Save Changes
-                </button>
-                <button
-                    type="button"
-                    className="ml-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                    onClick={() => handleSectionChange('AccountPreferences')}
-                >
-                    Cancel
-                </button>
-            </form>
-        </div>
-    );
+    const handleCancelVerification = () => {
+        // Reset form values to current values if verification is canceled
+        setUsername(currentUsername);
+        setEmail(currentEmail);
+        setBio(currentBio);
+        setIsVerifying(false);
+    };
 
-    const AccountManagement = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Account Management</h2>
-            <button
-                className="block px-4 py-2 mb-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                onClick={() => handleSectionChange('ChangePassword')}
-            >
-                Change Password
-            </button>
-            <button
-                className="block px-4 py-2 mb-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={() => handleSectionChange('UpdateEmail')}
-            >
-                Update Email Address
-            </button>
-            <button
-                className="block px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => handleSectionChange('DeleteAccount')}
-            >
-                Delete Account
-            </button>
-        </div>
-    );
+    const handleChangePassword = () => {
+        navigate('/auth/reset/password');
+    };
 
-    const ChangePassword = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Change Password</h2>
-            <form className="space-y-4">
-                <input
-                    type="password"
-                    placeholder="Current Password"
-                    className="block w-full p-2 border rounded"
-                />
-                <input
-                    type="password"
-                    placeholder="New Password"
-                    className="block w-full p-2 border rounded"
-                />
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                    Save Changes
-                </button>
-            </form>
-        </div>
-    );
-
-    const UpdateEmail = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Update Email Address</h2>
-            <form className="space-y-4">
-                <input
-                    type="email"
-                    placeholder="New Email Address"
-                    className="block w-full p-2 border rounded"
-                />
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                    Save Changes
-                </button>
-            </form>
-        </div>
-    );
-
-    const DeleteAccount = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Delete Account</h2>
-            <p className="mb-4 text-red-600">
-                Are you sure you want to delete your account? This action is irreversible.
-            </p>
-            <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => console.log('Account deleted')} // TODO: Add backend integration for account deletion
-            >
-                Confirm Delete
-            </button>
-            <button
-                className="ml-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={() => handleSectionChange('AccountManagement')}
-            >
-                Cancel
-            </button>
-        </div>
-    );
-
-    const DataPrivacyRules = () => (
-        <div>
-            <h2 className="text-2xl font-semibold mb-4">Data Privacy Rules</h2>
-            <p>
-                These are the privacy rules you agreed to during registration. Please review them carefully.
-            </p>
-            {/* Add the actual privacy rules here */}
-        </div>
-    );
+    const handleDeleteAccount = () => {
+        const confirmed = window.confirm(
+            'Are you sure you want to delete your account? This action is irreversible, and all your data will be permanently deleted.'
+        );
+        if (confirmed) {
+            // Logic to delete the account goes here
+            alert('Your account has been successfully deleted.');
+            navigate('/login'); // Redirect to login page after deletion
+        }
+    };
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <div className="w-1/4 bg-white shadow-md p-4">
-                <h2 className="text-lg font-semibold mb-4">Settings</h2>
-                <button
-                    className={`block w-full text-left px-4 py-2 mb-2 rounded ${
-                        activeSection === 'AccountPreferences' ? 'bg-blue-100' : ''
-                    }`}
-                    onClick={() => handleSectionChange('AccountPreferences')}
-                >
-                    Account Preferences
-                </button>
-                <button
-                    className={`block w-full text-left px-4 py-2 mb-2 rounded ${
-                        activeSection === 'AccountManagement' ? 'bg-blue-100' : ''
-                    }`}
-                    onClick={() => handleSectionChange('AccountManagement')}
-                >
-                    Account Management
-                </button>
-                <button
-                    className={`block w-full text-left px-4 py-2 mb-2 rounded ${
-                        activeSection === 'DataPrivacyRules' ? 'bg-blue-100' : ''
-                    }`}
-                    onClick={() => handleSectionChange('DataPrivacyRules')}
-                >
-                    Data Privacy Rules
-                </button>
-            </div>
+        <div className="flex flex-col min-h-screen bg-gray-100">
+            {/* Navbar */}
+            <Navbar />
 
-            {/* Main Content */}
-            <div className="w-3/4 p-6">
-                {activeSection === 'AccountPreferences' && <AccountPreferences />}
-                {activeSection === 'UpdateProfile' && <UpdateProfile />}
-                {activeSection === 'AccountManagement' && <AccountManagement />}
-                {activeSection === 'ChangePassword' && <ChangePassword />}
-                {activeSection === 'UpdateEmail' && <UpdateEmail />}
-                {activeSection === 'DeleteAccount' && <DeleteAccount />}
-                {activeSection === 'DataPrivacyRules' && <DataPrivacyRules />}
+            <div className="flex">
+                {/* Sidebar */}
+                <Sidebar />
+
+                {/* Main Content */}
+                <div className="flex-1 p-8">
+                    <h1 className="text-3xl font-bold mb-6">Settings</h1>
+
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        {selectedMenu === 'Account Preferences' && (
+                            <div>
+                                <h2 className="text-xl font-semibold mb-4">Update Profile Information</h2>
+                                {isVerifying ? (
+                                    <div className="space-y-4">
+                                        <p className="text-gray-700">
+                                            Please enter your password to verify the changes.
+                                        </p>
+                                        <input
+                                            type="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            placeholder="Enter your password"
+                                            className="w-full p-2 border rounded-lg"
+                                        />
+                                        <div className="flex space-x-4">
+                                            <button
+                                                onClick={handleVerifyPassword}
+                                                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                                            >
+                                                Verify and Save Changes
+                                            </button>
+                                            <button
+                                                onClick={handleCancelVerification}
+                                                className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <form className="space-y-4">
+                                        <div>
+                                            <label className="block font-medium text-gray-600 mb-2">Username</label>
+                                            <input
+                                                type="text"
+                                                value={username}
+                                                onChange={(e) => setUsername(e.target.value)}
+                                                placeholder={currentUsername}
+                                                className="w-full p-2 border rounded-lg"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block font-medium text-gray-600 mb-2">Email Address</label>
+                                            <input
+                                                type="email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                placeholder={currentEmail}
+                                                className="w-full p-2 border rounded-lg"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block font-medium text-gray-600 mb-2">Biography</label>
+                                            <textarea
+                                                value={bio}
+                                                onChange={(e) => setBio(e.target.value)}
+                                                placeholder={currentBio}
+                                                className="w-full p-2 border rounded-lg"
+                                                rows={3}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleSaveChanges}
+                                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                        >
+                                            Save Changes
+                                        </button>
+                                    </form>
+                                )}
+                            </div>
+                        )}
+                        {selectedMenu === 'Account Management' && (
+                            <div>
+                                <h2 className="text-xl font-semibold mb-4">Manage Account</h2>
+                                <div className="space-y-4">
+                                    <button
+                                        className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                        onClick={handleChangePassword}
+                                    >
+                                        Change Password
+                                    </button>
+                                    <button
+                                        className="w-full py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                                        onClick={handleDeleteAccount}
+                                    >
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {selectedMenu === 'Data Privacy Rules' && (
+                            <div>
+                                <h2 className="text-xl font-semibold mb-4">Data Privacy Rules</h2>
+                                <p className="text-gray-700 leading-relaxed">
+                                    These are the data privacy rules you accepted during registration. Make sure to 
+                                    review them periodically to understand how your data is used and stored. 
+                                </p>
+                                <ul className="list-disc ml-8 mt-4 text-gray-700">
+                                    <li>Your data is stored securely and is not shared without your consent.</li>
+                                    <li>You can request data deletion anytime.</li>
+                                    <li>Only authorized personnel have access to your data.</li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Settings Menu */}
+                <SettingsMenu
+                    selectedMenu={selectedMenu}
+                    setSelectedMenu={setSelectedMenu}
+                />
             </div>
         </div>
     );
 };
 
 export default SettingsPage;
+
+
+
+
+
