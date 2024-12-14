@@ -92,7 +92,14 @@ const ProductPage = () => {
     const handleSearch = async () => {
         try {
             const searchedProducts = await axiosHelper(`/products/search?keyword=${searchKeyword}`);
-            setProducts(searchedProducts);
+            const productsWithImages = await Promise.all(
+                searchedProducts.map(async (product) => {
+                    const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, {responseType: 'blob'});
+                    const imageUrl = URL.createObjectURL(imageResponse);
+                    return {...product, imageUrl};
+                })
+            );
+            setProducts(productsWithImages);
         } catch (error) {
             console.error('Failed to search products:', error);
         }

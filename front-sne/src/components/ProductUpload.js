@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axiosHelper from "../axiosHelper";
 
 const ProductUpload = () => {
     const [isActive, setIsActive] = useState(false);
@@ -25,6 +26,13 @@ const ProductUpload = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Submitting product:', formData);
+
+        // try {
+        //     await axiosHelper('/products', 'POST', formData, {
+        //         'Content-Type': 'multipart/form-data', // Ensure correct header for form data
+        //     });
+        // }
+
         // Add API call logic here
         setIsActive(false); // Collapse after submission
     };

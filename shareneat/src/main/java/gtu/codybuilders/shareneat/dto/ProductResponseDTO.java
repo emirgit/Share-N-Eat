@@ -18,6 +18,7 @@ public class ProductResponseDTO {
     private String brand;
     private String category;
     private String imageUrl;
+    private String content;
 
     private Double calories;
     private Double proteinGrams;
@@ -30,4 +31,8 @@ public class ProductResponseDTO {
     private Integer numberOfComments;
     private Instant created;
     private List<ProductComment> comments;
+
+    private Double averageRateExpert;
+    private Double averageRateRegular;
+
 }

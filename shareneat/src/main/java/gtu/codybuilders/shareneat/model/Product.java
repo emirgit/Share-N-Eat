@@ -22,6 +22,7 @@ public class Product {
     private String name;
     private String category;
     private String imageUrl;
+    private String content;
 
     private Double calories;
     private Double proteinGrams;
