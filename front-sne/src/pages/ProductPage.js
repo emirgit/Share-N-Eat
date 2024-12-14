@@ -108,13 +108,13 @@ const ProductPage = () => {
             case 'name':
                 return a.name.localeCompare(b.name);
             case 'rating':
-                return b.certifiedRating - a.certifiedRating;
+                return b.averageRateExpert - a.averageRateExpert;
             case 'protein':
-                return b.macronutrients.protein - a.macronutrients.protein;
+                return b.proteinGrams - a.proteinGrams;
             case 'carbs':
-                return b.macronutrients.carbs - a.macronutrients.carbs;
+                return b.carbonhydratesGrams - a.carbonhydratesGrams;
             case 'fat':
-                return b.macronutrients.fat - a.macronutrients.fat;
+                return b.fatGrams - a.fatGrams;
             default:
                 return 0; // No sorting
         }

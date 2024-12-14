@@ -4,7 +4,9 @@ const ProductUpload = () => {
     const [isActive, setIsActive] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
-        macronutrients: { protein: 0, carbs: 0, fat: 0 },
+        proteinGrams: 0,
+        carbonhydratesGrams: 0,
+        fatGrams: 0,
         quantity: '',
         calories: 0,
         contents: '',
@@ -106,13 +108,8 @@ const ProductUpload = () => {
                                 type="number"
                                 name="protein"
                                 placeholder="Protein"
-                                value={formData.macronutrients.protein}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        macronutrients: { ...prev.macronutrients, protein: +e.target.value },
-                                    }))
-                                }
+                                value={formData.proteinGrams}
+                                onChange={handleChange}
                                 className="border p-2 rounded w-full text-sm"
                             />
                         </div>
@@ -122,13 +119,8 @@ const ProductUpload = () => {
                                 type="number"
                                 name="carbs"
                                 placeholder="Carbs"
-                                value={formData.macronutrients.carbs}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        macronutrients: { ...prev.macronutrients, carbs: +e.target.value },
-                                    }))
-                                }
+                                value={formData.carbonhydratesGrams}
+                                onChange={handleChange}
                                 className="border p-2 rounded w-full text-sm"
                             />
                         </div>
@@ -138,13 +130,8 @@ const ProductUpload = () => {
                                 type="number"
                                 name="fat"
                                 placeholder="Fat"
-                                value={formData.macronutrients.fat}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        macronutrients: { ...prev.macronutrients, fat: +e.target.value },
-                                    }))
-                                }
+                                value={formData.fatGrams}
+                                onChange={handleChange}
                                 className="border p-2 rounded w-full text-sm"
                             />
                         </div>

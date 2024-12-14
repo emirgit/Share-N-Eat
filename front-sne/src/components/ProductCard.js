@@ -27,26 +27,23 @@ const Star = ({ filled }) => (
 
 const ProductCard = ({ product, userRoles, currentUsername }) => {
 
-    const {
-        id,
-        name,
-        brand,
-        imageUrl,
-        calories,
-        proteinGrams,
-        carbohydrateGrams,
-        fatGrams,
-        sugarGrams,
-        rating,
-        ratingCount,
-        numberOfComments,
-        created,
-    } = product;
+    // const {
+    //     id,
+    //     name,
+    //     brand,
+    //     imageUrl,
+    //     calories,
+    //     proteinGrams,
+    //     carbohydrateGrams,
+    //     fatGrams,
+    //     sugarGrams,
+    //     rating,
+    //     ratingCount,
+    //     numberOfComments,
+    //     created,
+    // } = product;
 
-    const navigate = useNavigate();
-    const [liked, setLiked] = useState(false);
-    const [currentLikeCount, setCurrentLikeCount] = useState(ratingCount);
-    const [loadingLike, setLoadingLike] = useState(false);
+
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
     // useEffect(() => {
@@ -69,9 +66,9 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
 
 
     const pieData = [
-        { name: 'Fat', value: product.macronutrients.fat },
-        { name: 'Protein', value: product.macronutrients.protein },
-        { name: 'Carbs', value: product.macronutrients.carbs },
+        { name: 'Fat', value: product.fatGrams },
+        { name: 'Protein', value: product.proteinGrams },
+        { name: 'Carbs', value: product.carbonhydratesGrams },
     ];
 
     const renderStars = (rating, maxStars = 5) => {
@@ -86,8 +83,8 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             {/* Left Section: Product Image and Info */}
             <div className="flex items-center">
                 <img
-                    src={imageUrl}
-                    alt={name}
+                    src={product.imageUrl}
+                    alt={product.name}
                     className="w-24 h-24 object-cover rounded-lg mr-4"
                 />
                 <div>
@@ -96,7 +93,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                     <div className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-lg inline-block">
                         {product.contents}
                     </div>
-                    <p className="text-gray-500 text-sm mt-1">({product.dateAdded})</p>
+                    <p className="text-gray-500 text-sm mt-1">({product.created})</p>
                 </div>
             </div>
 
@@ -104,8 +101,8 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             <div className="flex flex-col items-end space-y-2">
                 {/* Star Ratings */}
                 <div className="flex flex-col items-end">
-                    <div className="flex mb-1 text-blue-500">{renderStars(product.certifiedRating)}</div>
-                    <div className="flex text-yellow-500">{renderStars(product.nonCertifiedRating)}</div>
+                    <div className="flex mb-1 text-blue-500">{renderStars(product.averageRateExpert)}</div>
+                    <div className="flex text-yellow-500">{renderStars(product.averageRateRegular)}</div>
                 </div>
 
                 {/* Pie Chart and Macronutrient Details */}
@@ -128,16 +125,16 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                     {/* Macronutrient Details */}
                     <div className="flex flex-col text-sm text-gray-600">
                         <div className="flex items-center mb-1">
-                            <span>🍗</span> <span className="ml-1">{product.macronutrients.protein}g protein</span>
+                            <span>🍗</span> <span className="ml-1">{product.proteinGrams}g protein</span>
                         </div>
                         <div className="flex items-center mb-1">
-                            <span>🍞</span> <span className="ml-1">{product.macronutrients.carbs}g carbs</span>
+                            <span>🍞</span> <span className="ml-1">{product.carbonhydratesGrams}g carbs</span>
                         </div>
                         <div className="flex items-center mb-1">
-                            <span>🥓</span> <span className="ml-1">{product.macronutrients.fat}g fat</span>
+                            <span>🥓</span> <span className="ml-1">{product.fatGrams}g fat</span>
                         </div>
                         <div className="mt-2 text-center">
-                            {product.macronutrients.calories} kcal
+                            {product.calories} kcal
                         </div>
                     </div>
                 </div>
@@ -156,7 +153,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             </div>
 
             {isCommentsOpen && (
-                <ProductComment productId={id} username={current} />
+                <ProductComment productId={product.id} username={currentUsername} />
             )}
 
         </div>

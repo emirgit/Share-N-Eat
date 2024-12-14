@@ -20,6 +20,7 @@ public class Product {
 
     private String brand;
     private String name;
+    private String category;
     private String imageUrl;
 
     private Double calories;

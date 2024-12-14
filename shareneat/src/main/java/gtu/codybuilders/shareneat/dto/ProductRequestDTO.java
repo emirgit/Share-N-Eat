@@ -13,6 +13,7 @@ public class ProductRequestDTO {
     @NotBlank(message = "Name cannot be null")
     private String name;
     private String brand;
+    private String category;
     private String imageUrl;
 
     private Double calories;

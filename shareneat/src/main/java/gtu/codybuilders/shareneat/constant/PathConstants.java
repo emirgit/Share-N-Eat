@@ -3,8 +3,6 @@ package gtu.codybuilders.shareneat.constant;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.springframework.data.domain.Range;
-
 public class PathConstants {
 
 
@@ -29,7 +27,7 @@ public class PathConstants {
     public static final String API = "api";
     public static final String USERS = "/users";
     public static final String PRODUCTS = API + "/products";
-    public static final String PRODUCTS_GET_ALL = PRODUCTS + "/getAll";
+    public static final String PRODUCTS_GET_ALL = "/getAll";
     public static final String PRODUCT_ID = "/{productId}";
     public static final String GET_IMAGE = "/getImage";
     public static final String PRODUCT_GET_IMAGE = GET_IMAGE + PRODUCT_ID;
