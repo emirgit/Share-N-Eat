@@ -6,27 +6,11 @@ const Support = () => {
     const [tickets, setTickets] = useState([
         {
             id: 1,
-            username: 'Alice',
+            username: 'DummyTheUser',
             subject: 'Unable to reset my password',
-            date: '2024-12-01',
+            date: '2024-12-17',
             status: 'Open',
             message: 'I tried to reset my password but didn’t receive the email.',
-        },
-        {
-            id: 2,
-            username: 'Bob',
-            subject: 'Error while uploading a recipe',
-            date: '2024-11-30',
-            status: 'In Progress',
-            message: 'I keep getting an error message when uploading my recipe.',
-        },
-        {
-            id: 3,
-            username: 'Charlie',
-            subject: 'Request for account deletion',
-            date: '2024-11-28',
-            status: 'Resolved',
-            message: 'I would like to delete my account permanently.',
         },
     ]);
 

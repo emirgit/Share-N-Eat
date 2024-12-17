@@ -23,22 +23,22 @@ const AdminPanel = () => {
                             {/* User Activity */}
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow hover:shadow-lg transition">
                                 <h3 className="text-lg font-semibold text-blue-600">User Activity</h3>
-                                <p className="text-gray-600 mt-2">Active Users: <span className="font-bold">1,234</span></p>
-                                <p className="text-gray-600">New Users Today: <span className="font-bold">56</span></p>
+                                <p className="text-gray-600 mt-2">Active Users: <span className="font-bold">4</span></p>
+                                <p className="text-gray-600">New Users Today: <span className="font-bold">4</span></p>
                             </div>
 
                             {/* Post Performance */}
                             <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow hover:shadow-lg transition">
                                 <h3 className="text-lg font-semibold text-green-600">Post Performance</h3>
-                                <p className="text-gray-600 mt-2">Total Posts: <span className="font-bold">12,345</span></p>
-                                <p className="text-gray-600">Posts Today: <span className="font-bold">89</span></p>
+                                <p className="text-gray-600 mt-2">Total Posts: <span className="font-bold">2</span></p>
+                                <p className="text-gray-600">Posts Today: <span className="font-bold">2</span></p>
                             </div>
 
                             {/* Product Statistics */}
                             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow hover:shadow-lg transition">
                                 <h3 className="text-lg font-semibold text-yellow-600">Product Statistics</h3>
-                                <p className="text-gray-600 mt-2">Total Products: <span className="font-bold">8,765</span></p>
-                                <p className="text-gray-600">New Products: <span className="font-bold">23</span></p>
+                                <p className="text-gray-600 mt-2">Total Products: <span className="font-bold">2</span></p>
+                                <p className="text-gray-600">New Products: <span className="font-bold">2</span></p>
                             </div>
 
                             {/* Platform Performance */}

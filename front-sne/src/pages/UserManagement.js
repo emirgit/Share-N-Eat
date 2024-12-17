@@ -6,9 +6,10 @@ import AdminNavbar from '../components/AdminNavbar';
 const UserManagement = () => {
     // Mock user data
     const [users, setUsers] = useState([
-        { id: 1, username: 'Alice', email: 'alice@example.com', role: 'qualified', status: 'active', verified: true },
-        { id: 2, username: 'Bob', email: 'bob@example.com', role: 'non-qualified', status: 'active', verified: false },
-        { id: 3, username: 'Charlie', email: 'charlie@example.com', role: 'admin', status: 'banned', verified: true },
+        { id: 1, username: 'theAdmin', email: 'm.emir.kara@outlook.com', role: 'admin', status: 'active', verified: true },
+        { id: 2, username: 'DummyTheUser', email: 'dummy@outlook.com', role: 'user', status: 'active', verified: true },
+        { id: 3, username: 'DieticianPro', email: 'dietician@outlook.com', role: 'expert', status: 'active', verified: true },
+        { id: 4, username: 'trial', email: 'trial@outlook.com', role: 'user', status: 'active', verified: false },
     ]);
 
     // State for search and filters
@@ -73,8 +74,8 @@ const UserManagement = () => {
                         >
                             <option value="">All Roles</option>
                             <option value="admin">Admin</option>
-                            <option value="qualified">Qualified</option>
-                            <option value="non-qualified">Non-Qualified</option>
+                            <option value="expert">Expert</option>
+                            <option value="user">User</option>
                         </select>
                         <select
                             value={statusFilter}
@@ -112,8 +113,8 @@ const UserManagement = () => {
                                                 className="border rounded-lg p-1"
                                             >
                                                 <option value="admin">Admin</option>
-                                                <option value="qualified">Qualified</option>
-                                                <option value="non-qualified">Non-Qualified</option>
+                                                <option value="expert">Expert</option>
+                                                <option value="user">User</option>
                                             </select>
                                         </td>
                                         <td className="px-4 py-2">

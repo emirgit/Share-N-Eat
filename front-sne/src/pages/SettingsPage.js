@@ -6,7 +6,7 @@ import SettingsMenu from '../components/SettingsMenu';
 
 const SettingsPage = () => {
     const [selectedMenu, setSelectedMenu] = useState('Account Preferences');
-    const [currentUsername, setCurrentUsername] = useState('currentUsername'); // Mock current username
+    const [currentUsername, setCurrentUsername] = useState('Dummy Doe'); // Mock current username
     const [currentEmail, setCurrentEmail] = useState('currentEmail@example.com'); // Mock current email
     const [currentBio, setCurrentBio] = useState('This is my biography.'); // Mock current bio
     const [username, setUsername] = useState('currentUsername'); // Form username state
@@ -166,17 +166,25 @@ const SettingsPage = () => {
                         )}
                         {selectedMenu === 'Data Privacy Rules' && (
                             <div>
-                                <h2 className="text-xl font-semibold mb-4">Data Privacy Rules</h2>
+                                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                                <h2 className="text-xl font-semibold mb-4">Terms of Service:</h2>
                                 <p className="text-gray-700 leading-relaxed">
-                                    These are the data privacy rules you accepted during registration. Make sure to 
-                                    review them periodically to understand how your data is used and stored. 
+                                    These are the current Terms of Service... 
                                 </p>
-                                <ul className="list-disc ml-8 mt-4 text-gray-700">
-                                    <li>Your data is stored securely and is not shared without your consent.</li>
-                                    <li>You can request data deletion anytime.</li>
-                                    <li>Only authorized personnel have access to your data.</li>
-                                </ul>
+                                </div>
+                                
+                                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                                <h2 className="text-xl font-semibold mb-4">Privacy Policy:</h2>
+                                <p className="text-gray-700 leading-relaxed">
+                                    This is the current Privacy Policy...
+                                </p>    
+                                <p className="text-gray-700 leading-relaxed">
+                                Your data is stored securely and is not shared without your consent.
+                                </p>
+
+                                </div>    
                             </div>
+                            
                         )}
                     </div>
                 </div>

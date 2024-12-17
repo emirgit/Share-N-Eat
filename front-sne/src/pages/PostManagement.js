@@ -1,26 +1,15 @@
 import React, { useState } from 'react';
 import AdminNavbar from '../components/AdminNavbar';
 import AdminMenu from '../components/AdminMenu';
+import tavukPilav from '../assets/tavukPilav.png';
 
 const PostManagement = () => {
     const [posts, setPosts] = useState([
         {
             id: 1,
-            username: 'Alice',
-            description: 'This is a delicious recipe I tried!',
-            imageUrl: 'https://via.placeholder.com/150',
-        },
-        {
-            id: 2,
-            username: 'Bob',
-            description: 'Check out my awesome salad bowl!',
-            imageUrl: 'https://via.placeholder.com/150',
-        },
-        {
-            id: 3,
-            username: 'Charlie',
-            description: 'My latest creation: spicy ramen!',
-            imageUrl: 'https://via.placeholder.com/150',
+            username: 'DummyTheUser',
+            description: 'This is delicious!',
+            imageUrl: tavukPilav,
         },
     ]);
 

@@ -5,9 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7077bcda-2784-45d2-9b21-10e6c2f431bc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/front-sne/src/components/ProductCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/ProductCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/components/ProductUpload.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/ProductUpload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProductPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/ProductPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/PrivateRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/PrivateRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/AdminPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/AdminPanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/LoginPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/PostManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/PostManagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/SettingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/SettingsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/SiteSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/SiteSettings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/Support.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/Support.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/UserManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/UserManagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/spring-boot-app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/spring-boot-app.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,18 +42,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "oguzakkuss"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;oguzakkuss&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/emirgit/Share-N-Eat.git",
-    "accountId": "643a5588-8da7-4640-906a-22a2c87e9b00"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/emirgit/Share-N-Eat.git&quot;,
+    &quot;accountId&quot;: &quot;643a5588-8da7-4640-906a-22a2c87e9b00&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -53,18 +66,18 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "sprint__prototype",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Lenovo/Documents/GitHub/Share-N-Eat/front-sne",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;sprint__prototype&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lenovo/Documents/GitHub/Share-N-Eat/front-sne&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="gtu.codybuilders.shareneat.dto" />

@@ -6,13 +6,14 @@ import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import axiosHelper from '../axiosHelper';
+import RecipeCard from '../components/RecipeCard'; // Ensure this import exists
 
 const ProfilePage = () => {
     const { username } = useParams(); // Extract username from URL
-    const [currentUser, setCurrentUser] = useState(null); // To store current user's info
+    const [currentUsername, setCurrentUsername] = useState(null); // To store current user's username
     const [user, setUser] = useState({
         username: '',
-        isCertified: false,
+        role: '',
         bio: '',
         followers: 0,
         following: 0,
@@ -27,19 +28,39 @@ const ProfilePage = () => {
     const [isFollowing, setIsFollowing] = useState(false); // To track follow status
     const [followLoading, setFollowLoading] = useState(false); // To prevent multiple requests
 
-    // Fetch current user's info
+    // New state variables for posts
+    const [posts, setPosts] = useState([]); // To store fetched posts
+    const [postsLoading, setPostsLoading] = useState(true); // Loading state for posts
+    const [postsError, setPostsError] = useState(null); // Error state for posts
+
+    // Utility function to map backend roles to display-friendly strings
+    const getDisplayRole = (role) => {
+        switch (role) {
+            case 'ROLE_ADMIN':
+                return 'Admin';
+            case 'ROLE_EXPERT':
+                return 'Expert';
+            case 'ROLE_USER':
+                return 'User';
+            default:
+                return 'Unknown Role';
+        }
+    };
+
+    // Fetch current user's username
     useEffect(() => {
-        const fetchCurrentUser = async () => {
+        const fetchCurrentUsername = async () => {
             try {
-                const currentUserData = await axiosHelper('/user/my-account', 'GET');
-                setCurrentUser(currentUserData);
+                const currentUsernameData = await axiosHelper('/user/my-account/username', 'GET');
+                console.log(currentUsernameData)
+                setCurrentUsername(currentUsernameData); // Assuming the response has a 'username' field
             } catch (err) {
-                console.error('Error fetching current user data', err);
+                console.error('Error fetching current username', err);
                 setError('Failed to fetch current user data.');
             }
         };
 
-        fetchCurrentUser();
+        fetchCurrentUsername();
     }, []);
 
     // Fetch profile data based on whether it's own profile or another's
@@ -50,7 +71,7 @@ const ProfilePage = () => {
                 let fetchedUser;
                 let pictureResponse;
 
-                if (!username || username === currentUser?.username) {
+                if (!username || username === currentUsername) {
                     // Viewing own profile
                     setIsOwnProfile(true);
                     fetchedUser = await axiosHelper('/user/my-account', 'GET');
@@ -72,7 +93,7 @@ const ProfilePage = () => {
 
                 setUser({
                     username: fetchedUser.username,
-                    isCertified: fetchedUser.isCertified,
+                    role: fetchedUser.role, // Updated to store role
                     bio: fetchedUser.bio,
                     followers: fetchedUser.followersCount,
                     following: fetchedUser.followingCount,
@@ -89,11 +110,38 @@ const ProfilePage = () => {
             }
         };
 
-        // Only fetch user data after current user data is available
-        if (currentUser) {
+        // Only fetch user data after current username is available
+        if (currentUsername !== null) {
             fetchUserData();
         }
-    }, [username, currentUser]);
+    }, [username, currentUsername]);
+
+    // Fetch posts based on the profile being viewed
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                setPostsLoading(true); // Start loading posts
+                setPostsError(null); // Reset any previous errors
+                // Determine which username to use
+                const targetUsername = isOwnProfile ? currentUsername : user.username;
+                // Fetch posts by user
+                console.log(targetUsername)
+                const fetchedPosts = await axiosHelper(`/posts/by-user/${targetUsername}`, 'GET');
+
+                setPosts(fetchedPosts); // Set the fetched posts
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                setPostsError('Failed to load posts.');
+            } finally {
+                setPostsLoading(false); // Mark loading as complete
+            }
+        };
+        // Fetch posts only after user data is available
+        if (currentUsername && user.username) {
+
+            fetchPosts();
+        }
+    }, [currentUsername, user.username, isOwnProfile]);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -138,17 +186,17 @@ const ProfilePage = () => {
 
     const handleFollowToggle = async () => {
         if (followLoading) return; // Prevent multiple clicks
-    
+
         setFollowLoading(true);
         try {
             if (isFollowing) {
                 // Unfollow the user
                 await axiosHelper('/follows/unfollow', 'DELETE', {
-                    followerUsername: currentUser.username,
+                    followerUsername: currentUsername,
                     followedUsername: user.username,
                 });
                 setIsFollowing(false);
-    
+
                 // Decrease the follower count dynamically
                 setUser((prevUser) => ({
                     ...prevUser,
@@ -157,11 +205,11 @@ const ProfilePage = () => {
             } else {
                 // Follow the user
                 await axiosHelper('/follows/follow', 'POST', {
-                    followerUsername: currentUser.username,
+                    followerUsername: currentUsername,
                     followedUsername: user.username,
                 });
                 setIsFollowing(true);
-    
+
                 // Increase the follower count dynamically
                 setUser((prevUser) => ({
                     ...prevUser,
@@ -265,7 +313,8 @@ const ProfilePage = () => {
                                 )}
                             </div>
                             <div className="text-gray-500 mt-1">
-                                {user.isCertified ? 'Certified User' : 'Not Certified'}
+                                {/* Updated role display */}
+                                {getDisplayRole(user.role)}
                             </div>
                             <div className="mt-4">
                                 {isEditing && isOwnProfile ? (
@@ -287,6 +336,40 @@ const ProfilePage = () => {
                                 </button>
                             )}
                         </div>
+                    </div>
+
+                    {/* Posts Section */}
+                    <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8">
+                        <h2 className="text-2xl font-semibold mb-4">Posts</h2>
+
+                        {/* Loading State */}
+                        {postsLoading && (
+                            <p className="text-center text-gray-500">Loading posts...</p>
+                        )}
+
+                        {/* Error State */}
+                        {postsError && (
+                            <p className="text-center text-red-500">{postsError}</p>
+                        )}
+
+                        {/* No Posts */}
+                        {!postsLoading && !postsError && posts.length === 0 && (
+                            <p className="text-center text-gray-500">No posts available.</p>
+                        )}
+
+                        {/* Display Posts */}
+                        {!postsLoading && !postsError && posts.length > 0 && (
+                            <div className="space-y-4">
+                                {posts.map((post) => (
+                                    <RecipeCard
+                                        key={post.id}
+                                        post={post}
+                                        userRoles={user.role ? [user.role] : []} // Assuming roles is an array
+                                        currentUsername={currentUsername}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Additional Sections (e.g., User's Posts) */}

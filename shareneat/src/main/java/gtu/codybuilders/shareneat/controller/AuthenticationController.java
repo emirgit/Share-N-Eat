@@ -95,6 +95,8 @@ public class AuthenticationController {
         user.setFollowingCount(0);
         user.setPostsCount(0);
         user.setLastLogin(Instant.now());
+        user.setProfilePictureUrl("default-image.png");
+        user.setBio("I'm new in website!");
 
         // Save the user
         userService.saveUser(user);

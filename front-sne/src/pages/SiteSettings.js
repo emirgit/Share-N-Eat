@@ -5,15 +5,13 @@ import AdminMenu from '../components/AdminMenu';
 const SiteSettings = () => {
     // State to manage settings
     const [termsOfService, setTermsOfService] = useState('These are the current Terms of Service...');
-    const [privacyPolicy, setPrivacyPolicy] = useState('This is the current Privacy Policy...');
-    const [emailNotifications, setEmailNotifications] = useState(true);
+    const [privacyPolicy, setPrivacyPolicy] = useState('This is the current Privacy Policy...\nYour data is stored securely and is not shared without your consent.');
 
     const handleSave = () => {
         alert('Settings have been updated successfully!');
         // Replace with actual backend integration
         console.log('Terms of Service:', termsOfService);
         console.log('Privacy Policy:', privacyPolicy);
-        console.log('Email Notifications:', emailNotifications);
     };
 
     return (
@@ -44,20 +42,6 @@ const SiteSettings = () => {
                             onChange={(e) => setPrivacyPolicy(e.target.value)}
                             className="w-full h-40 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                    </div>
-
-                    {/* Email Notifications */}
-                    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                        <h2 className="text-xl font-semibold mb-4">Email Notifications</h2>
-                        <label className="flex items-center space-x-4">
-                            <span>Email Notifications:</span>
-                            <input
-                                type="checkbox"
-                                checked={emailNotifications}
-                                onChange={(e) => setEmailNotifications(e.target.checked)}
-                                className="h-6 w-6 rounded focus:ring-2 focus:ring-blue-500"
-                            />
-                        </label>
                     </div>
 
                     {/* Save Button */}
