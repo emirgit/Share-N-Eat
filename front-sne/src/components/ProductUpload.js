@@ -23,18 +23,30 @@ const ProductUpload = () => {
         setFormData((prev) => ({ ...prev, thumbnail: e.target.files[0] }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Submitting product:', formData);
 
-        // try {
-        //     await axiosHelper('/products', 'POST', formData, {
-        //         'Content-Type': 'multipart/form-data', // Ensure correct header for form data
-        //     });
-        // }
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('proteinGrams', formData.proteinGrams);
+        data.append('carbonhydratesGrams', formData.carbonhydratesGrams);
+        data.append('fatGrams', formData.fatGrams);
+        data.append('quantity', formData.quantity);
+        data.append('calories', formData.calories);
+        data.append('contents', formData.contents);
+        if (formData.thumbnail) {
+            data.append('files', formData.thumbnail);
+        }
 
-        // Add API call logic here
-        setIsActive(false); // Collapse after submission
+        try {
+            const response = await axiosHelper('/products/product-request', 'POST', data, {
+                'Content-Type': 'multipart/form-data',
+            });
+            console.log('Product uploaded successfully:', response);
+            setIsActive(false); // Collapse after submission
+        } catch (error) {
+            console.error('Error uploading product:', error);
+        }
     };
 
     return (
@@ -114,7 +126,7 @@ const ProductUpload = () => {
                             <label className="block text-gray-700 text-sm mb-1">Protein (g)</label>
                             <input
                                 type="number"
-                                name="protein"
+                                name="proteinGrams"
                                 placeholder="Protein"
                                 value={formData.proteinGrams}
                                 onChange={handleChange}
@@ -125,7 +137,7 @@ const ProductUpload = () => {
                             <label className="block text-gray-700 text-sm mb-1">Carbs (g)</label>
                             <input
                                 type="number"
-                                name="carbs"
+                                name="carbonhydratesGrams"
                                 placeholder="Carbs"
                                 value={formData.carbonhydratesGrams}
                                 onChange={handleChange}
@@ -136,7 +148,7 @@ const ProductUpload = () => {
                             <label className="block text-gray-700 text-sm mb-1">Fat (g)</label>
                             <input
                                 type="number"
-                                name="fat"
+                                name="fatGrams"
                                 placeholder="Fat"
                                 value={formData.fatGrams}
                                 onChange={handleChange}

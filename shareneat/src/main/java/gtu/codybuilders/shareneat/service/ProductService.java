@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service;
 
+import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import org.springframework.core.io.Resource;
@@ -27,5 +28,7 @@ public interface ProductService {
     List<ProductResponseDTO> filterProducts(Map<String, String> filters);
 
     Resource getImage(Long productId);
+
+    void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO,  List<MultipartFile> files);
 
 }

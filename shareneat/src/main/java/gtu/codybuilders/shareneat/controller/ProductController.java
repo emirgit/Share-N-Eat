@@ -1,6 +1,7 @@
 package gtu.codybuilders.shareneat.controller;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
@@ -66,6 +67,13 @@ public class ProductController {
     public void createProduct(@Valid @ModelAttribute ProductRequestDTO productRequestDTO, @RequestPart("file") MultipartFile file) {
         productService.createProduct(productRequestDTO, file);
     }
+
+    @PostMapping(PathConstants.PRODUCT_REQUEST)
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void createAddProductRequest(@Valid @ModelAttribute AdminProductRequestRequestDTO adminProductRequestRequestDTO, @RequestPart("files") List<MultipartFile> files){
+        productService.createAddProductRequest(adminProductRequestRequestDTO, files);
+    }
+
 
     @DeleteMapping(PathConstants.PRODUCT_ID)
     //@ResponseStatus()

@@ -29,6 +29,9 @@ public class PathConstants {
     public static final String PRODUCTS = API + "/products";
     public static final String PRODUCTS_GET_ALL = "/getAll";
     public static final String PRODUCT_ID = "/{productId}";
+
+    public static final String PRODUCT_REQUEST = "/product-request";
+
     public static final String GET_IMAGE = "/getImage";
     public static final String PRODUCT_GET_IMAGE = GET_IMAGE + PRODUCT_ID;
     public static final String SEARCH = "/search";
@@ -57,6 +60,8 @@ public class PathConstants {
     public static final Path UPLOAD_DIR_PRODUCT = UPLOAD_DIR.resolve("products");
 
     public static final Path UPLOAD_DIR_POST = UPLOAD_DIR.resolve("posts");
+
+    public static final Path UPLOAD_DIR_ADMIN_PRODUCT_REQUEST = UPLOAD_DIR.resolve("admin-product-requests");
 
     public static final String defaultProductImage = "default_product.jpg";
     public static final String defaultUserImage = "default_user.jpg";

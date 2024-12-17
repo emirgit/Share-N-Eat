@@ -18,4 +18,7 @@ public class AdminProductRequestServiceImpl implements AdminProductRequestServic
     public List<AdminProductRequest> getAll() {
         return adminProductRequestRepository.findAll();
     }
+
+
+
 }

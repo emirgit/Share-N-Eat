@@ -1,10 +1,14 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
 import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
+import gtu.codybuilders.shareneat.model.AdminProductRequest;
+import gtu.codybuilders.shareneat.model.ImageUrl;
 import gtu.codybuilders.shareneat.model.Product;
+import gtu.codybuilders.shareneat.repository.AdminProductRequestRepository;
 import gtu.codybuilders.shareneat.repository.ProductRepository;
 import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.ProductService;
@@ -17,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
     private ImageService imageService;
+    private AdminProductRequestRepository adminProductRequestRepository;
 
     //@Autowired
     private final ModelMapper modelMapper;
@@ -131,6 +137,38 @@ public class ProductServiceImpl implements ProductService {
         this.bindImageWithProduct(product,file);
         productRepository.save(product);
     }
+
+    @Override
+    public void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, List<MultipartFile> files) {
+        AdminProductRequest adminProductRequest = new AdminProductRequest();
+        adminProductRequest.setName(adminProductRequestRequestDTO.getName());
+        adminProductRequest.setBrand(adminProductRequestRequestDTO.getBrand());
+        adminProductRequest.setDescription(adminProductRequestRequestDTO.getDescription());
+        adminProductRequest.setCalories(adminProductRequestRequestDTO.getCalories());
+        adminProductRequest.setProteinGrams(adminProductRequestRequestDTO.getProteinGrams());
+        adminProductRequest.setCarbohydrateGrams(adminProductRequestRequestDTO.getCarbohydrateGrams());
+        adminProductRequest.setFatGrams(adminProductRequestRequestDTO.getFatGrams());
+        adminProductRequest.setSugarGrams(adminProductRequestRequestDTO.getSugarGrams());
+        adminProductRequest.setCategory(adminProductRequestRequestDTO.getCategory());
+
+        List<ImageUrl> images = new ArrayList<>();
+        for (MultipartFile file : files) {
+            try {
+                String imageUrl = imageService.saveImage(file, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+                ImageUrl imageUrlObject = new ImageUrl();
+                imageUrlObject.setUrl(imageUrl);
+                imageUrlObject.setAdminProductRequest(adminProductRequest);
+
+                images.add(imageUrlObject);
+            } catch (IOException e) {
+                System.out.println("Error saving image");
+            }
+        }
+        adminProductRequest.setImageUrls(images);
+
+        adminProductRequestRepository.save(adminProductRequest);
+    }
+
 
     @Override
     public void deleteProduct(long productId){
