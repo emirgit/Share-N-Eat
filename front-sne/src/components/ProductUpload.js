@@ -8,7 +8,7 @@ const ProductUpload = () => {
         proteinGrams: 0,
         carbonhydratesGrams: 0,
         fatGrams: 0,
-        quantity: '',
+        quantity: 0,
         calories: 0,
         contents: '',
         thumbnail: null,
