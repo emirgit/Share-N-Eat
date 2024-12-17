@@ -153,7 +153,9 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             </div>
 
             {isCommentsOpen && (
+
                 <ProductComment productId={product.id} username={currentUsername} />
+
             )}
 
         </div>
