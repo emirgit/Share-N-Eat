@@ -22,7 +22,7 @@ public class ProductResponseDTO {
 
     private Double calories;
     private Double proteinGrams;
-    private Double carbohydrateGrams;
+    private Double carbonhydrateGrams;
     private Double fatGrams;
     private Double sugarGrams;
 

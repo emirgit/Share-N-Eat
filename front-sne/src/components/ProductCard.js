@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import axiosHelper from '../axiosHelper';
@@ -27,57 +26,62 @@ const Star = ({ filled }) => (
 );
 
 const ProductCard = ({ product, userRoles, currentUsername }) => {
-
-    // const {
-    //     id,
-    //     name,
-    //     brand,
-    //     imageUrl,
-    //     calories,
-    //     proteinGrams,
-    //     carbohydrateGrams,
-    //     fatGrams,
-    //     sugarGrams,
-    //     rating,
-    //     ratingCount,
-    //     numberOfComments,
-    //     created,
-    // } = product;
-
-
+    const navigate = useNavigate();
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+    const [userRating, setUserRating] = useState(0);
+    const [loadingRating, setLoadingRating] = useState(false);
 
-    // useEffect(() => {
-    //     const fetchLikeStatus = async () => {
-    //         try {
-    //             const isLiked = await axiosHelper(`/likes/status/${id}`, 'GET');
-    //             setLiked(isLiked);
-    //         } catch (error) {
-    //             console.error('Error fetching like status:', error);
-    //         }
-    //     };
-    //
-    //     fetchLikeStatus();
-    // }, [id]);
+    useEffect(() => {
+        const fetchUserRating = async () => {
+            try {
+                const response = await axiosHelper(`/api/product-rate/current-user-rate/${product.id}`, 'GET');
+                setUserRating(response || 0);
+            } catch (error) {
+                console.error('Error fetching user rating:', error);
+            }
+        };
+
+        fetchUserRating();
+    }, [product.id]);
 
     const handleComments = () => {
         setIsCommentsOpen(!isCommentsOpen);
     };
 
-
+    const handleRatingChange = async (newRating) => {
+        if (loadingRating) return;
+        setLoadingRating(true);
+        try {
+            if (userRating === newRating) {
+                await axiosHelper(`/api/product-rate/${product.id}`, 'DELETE');
+                setUserRating(0);
+            } else {
+                const rateDto = { rating: newRating, productId: product.id };
+                await axiosHelper(`/api/product-rate`, 'POST', rateDto);
+                setUserRating(newRating);
+            }
+        } catch (error) {
+            console.error('Error updating rating:', error);
+            alert('An error occurred while updating your rating. Please try again.');
+        } finally {
+            setLoadingRating(false);
+        }
+    };
 
     const pieData = [
         { name: 'Fat', value: product.fatGrams },
         { name: 'Protein', value: product.proteinGrams },
-        { name: 'Carbs', value: product.carbonhydratesGrams },
+        { name: 'Carbs', value: product.carbonhydrateGrams },
     ];
 
     const renderStars = (rating, maxStars = 5) => {
         const filledStars = Math.round(rating);
         return [...Array(maxStars)].map((_, index) => (
-            <Star key={index} filled={index < filledStars} />
+            <Star key={index} filled={index < filledStars} onClick={() => handleRatingChange(index + 1)} />
         ));
     };
+
+    const formattedDate = new Date(product.created).toLocaleDateString();
 
     return (
         <div className="flex items-center justify-between bg-white rounded-lg shadow-md p-4 mb-4">
@@ -92,9 +96,9 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                     <h3 className="text-lg font-semibold">{product.name}</h3>
                     <p className="text-sm text-gray-500">{product.quantity}</p>
                     <div className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-lg inline-block">
-                        {product.contents}
+                        {product.content}
                     </div>
-                    <p className="text-gray-500 text-sm mt-1">({product.created})</p>
+                    <p className="text-gray-500 text-sm mt-1">({formattedDate})</p>
                 </div>
             </div>
 
@@ -102,8 +106,12 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             <div className="flex flex-col items-end space-y-2">
                 {/* Star Ratings */}
                 <div className="flex flex-col items-end">
-                    <div className="flex mb-1 text-blue-500">{renderStars(product.averageRateExpert)}</div>
-                    <div className="flex text-yellow-500">{renderStars(product.averageRateRegular)}</div>
+                    <div className="flex mb-1 text-blue-500">
+                        {renderStars(product.averageRateExpert)}
+                    </div>
+                    <div className="flex text-yellow-500">
+                        {renderStars(product.averageRateRegular)}
+                    </div>
                 </div>
 
                 {/* Pie Chart and Macronutrient Details */}
@@ -129,7 +137,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                             <span>🍗</span> <span className="ml-1">{product.proteinGrams}g protein</span>
                         </div>
                         <div className="flex items-center mb-1">
-                            <span>🍞</span> <span className="ml-1">{product.carbonhydratesGrams}g carbs</span>
+                            <span>🍞</span> <span className="ml-1">{product.carbonhydrateGrams}g carbs</span>
                         </div>
                         <div className="flex items-center mb-1">
                             <span>🥓</span> <span className="ml-1">{product.fatGrams}g fat</span>
@@ -146,7 +154,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                         <FontAwesomeIcon icon={faHeart} className="mr-1" />
                         {product.likes}
                     </button>
-                    <button className="flex items-center text-gray-500">
+                    <button onClick={handleComments} className="flex items-center text-gray-500">
                         <FontAwesomeIcon icon={faCommentDots} className="mr-1" />
                         {product.comments}
                     </button>
@@ -154,11 +162,8 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             </div>
 
             {isCommentsOpen && (
-
                 <ProductComment productId={product.id} username={currentUsername} />
-
             )}
-
         </div>
     );
 };

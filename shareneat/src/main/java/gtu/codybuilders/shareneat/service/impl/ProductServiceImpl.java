@@ -91,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
             case "brand" -> Comparator.comparing(Product::getBrand);
             case "calories" -> Comparator.comparing(Product::getCalories);
             case "protein" -> Comparator.comparing(Product::getProteinGrams);
-            case "carbohydrates" -> Comparator.comparing(Product::getCarbohydrateGrams);
+            case "carbohydrates" -> Comparator.comparing(Product::getCarbonhydrateGrams);
             case "fat" -> Comparator.comparing(Product::getFatGrams);
             case "sugar" -> Comparator.comparing(Product::getSugarGrams);
             case "rating" -> Comparator.comparing(Product::getRating);
@@ -184,7 +184,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productRequestDTO.getName());
         product.setBrand(productRequestDTO.getBrand());
         product.setCalories(productRequestDTO.getCalories());
-        product.setCarbohydrateGrams(productRequestDTO.getCarbohydrateGrams());
+        product.setCarbonhydrateGrams(productRequestDTO.getCarbonhydrateGrams());
         product.setFatGrams(productRequestDTO.getFatGrams());
         product.setProteinGrams(productRequestDTO.getProteinGrams());
         product.setSugarGrams(productRequestDTO.getSugarGrams());

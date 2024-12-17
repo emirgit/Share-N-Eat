@@ -23,6 +23,7 @@ import SiteSettings from './pages/SiteSettings';
 import ProductManagement from './pages/ProductManagement';
 import UserManagement from './pages/UserManagement';
 import SettingsPage from './pages/SettingsPage';
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} /> {/* Own Profile */}
         <Route path="/profile/:username" element={<ProfilePage />} /> {/* Other's Profile */}
         <Route path="/post/:postId" element={<PostPage />} /> {/* Other's Profile */}
+        <Route path="/product/:productId" element={<ProductDetailsPage />} />
         <Route path="/change-username" element={<PrivateRoute element={ChangeUsername} />} />
         <Route path="/change-password" element={<PrivateRoute element={ChangePassword} />} />
         <Route path="/change-photo" element={<PrivateRoute element={ChangePhoto} />} />
