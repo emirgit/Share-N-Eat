@@ -15,8 +15,18 @@ public class ProductRateController {
 
     private final ProductRateService productRateService;
 
+    @GetMapping("/current-user-rate/{productId}")
+    public ResponseEntity<Double> getCurrentUserRate(@PathVariable("productId") Long productId) {
+        Double rate = productRateService.getCurrentUserRate(productId);
+        if (rate == null) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(rate, HttpStatus.OK);
+    }
+
+
     @PostMapping
-    public ResponseEntity<Void> rateProduct(ProductRateRequestDTO productRateRequestDTO) {
+    public ResponseEntity<Void> rateProduct(@RequestParam ProductRateRequestDTO productRateRequestDTO) {
         productRateService.rateProduct(productRateRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -26,6 +26,21 @@ public class ProductRateServiceImpl implements ProductRateService {
     private final UserRepository userRepository;
     private final ProductRateRepository productRateRepository;
 
+    @Override
+    public Double getCurrentUserRate(Long productId) {
+        Long userId = AuthUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product Not Found with ID - " + productId));
+
+        Optional<ProductRate> existingRate = productRateRepository.findByProductAndUser(product, user);
+
+        return existingRate.map(ProductRate::getRating).orElse(null);
+    }
+
+
     @Transactional
     public void rateProduct(ProductRateRequestDTO productRateRequestDTO) {
         Long userId = AuthUtil.getUserId();
