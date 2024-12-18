@@ -37,6 +37,12 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/delete/my-account")
+    public ResponseEntity<Void> deleteMyAccount(){
+        userService.deleteCurrentUser();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PutMapping("/my-account")
     public ResponseEntity<UserProfileDTO> updateUser(@RequestBody UserProfileRequestDTO userProfileRequestDTO) {
 

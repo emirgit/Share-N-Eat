@@ -1,11 +1,14 @@
 package gtu.codybuilders.shareneat.service.impl;
 
+import java.time.Instant;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.model.Feedback;
+import gtu.codybuilders.shareneat.model.FeedbackStatus;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.FeedbackRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
@@ -23,7 +26,7 @@ public class FeedbackServiceImpl implements FeedbackService{
     private final FeedbackRepository feedbackRepository;
 
     @Override
-    public void save(String feedbackMessage) {
+    public void save(String feedbackSubject, String feedbackMessage) {
         Long userId = AuthUtil.getUserId();
     
         // Fetch the current user
@@ -33,7 +36,10 @@ public class FeedbackServiceImpl implements FeedbackService{
         // Create a new Feedback object
         Feedback feedback = new Feedback();
         feedback.setUser(user);
+        feedback.setFeedbackSubject(feedbackSubject);
         feedback.setFeedbackMessage(feedbackMessage);
+        feedback.setCreatedDate(Instant.now());
+        feedback.setFeedbackStatus(FeedbackStatus.OPEN);
     
         // Save the feedback
         feedbackRepository.save(feedback);
@@ -47,6 +53,19 @@ public class FeedbackServiceImpl implements FeedbackService{
 
         // Delete the feedback
         feedbackRepository.delete(feedback);
+    }
+
+    @Override
+    public void editFeedbackStatus(Long feedbackId, FeedbackStatus newStatus) {
+        // Fetch feedback by ID
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new IllegalArgumentException("Feedback not found with ID: " + feedbackId));
+        
+        // Update the status
+        feedback.setFeedbackStatus(newStatus);
+        
+        // Save the updated feedback
+        feedbackRepository.save(feedback);
     }
 
     @Override

@@ -10,6 +10,7 @@ import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -143,6 +144,27 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> changeUserRole(@PathVariable Long userId, @PathVariable Role role) {
         userService.changeUserRole(userId, role);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("user/delete/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable String username){
+        userService.deleteUserByUsername(username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("user/ban/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> banUser(@PathVariable String username) {
+        userService.banUser(username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("user/unban/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> unbanUser(@PathVariable String username) {
+        userService.unbanUser(username);
         return ResponseEntity.ok().build();
     }
 

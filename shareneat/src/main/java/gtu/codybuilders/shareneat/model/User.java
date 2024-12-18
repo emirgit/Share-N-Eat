@@ -33,6 +33,8 @@ public class User{
     private Instant created;
     private boolean enabled;
 
+    private boolean isBanned;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

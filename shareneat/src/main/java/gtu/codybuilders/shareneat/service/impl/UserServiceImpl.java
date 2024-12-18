@@ -75,6 +75,14 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
+    @Override
+    public void deleteUserByUsername(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+    
+        userRepository.delete(user);
+    }
+
 
     @Override
     public Optional<User> findUserByEmail(String email) {
@@ -308,6 +316,22 @@ public class UserServiceImpl implements UserService {
     public void changeUserRole(Long userId, Role role) {
         User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setRole(role);
+        repository.save(user);
+    }
+
+    @Override
+    public void banUser(String username){
+        User user = repository.findByUsername(username)
+                        .orElseThrow(() -> new UserNotFoundException("User not found !"));
+        user.setBanned(true);
+        repository.save(user);
+    }
+
+    @Override
+    public void unbanUser(String username){
+        User user = repository.findByUsername(username)
+                        .orElseThrow(() -> new UserNotFoundException("User not found !"));
+        user.setBanned(false);
         repository.save(user);
     }
 
