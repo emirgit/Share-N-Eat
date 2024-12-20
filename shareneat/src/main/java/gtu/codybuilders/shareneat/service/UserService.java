@@ -58,4 +58,5 @@ public interface UserService {
 
     void banUser(String username);
     void unbanUser(String username);
+    Long getUsersCount();
 }

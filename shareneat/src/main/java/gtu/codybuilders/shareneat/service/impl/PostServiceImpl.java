@@ -229,6 +229,11 @@ public class PostServiceImpl implements PostService{
         return user.getProfilePictureUrl();
     }
 
+    @Override
+    public Long getPostsCount(){
+        return postRepository.count();
+    }
+
     /*
         the same algorithm with filterProducts method in ProductServiceImpl.
         but only the difference is the mapper object, postMapper instead of modelMapper.
