@@ -6,6 +6,8 @@ import gtu.codybuilders.shareneat.model.PasswordResetToken;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,9 +36,9 @@ public interface UserService {
     void deleteCurrentUser();
     void deleteUserByUsername(String username);
 
-    List<User> searchUsers(String query); // Added for SearchController
+    Page<User> searchUsers(String query, Pageable pageable); // Added for SearchController
 
-    public UserProfileDTO convertToUserProfileDTO(User user);
+    UserProfileDTO convertToUserProfileDTO(User user);
 
     User updateUserProfile(UserProfileRequestDTO userRequestDTO, Long userId);
 

@@ -6,54 +6,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRecycle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import Milk from '../assets/Milk.jpg';
 
 const ProductManagement = () => {
     const [products, setProducts] = useState([
         {
             id: 1,
             name: 'Milk',
-            brand: 'DairyCo',
+            brand: 'İcim',
             category: 'Dairy',
             quantity: 1000,
             macronutrients: { protein: 3, carbs: 5, fat: 2, sugar: 4 },
             calories: 50,
-            images: ['https://via.placeholder.com/100', 'https://via.placeholder.com/100'],
-        },
-        {
-            id: 2,
-            name: 'Banana',
-            brand: 'FruitWorld',
-            category: 'Fruits',
-            quantity: 1000,
-            macronutrients: { protein: 1, carbs: 20, fat: 0, sugar: 15 },
-            calories: 200,
-            images: ['https://via.placeholder.com/100', 'https://via.placeholder.com/100'],
+            images: [Milk],
         },
     ]);
 
     const [requests, setRequests] = useState([
-        {
-            id: 1,
-            name: 'Almond Milk',
-            brand: 'NutCo',
-            category: 'Dairy',
-            quantity: 1000,
-            macronutrients: { protein: 1, carbs: 4, fat: 2, sugar: 3 },
-            calories: 40,
-            reason: 'I am lactose intolerant.',
-            images: ['https://via.placeholder.com/100', 'https://via.placeholder.com/100'],
-        },
-        {
-            id: 2,
-            name: 'Protein Bars',
-            brand: 'Wasp',
-            category: 'Snacks',
-            quantity: 500,
-            macronutrients: { protein: 20, carbs: 15, fat: 5, sugar: 10 },
-            calories: 300,
-            reason: 'For gym and fitness enthusiasts.',
-            images: ['https://via.placeholder.com/100', 'https://via.placeholder.com/100'],
-        },
+
     ]);
 
     const sliderSettings = {

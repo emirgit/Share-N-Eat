@@ -2,6 +2,7 @@ package gtu.codybuilders.shareneat.repository;
 
 import gtu.codybuilders.shareneat.model.Post;
 import gtu.codybuilders.shareneat.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -28,7 +29,7 @@ public interface PostRepository extends JpaRepository<Post, Long> , JpaSpecifica
 
     List<Post> findTop100ByOrderByCreatedDateDesc();
 
-    List<Post> findByPostNameContainingIgnoreCase(String postName);
+    Page<Post> findByPostNameContainingIgnoreCase(String postName, Pageable pageable);
 
     List<Post> findByUserOrderByCreatedDateDesc(User user, Pageable pageable);
 

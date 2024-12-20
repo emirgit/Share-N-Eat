@@ -10,7 +10,6 @@ import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -104,8 +103,17 @@ public class AdminController {
 
     @GetMapping("user/username_{username}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(userService.searchUsers(username));
+    public ResponseEntity<?> getUserByUsername(
+            @PathVariable String username,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userService.searchUsers(username, pageable);
+
+        Page<UserProfileDTO> userProfileDTOPage = userPage.map(userService::convertToUserProfileDTO);
+
+        return ResponseEntity.ok(userProfileDTOPage);
     }
 
     @GetMapping("user/userId_{userId}")

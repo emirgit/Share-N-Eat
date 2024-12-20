@@ -5,19 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import ProductComment from "./ProductComment";
-import {data} from "autoprefixer";
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Yellow for fat, claret red for protein, blue for carbs
 
-const Star = ({ filled, onClick }) => (
+const Star = ({ filled }) => (
     <svg
-        className="w-5 h-5 cursor-pointer"
+        className="w-5 h-5"
         fill={filled ? 'currentColor' : 'none'}
         stroke="currentColor"
         strokeWidth="2"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
-        onClick={onClick}
     >
         <path
             strokeLinecap="round"
@@ -36,7 +34,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
     useEffect(() => {
         const fetchUserRating = async () => {
             try {
-                const response = await axiosHelper(`/product-rate/current-user-rate/${product.id}`, 'GET');
+                const response = await axiosHelper(`/api/product-rate/current-user-rate/${product.id}`, 'GET');
                 setUserRating(response || 0);
             } catch (error) {
                 console.error('Error fetching user rating:', error);
@@ -55,16 +53,13 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
         setLoadingRating(true);
         try {
             if (userRating === newRating) {
-                console.log("anan")
-                await axiosHelper(`/product-rate/${product.id}`, 'DELETE');
+                await axiosHelper(`/api/product-rate/${product.id}`, 'DELETE');
                 setUserRating(0);
             } else {
-                console.log("baban")
-                const ProductRateRequestDTO = { rating: newRating, productId: product.id };
-                await axiosHelper(`/product-rate`, 'POST', data = ProductRateRequestDTO);
+                const rateDto = { rating: newRating, productId: product.id };
+                await axiosHelper(`/api/product-rate`, 'POST', rateDto);
                 setUserRating(newRating);
             }
-
         } catch (error) {
             console.error('Error updating rating:', error);
             alert('An error occurred while updating your rating. Please try again.');

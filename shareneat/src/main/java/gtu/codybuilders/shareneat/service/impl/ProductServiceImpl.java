@@ -15,6 +15,8 @@ import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,12 +62,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDTO> searchProducts(String keyword) {
-        List<Product> products = productRepository.searchProducts(keyword);
-
-        return products.stream()
-                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
-                .collect(Collectors.toList());
+    public Page<ProductResponseDTO> searchProducts(String keyword, Pageable pageable) {
+        return productRepository.searchProducts(keyword, pageable)
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class));
     }
 
     @Override

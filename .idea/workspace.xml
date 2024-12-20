@@ -6,21 +6,31 @@
   <component name="ChangeListManager">
     <list default="true" id="7077bcda-2784-45d2-9b21-10e6c2f431bc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-sne/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/components/PrivateRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/PrivateRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/AdminNavbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/AdminNavbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/Navbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/ProductCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/ProductCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/ProductUpload.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/ProductUpload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/Sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/Sidebar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-sne/src/pages/AdminPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/AdminPanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/LoginPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/PostManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/PostManagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/SettingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/SettingsPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/SiteSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/SiteSettings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/Support.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/Support.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/UserManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/UserManagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/MainPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProductManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/ProductManagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/spring-boot-app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/spring-boot-app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/SearchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/SearchController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/ProductRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/ProductRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/ProductResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/ProductResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/PostServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
