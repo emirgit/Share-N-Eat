@@ -88,6 +88,7 @@ public class AuthenticationController {
         user.setPassword(request.getPassword());
         user.setCreated(Instant.now());
         user.setEnabled(false);
+        user.setBanned(false);
         user.setRole(Role.ROLE_USER); // Assign ROLE_USER
 
         // Set default values for other fields if necessary

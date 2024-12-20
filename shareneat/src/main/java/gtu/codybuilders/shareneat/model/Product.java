@@ -24,9 +24,11 @@ public class Product {
     private String imageUrl;
     private String content;
 
+    private Double quantity;
+
     private Double calories;
     private Double proteinGrams;
-    private Double carbohydrateGrams;
+    private Double carbonhydrateGrams;
     private Double fatGrams;
     private Double sugarGrams;
 

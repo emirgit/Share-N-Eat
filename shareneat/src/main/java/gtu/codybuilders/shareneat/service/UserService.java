@@ -32,6 +32,7 @@ public interface UserService {
 
     void deleteUser(String email);
     void deleteCurrentUser();
+    void deleteUserByUsername(String username);
 
     List<User> searchUsers(String query); // Added for SearchController
 
@@ -54,4 +55,8 @@ public interface UserService {
     void changeUserRole(Long userId, Role role);
 
     Optional<User> findUserByUsername(String username);
+
+    void banUser(String username);
+    void unbanUser(String username);
+    Long getUsersCount();
 }

@@ -6,7 +6,7 @@ const ProductUpload = () => {
     const [formData, setFormData] = useState({
         name: '',
         proteinGrams: 0,
-        carbonhydratesGrams: 0,
+        carbonhydrateGrams: 0,
         fatGrams: 0,
         quantity: 0,
         calories: 0,
@@ -23,6 +23,35 @@ const ProductUpload = () => {
         setFormData((prev) => ({ ...prev, thumbnail: e.target.files[0] }));
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('proteinGrams', formData.proteinGrams);
+        data.append('carbonhydrateGrams', formData.carbonhydrateGrams);
+        data.append('fatGrams', formData.fatGrams);
+        data.append('quantity', formData.quantity);
+        data.append('calories', formData.calories);
+        data.append('content', formData.contents);
+        if (formData.thumbnail) {
+            data.append('file', formData.thumbnail);
+        }
+
+        try {
+            const response = await axiosHelper('/products', 'POST', data, {
+                'Content-Type': 'multipart/form-data',
+            });
+            console.log('Product uploaded successfully:', response);
+            setIsActive(false); // Collapse after submission
+        } catch (error) {
+            console.error('Error uploading product:', error);
+        }
+    };
+
+
+
+    /*
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -48,7 +77,7 @@ const ProductUpload = () => {
             console.error('Error uploading product:', error);
         }
     };
-
+    */
     return (
         <div
             className={`transition-all duration-300 ${
@@ -137,9 +166,9 @@ const ProductUpload = () => {
                             <label className="block text-gray-700 text-sm mb-1">Carbs (g)</label>
                             <input
                                 type="number"
-                                name="carbonhydratesGrams"
+                                name="carbonhydrateGrams"
                                 placeholder="Carbs"
-                                value={formData.carbonhydratesGrams}
+                                value={formData.carbonhydrateGrams}
                                 onChange={handleChange}
                                 className="border p-2 rounded w-full text-sm"
                             />

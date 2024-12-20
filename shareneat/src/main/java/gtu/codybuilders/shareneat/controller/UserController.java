@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.controller;
 
+import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.model.User;
@@ -35,6 +36,12 @@ public class UserController {
         Optional<User> user = userService.findUserById(AuthUtil.getUserId());
         return user.map(u -> ResponseEntity.ok(userService.convertToUserProfileDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/delete/my-account")
+    public ResponseEntity<Void> deleteMyAccount(){
+        userService.deleteCurrentUser();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/my-account")
@@ -135,6 +142,12 @@ public class UserController {
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @GetMapping(PathConstants.USERS_COUNT)
+    public ResponseEntity<Long> getUsersCount() {
+        Long userCount = userService.getUsersCount();
+        return new ResponseEntity<>(userCount, HttpStatus.OK);
     }
 
 }

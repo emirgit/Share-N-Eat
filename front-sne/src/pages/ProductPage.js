@@ -84,7 +84,14 @@ const ProductPage = () => {
         setSortOption(option);
         try {
             const sortedProducts = await axiosHelper(`/products/sortedBy${option}/${order}`);
-            setProducts(sortedProducts);
+            const productsWithImages = await Promise.all(
+                sortedProducts.map(async (product) => {
+                    const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, { responseType: 'blob' });
+                    const imageUrl = URL.createObjectURL(imageResponse);
+                    return { ...product, imageUrl };
+                })
+            );
+            setProducts(productsWithImages);
         } catch (error) {
             console.error('Failed to sort products:', error);
         }

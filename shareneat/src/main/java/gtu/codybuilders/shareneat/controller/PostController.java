@@ -94,5 +94,10 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+    @GetMapping(PathConstants.POSTS_COUNT)
+    public ResponseEntity<Long> getPostsCount() {
+        Long postCount = postService.getPostsCount();
+        return new ResponseEntity<>(postCount, HttpStatus.OK);
+    }
 
 }

@@ -23,6 +23,7 @@ import SiteSettings from './pages/SiteSettings';
 import ProductManagement from './pages/ProductManagement';
 import UserManagement from './pages/UserManagement';
 import SettingsPage from './pages/SettingsPage';
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 
 function App() {
   return (

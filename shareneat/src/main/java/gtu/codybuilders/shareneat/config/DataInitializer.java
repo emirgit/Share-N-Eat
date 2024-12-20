@@ -38,6 +38,7 @@ public class DataInitializer {
             adminUser.setUsername("theAdmin");
             adminUser.setCreated(Instant.now());
             adminUser.setEnabled(true);
+            adminUser.setBanned(false);
             adminUser.setBio("I'm the admin");
             adminUser.setRole(Role.ROLE_ADMIN);
 
@@ -62,6 +63,7 @@ public class DataInitializer {
             dummyUser.setUsername("DummyTheUser");
             dummyUser.setCreated(Instant.now());
             dummyUser.setEnabled(true);
+            dummyUser.setBanned(false);
             dummyUser.setBio("I'm the dummy to serve your desire. I'm happy to assist you");
             dummyUser.setRole(Role.ROLE_USER);
 
@@ -86,6 +88,7 @@ public class DataInitializer {
             dieticianUser.setUsername("DieticianPro");
             dieticianUser.setCreated(Instant.now());
             dieticianUser.setEnabled(true);
+            dieticianUser.setBanned(false);
             dieticianUser.setBio("I’m a dietician here to share healthy eating tips.");
             dieticianUser.setRole(Role.ROLE_EXPERT);
 

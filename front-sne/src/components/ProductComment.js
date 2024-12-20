@@ -15,7 +15,7 @@ const ProductComment = ({ productId, username }) => {
             setLoading(true);
             setError(null);
 
-            const response = await axiosHelper(`/product-comments/${productId}`, 'GET');
+            const response = await axiosHelper(`/product-comments/product/${productId}`, 'GET');
             const fetchedComments = response || [];
             // Enhance each comment with an isOwner flag after fetching
             const enrichedComments = fetchedComments.map((comment) => ({

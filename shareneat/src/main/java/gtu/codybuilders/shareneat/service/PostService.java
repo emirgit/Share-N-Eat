@@ -21,10 +21,11 @@ public interface PostService {
     String returnProfilePhoto();
 
     List<PostResponse> getPostsForCurrentUserInRange(int page);
-
     List<PostResponse> getPostsByUsernameInRange(String username, int page);
 
     List<PostResponse> filterPosts(Map<String, String> filters);
+
+    Long getPostsCount();
 
 
 }
