@@ -15,6 +15,8 @@ import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,12 +62,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDTO> searchProducts(String keyword) {
-        List<Product> products = productRepository.searchProducts(keyword);
-
-        return products.stream()
-                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
-                .collect(Collectors.toList());
+    public Page<ProductResponseDTO> searchProducts(String keyword, Pageable pageable) {
+        return productRepository.searchProducts(keyword, pageable)
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class));
     }
 
     @Override
@@ -91,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
             case "brand" -> Comparator.comparing(Product::getBrand);
             case "calories" -> Comparator.comparing(Product::getCalories);
             case "protein" -> Comparator.comparing(Product::getProteinGrams);
-            case "carbohydrates" -> Comparator.comparing(Product::getCarbohydrateGrams);
+            case "carbohydrates" -> Comparator.comparing(Product::getCarbonhydrateGrams);
             case "fat" -> Comparator.comparing(Product::getFatGrams);
             case "sugar" -> Comparator.comparing(Product::getSugarGrams);
             case "rating" -> Comparator.comparing(Product::getRating);
@@ -184,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productRequestDTO.getName());
         product.setBrand(productRequestDTO.getBrand());
         product.setCalories(productRequestDTO.getCalories());
-        product.setCarbohydrateGrams(productRequestDTO.getCarbohydrateGrams());
+        product.setCarbonhydrateGrams(productRequestDTO.getCarbonhydrateGrams());
         product.setFatGrams(productRequestDTO.getFatGrams());
         product.setProteinGrams(productRequestDTO.getProteinGrams());
         product.setSugarGrams(productRequestDTO.getSugarGrams());

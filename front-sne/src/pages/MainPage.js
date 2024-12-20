@@ -113,7 +113,7 @@ const MainPage = () => {
                             {!loading && posts.length > 0 ? (
                                 posts.map((post) => (
                                     <RecipeCard
-                                        key={post.id}
+                                        key={post.postId}
                                         post={post}
                                         userRoles={roles}
                                         currentUsername={currentUsername}

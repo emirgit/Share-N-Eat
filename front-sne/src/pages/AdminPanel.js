@@ -30,8 +30,8 @@ const AdminPanel = () => {
                             {/* Post Performance */}
                             <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow hover:shadow-lg transition">
                                 <h3 className="text-lg font-semibold text-green-600">Post Performance</h3>
-                                <p className="text-gray-600 mt-2">Total Posts: <span className="font-bold">2</span></p>
-                                <p className="text-gray-600">Posts Today: <span className="font-bold">2</span></p>
+                                <p className="text-gray-600 mt-2">Total Posts: <span className="font-bold">1</span></p>
+                                <p className="text-gray-600">Posts Today: <span className="font-bold">1</span></p>
                             </div>
 
                             {/* Product Statistics */}

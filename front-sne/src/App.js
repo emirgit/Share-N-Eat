@@ -23,6 +23,7 @@ import SiteSettings from './pages/SiteSettings';
 import ProductManagement from './pages/ProductManagement';
 import UserManagement from './pages/UserManagement';
 import SettingsPage from './pages/SettingsPage';
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/change-description" element={<PrivateRoute element={ChangeDescription} />} />
         <Route path="/help" element={<PrivateRoute element={HelpPage} />} />
         <Route path="/products" element={<PrivateRoute element={ProductPage} />} />
+        <Route path="/product/:productId" element={<ProductDetailsPage />} />
         <Route path="/settings" element={<PrivateRoute element={SettingsPage} />} />
 
         {/* Admin Routes */}

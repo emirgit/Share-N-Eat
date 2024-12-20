@@ -16,7 +16,9 @@ import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -213,12 +215,9 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<PostResponse> searchPosts(String query) {
-        return postRepository.findByPostNameContainingIgnoreCase(query)
-                                .stream()
-                                .map(postMapper::mapToPostResponse)
-                                .collect(Collectors.toList());
+    public Page<PostResponse> searchPosts(String query, Pageable pageable) {
+        return postRepository.findByPostNameContainingIgnoreCase(query, pageable)
+                .map(postMapper::mapToPostResponse);
     }
 
     @Override

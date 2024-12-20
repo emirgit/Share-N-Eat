@@ -30,11 +30,19 @@ const Sidebar = () => {
             </div>
             <div
                 className="flex items-center mb-6 cursor-pointer"
+                onClick={() => navigate('/')}
+            >
+                <span className="mr-2">🍽️</span>
+                <span className="text-lg font-medium">Find Your Meal</span>
+            </div>
+            <div
+                className="flex items-center mb-6 cursor-pointer"
                 onClick={() => navigate('/products')}
             >
                 <span className="mr-2">🛒</span>
                 <span className="text-lg font-medium">Products</span>
             </div>
+            
 
             
         </div>
