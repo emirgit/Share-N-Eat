@@ -1,11 +1,6 @@
 package gtu.codybuilders.shareneat.service.impl;
 
-import java.time.Instant;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
+import gtu.codybuilders.shareneat.dto.FeedbackResponseDTO;
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.model.Feedback;
 import gtu.codybuilders.shareneat.model.FeedbackStatus;
@@ -16,6 +11,11 @@ import gtu.codybuilders.shareneat.service.FeedbackService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Service
 @AllArgsConstructor
@@ -68,9 +68,18 @@ public class FeedbackServiceImpl implements FeedbackService{
         feedbackRepository.save(feedback);
     }
 
-    @Override
-    public Page<Feedback> getFeedbackPage(Pageable pageable) {
-        return feedbackRepository.findAll(pageable);
+    public Page<FeedbackResponseDTO> getFeedbackPage(Pageable pageable) {
+        return feedbackRepository.findAll(pageable).map(feedback -> {
+            String userName = feedback.getUser() != null ? feedback.getUser().getUsername() : null; // Assuming User has a `name` field
+            return new FeedbackResponseDTO(
+                    feedback.getFeedbackId(),
+                    feedback.getFeedbackSubject(),
+                    feedback.getFeedbackMessage(),
+                    feedback.getCreatedDate(),
+                    feedback.getFeedbackStatus().name(), // Enum converted to String
+                    userName
+            );
+        });
     }
     
 }

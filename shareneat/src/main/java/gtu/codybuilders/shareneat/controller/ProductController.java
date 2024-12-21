@@ -97,7 +97,7 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(PathConstants.PRODUCTS_COUNT)
+    @GetMapping(PathConstants.COUNT)
     public ResponseEntity<Long> getProductsCount() {
         Long productCount = productService.getProductsCount();
         return new ResponseEntity<>(productCount, HttpStatus.OK);

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import AdminMenu from '../components/AdminMenu';
-
 import AdminNavbar from '../components/AdminNavbar';
+import axiosHelper from '../axiosHelper';
 
 const UserManagement = () => {
-    // Mock user data
     const [users, setUsers] = useState([
         { id: 1, username: 'theAdmin', email: 'm.emir.kara@outlook.com', role: 'admin', status: 'active', verified: true },
         { id: 2, username: 'DummyTheUser', email: 'dummy@outlook.com', role: 'user', status: 'active', verified: true },
@@ -12,12 +11,62 @@ const UserManagement = () => {
         { id: 4, username: 'trial', email: 'trial@outlook.com', role: 'user', status: 'active', verified: false },
     ]);
 
-    // State for search and filters
     const [searchQuery, setSearchQuery] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [resetModalVisible, setResetModalVisible] = useState(false);
+    const [selectedUserEmail, setSelectedUserEmail] = useState('');
+    const [resetLink, setResetLink] = useState('');
 
-    // Handle search and filtering
+    const handleRoleChange = async (username, newRole) => {
+        try {
+            await axiosHelper(`/admin/user/change-role/${username}/${newRole}`, 'PUT');
+            setUsers(users.map((user) =>
+                user.username === username ? { ...user, role: newRole } : user
+            ));
+            alert(`Role changed to ${newRole} for user ${username}`);
+        } catch (error) {
+            console.error(`Error changing role for ${username}:`, error);
+            alert('Failed to change role. Please try again.');
+        }
+    };
+    
+
+    const handleBanUser = async (username) => {
+        try {
+            const targetUser = users.find((user) => user.username === username);
+            if (targetUser.status === 'banned') {
+                await axiosHelper(`/admin/user/unban/${username}`, 'PUT');
+                setUsers(users.map((user) => (user.username === username ? { ...user, status: 'active' } : user)));
+            } else {
+                await axiosHelper(`/admin/user/ban/${username}`, 'PUT');
+                setUsers(users.map((user) => (user.username === username ? { ...user, status: 'banned' } : user)));
+            }
+        } catch (error) {
+            console.error(`Error banning/unbanning user ${username}:`, error);
+        }
+    };
+
+    const openResetPasswordModal = (email) => {
+        setSelectedUserEmail(email);
+        setResetModalVisible(true);
+    };
+
+    const handleResetPassword = async () => {
+        try {
+            const response = await axiosHelper(`/admin/reset/password/${selectedUserEmail}`, 'POST');
+            setResetLink(response); // Set reset link from backend response
+        } catch (error) {
+            console.error(`Error resetting password for ${selectedUserEmail}:`, error);
+        }
+    };
+
+    const closeResetPasswordModal = () => {
+        setResetModalVisible(false);
+        setSelectedUserEmail('');
+        setResetLink('');
+    };
+
     const filteredUsers = users.filter((user) => {
         const matchesSearch = searchQuery
             ? user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -29,32 +78,10 @@ const UserManagement = () => {
         return matchesSearch && matchesRole && matchesStatus;
     });
 
-    // Handle actions
-    const handleBanUser = (id) => {
-        setUsers(
-            users.map((user) =>
-                user.id === id ? { ...user, status: user.status === 'banned' ? 'active' : 'banned' } : user
-            )
-        );
-    };
-
-    const handleAssignRole = (id, newRole) => {
-        setUsers(users.map((user) => (user.id === id ? { ...user, role: newRole } : user)));
-    };
-
-    const handleVerifyAccount = (id) => {
-        setUsers(users.map((user) => (user.id === id ? { ...user, verified: true } : user)));
-    };
-
-    const handleResetPassword = (id) => {
-        alert(`Password reset link sent to user ID: ${id}`);
-    };
-
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
-            <AdminNavbar/>
+            <AdminNavbar />
             <div className="flex">
-                
                 <div className="flex-1 p-8">
                     <h1 className="text-3xl font-bold mb-6">User Management</h1>
 
@@ -109,8 +136,8 @@ const UserManagement = () => {
                                         <td className="px-4 py-2">
                                             <select
                                                 value={user.role}
-                                                onChange={(e) => handleAssignRole(user.id, e.target.value)}
-                                                className="border rounded-lg p-1"
+                                                onChange={(e) => handleRoleChange(user.username, e.target.value)}
+                                                className="border rounded-lg p-2"
                                             >
                                                 <option value="admin">Admin</option>
                                                 <option value="expert">Expert</option>
@@ -132,17 +159,12 @@ const UserManagement = () => {
                                             {user.verified ? (
                                                 <span className="text-green-600">Verified</span>
                                             ) : (
-                                                <button
-                                                    onClick={() => handleVerifyAccount(user.id)}
-                                                    className="text-blue-500 hover:underline"
-                                                >
-                                                    Verify
-                                                </button>
+                                                <span className="text-red-600">Not Verified</span>
                                             )}
                                         </td>
-                                        <td className="px-4 py-2">
+                                        <td className="px-4 py-2 space-x-2">
                                             <button
-                                                onClick={() => handleBanUser(user.id)}
+                                                onClick={() => handleBanUser(user.username)}
                                                 className={`text-sm px-4 py-2 rounded-lg ${
                                                     user.status === 'banned'
                                                         ? 'bg-green-500 text-white hover:bg-green-600'
@@ -152,8 +174,8 @@ const UserManagement = () => {
                                                 {user.status === 'banned' ? 'Unban' : 'Ban'}
                                             </button>
                                             <button
-                                                onClick={() => handleResetPassword(user.id)}
-                                                className="ml-4 text-sm bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                                onClick={() => openResetPasswordModal(user.email)}
+                                                className="text-sm px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
                                             >
                                                 Reset Password
                                             </button>
@@ -163,9 +185,51 @@ const UserManagement = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Reset Password Modal */}
+                    {resetModalVisible && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                                <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
+                                <p className="mb-4">Email: {selectedUserEmail}</p>
+                                {resetLink ? (
+                                    <div className="mb-4">
+                                        <p className="mb-2">Reset Link:</p>
+                                        <div className="flex items-center">
+                                            <span className="flex-1 break-all">{resetLink}</span>
+                                            <button
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(resetLink).then(() => {
+                                                        alert('Reset link copied to clipboard!');
+                                                    });
+                                                }}
+                                                className="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={handleResetPassword}
+                                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                                    >
+                                        Generate Reset Link
+                                    </button>
+                                )}
+                                <div className="flex justify-end mt-4">
+                                    <button
+                                        onClick={closeResetPasswordModal}
+                                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* Admin Menu */}
                 <AdminMenu />
             </div>
         </div>

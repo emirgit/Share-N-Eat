@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SettingsMenu from '../components/SettingsMenu';
+import axiosHelper from '../axiosHelper'; // Ensure this path is correct
 
 const SettingsPage = () => {
     const [selectedMenu, setSelectedMenu] = useState('Account Preferences');
+
+    // Account Preferences States
     const [currentUsername, setCurrentUsername] = useState('Dummy Doe'); // Mock current username
     const [currentEmail, setCurrentEmail] = useState('currentEmail@example.com'); // Mock current email
     const [currentBio, setCurrentBio] = useState('This is my biography.'); // Mock current bio
@@ -16,6 +19,30 @@ const SettingsPage = () => {
     const [password, setPassword] = useState(''); // State to capture password for verification
 
     const navigate = useNavigate();
+
+    // Data Privacy Rules States
+    const [termsOfService, setTermsOfService] = useState('');
+    const [privacyPolicy, setPrivacyPolicy] = useState('');
+    const [loadingPrivacy, setLoadingPrivacy] = useState(true);
+    const [errorPrivacy, setErrorPrivacy] = useState('');
+
+    // Fetch site settings for Data Privacy Rules on component mount
+    useEffect(() => {
+        const fetchSiteSettings = async () => {
+            try {
+                const data = await axiosHelper('/settings'); // Endpoint: /api/settings
+                setTermsOfService(data.termsOfService);
+                setPrivacyPolicy(data.privacyPolicy);
+                setLoadingPrivacy(false);
+            } catch (error) {
+                console.error('Error fetching site settings:', error);
+                setErrorPrivacy('Failed to load site settings. Please try again later.');
+                setLoadingPrivacy(false);
+            }
+        };
+
+        fetchSiteSettings();
+    }, []);
 
     const handleSaveChanges = () => {
         // Check if any changes were made
@@ -63,7 +90,7 @@ const SettingsPage = () => {
             {/* Navbar */}
             <Navbar />
 
-            <div className="flex">
+            <div className="flex flex-1">
                 {/* Sidebar */}
                 <Sidebar />
 
@@ -166,25 +193,29 @@ const SettingsPage = () => {
                         )}
                         {selectedMenu === 'Data Privacy Rules' && (
                             <div>
-                                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                                <h2 className="text-xl font-semibold mb-4">Terms of Service:</h2>
-                                <p className="text-gray-700 leading-relaxed">
-                                    These are the current Terms of Service... 
-                                </p>
-                                </div>
-                                
-                                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                                <h2 className="text-xl font-semibold mb-4">Privacy Policy:</h2>
-                                <p className="text-gray-700 leading-relaxed">
-                                    This is the current Privacy Policy...
-                                </p>    
-                                <p className="text-gray-700 leading-relaxed">
-                                Your data is stored securely and is not shared without your consent.
-                                </p>
+                                <h2 className="text-xl font-semibold mb-4">Data Privacy Rules</h2>
+                                {loadingPrivacy ? (
+                                    <p className="text-gray-700">Loading data privacy rules...</p>
+                                ) : errorPrivacy ? (
+                                    <p className="text-red-500">{errorPrivacy}</p>
+                                ) : (
+                                    <div>
+                                        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                                            <h3 className="text-lg font-semibold mb-2">Terms of Service:</h3>
+                                            <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                                                {termsOfService}
+                                            </p>
+                                        </div>
 
-                                </div>    
+                                        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                                            <h3 className="text-lg font-semibold mb-2">Privacy Policy:</h3>
+                                            <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                                                {privacyPolicy}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            
                         )}
                     </div>
                 </div>
@@ -200,8 +231,3 @@ const SettingsPage = () => {
 };
 
 export default SettingsPage;
-
-
-
-
-

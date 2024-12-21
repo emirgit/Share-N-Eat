@@ -25,11 +25,11 @@ public class PathConstants {
     public static final String EMAIL_VERIFY_TOKEN = EMAIL_VERIFY + "/token";
 
     public static final String API = "api";
-    public static final String USERS = "/users";
+    public static final String USER = API + "/user";
+    public static final String ADMIN = API + "/admin";
     public static final String PRODUCTS = API + "/products";
     public static final String PRODUCTS_GET_ALL = "/getAll";
     public static final String PRODUCT_ID = "/{productId}";
-    public static final String PRODUCTS_COUNT = PRODUCTS + "/count";
 
     public static final String PRODUCT_REQUEST = "/product-request";
 
@@ -49,9 +49,8 @@ public class PathConstants {
     public static final String CURRENT_USER_RANGE = CURRENT_USER + RANGE;
     public static final String BY_USER_USERNAME = BY_USER + USERNAME;
     public static final String BY_USER_USERNAME_RANGE = BY_USER_USERNAME + RANGE;
-    public static final String POSTS_COUNT = POSTS + "/count";
 
-    public static final String USERS_COUNT = API + USERS + "/count";
+    public static final String COUNT = "/count";
 
 
     //image upload paths

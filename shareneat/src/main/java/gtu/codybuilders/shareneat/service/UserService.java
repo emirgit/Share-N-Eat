@@ -50,11 +50,7 @@ public interface UserService {
 
     List<User> findByEnabled(Boolean enabled);
 
-    void enableUser(Long userId);
-
-    void disableUser(Long userId);
-
-    void changeUserRole(Long userId, Role role);
+    void changeUserRole(String username, Role role);
 
     Optional<User> findUserByUsername(String username);
 

@@ -300,23 +300,10 @@ public class UserServiceImpl implements UserService {
         return repository.findByEnabled(enabled).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @Override
-    public void enableUser(Long userId) {
-        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
-        user.setEnabled(true);
-        repository.save(user);
-    }
 
     @Override
-    public void disableUser(Long userId) {
-        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
-        user.setEnabled(false);
-        repository.save(user);
-    }
-
-    @Override
-    public void changeUserRole(Long userId, Role role) {
-        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+    public void changeUserRole(String username, Role role) {
+        User user = repository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setRole(role);
         repository.save(user);
     }

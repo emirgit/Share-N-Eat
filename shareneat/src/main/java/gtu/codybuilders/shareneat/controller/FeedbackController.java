@@ -1,23 +1,16 @@
 package gtu.codybuilders.shareneat.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import gtu.codybuilders.shareneat.model.Feedback;
+import gtu.codybuilders.shareneat.dto.FeedbackRequestDTO;
+import gtu.codybuilders.shareneat.dto.FeedbackResponseDTO;
 import gtu.codybuilders.shareneat.model.FeedbackStatus;
 import gtu.codybuilders.shareneat.service.impl.FeedbackServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/feedbacks")
@@ -26,18 +19,21 @@ public class FeedbackController {
 
     private final FeedbackServiceImpl feedbackService;
 
+    // Receives new feedback (subject + message) from the front end
     @PostMapping("/sendFeedback")
-    public ResponseEntity<Void> sendFeedback(@RequestBody String feedbackSubject, String feedbackMessage) {
-        feedbackService.save(feedbackSubject, feedbackMessage);
+    public ResponseEntity<Void> sendFeedback(@RequestBody FeedbackRequestDTO feedbackRequest) {
+        feedbackService.save(feedbackRequest.getSubject(), feedbackRequest.getMessage());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    // Deletes a feedback by ID
     @DeleteMapping("/deleteFeedback/{feedbackId}")
     public ResponseEntity<Void> deleteFeedback(@PathVariable Long feedbackId) {
         feedbackService.delete(feedbackId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
+    // Updates the status of an existing feedback ticket
     @PutMapping("/editFeedbackStatus/{feedbackId}")
     public ResponseEntity<Void> editFeedbackStatus(
             @PathVariable Long feedbackId,
@@ -46,11 +42,14 @@ public class FeedbackController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // Retrieves feedback in a paginated format
     @GetMapping("/getFeedback")
-    public ResponseEntity<Page<Feedback>> getFeedback(
-            @RequestParam(defaultValue = "0") int page, 
+    public ResponseEntity<Page<FeedbackResponseDTO>> getFeedback(
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<Feedback> feedbackPage = feedbackService.getFeedbackPage(PageRequest.of(page, size));
-        return new ResponseEntity<>(feedbackPage, HttpStatus.OK);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<FeedbackResponseDTO> feedbackPage = feedbackService.getFeedbackPage(pageable);
+        return ResponseEntity.ok(feedbackPage);
     }
 }

@@ -1,28 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminNavbar from '../components/AdminNavbar';
 import AdminMenu from '../components/AdminMenu';
+import axiosHelper from '../axiosHelper';
 
 const SiteSettings = () => {
     // State to manage settings
-    const [termsOfService, setTermsOfService] = useState('These are the current Terms of Service...');
-    const [privacyPolicy, setPrivacyPolicy] = useState('This is the current Privacy Policy...\nYour data is stored securely and is not shared without your consent.');
+    const [termsOfService, setTermsOfService] = useState('');
+    const [privacyPolicy, setPrivacyPolicy] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
-    const handleSave = () => {
-        alert('Settings have been updated successfully!');
-        // Replace with actual backend integration
-        console.log('Terms of Service:', termsOfService);
-        console.log('Privacy Policy:', privacyPolicy);
+    // Fetch current settings on component mount
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const data = await axiosHelper('/settings');
+                setTermsOfService(data.termsOfService);
+                setPrivacyPolicy(data.privacyPolicy);
+                setLoading(false);
+            } catch (err) {
+                console.error('Error fetching settings:', err);
+                setError('Failed to load settings. Please try again later.');
+                setLoading(false);
+            }
+        };
+
+        fetchSettings();
+    }, []);
+
+    // Handle save button click
+    const handleSave = async () => {
+        try {
+            const payload = {
+                termsOfService,
+                privacyPolicy,
+            };
+            const updatedData = await axiosHelper('/settings', 'PUT', payload);
+            setSuccessMessage('Settings have been updated successfully!');
+            setError('');
+            // Optionally, you can log the updated settings
+            console.log('Updated Terms of Service:', updatedData.termsOfService);
+            console.log('Updated Privacy Policy:', updatedData.privacyPolicy);
+        } catch (err) {
+            console.error('Error updating settings:', err);
+            setError('Failed to update settings. Please try again.');
+            setSuccessMessage('');
+        }
     };
+
+    // Render loading state
+    if (loading) {
+        return (
+            <div className="flex flex-col min-h-screen bg-gray-100">
+                <AdminNavbar />
+                <div className="flex">
+                    <div className="flex-1 p-8 flex items-center justify-center">
+                        <p className="text-xl">Loading...</p>
+                    </div>
+                    <AdminMenu />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
             {/* Admin Navbar */}
             <AdminNavbar />
 
-            <div className="flex">
+            <div className="flex flex-1">
                 {/* Main Content */}
                 <div className="flex-1 p-8">
                     <h1 className="text-3xl font-bold mb-6">Site Settings</h1>
+
+                    {/* Display Success Message */}
+                    {successMessage && (
+                        <div className="mb-4 p-4 bg-green-100 text-green-700 rounded">
+                            {successMessage}
+                        </div>
+                    )}
+
+                    {/* Display Error Message */}
+                    {error && (
+                        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+                            {error}
+                        </div>
+                    )}
 
                     {/* Terms of Service */}
                     <div className="bg-white rounded-lg shadow-md p-6 mb-6">

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping(PathConstants.USER)
 public class UserController {
 
     private final UserService userService;
@@ -144,7 +144,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(PathConstants.USERS_COUNT)
+    @GetMapping(PathConstants.COUNT)
     public ResponseEntity<Long> getUsersCount() {
         Long userCount = userService.getUsersCount();
         return new ResponseEntity<>(userCount, HttpStatus.OK);
