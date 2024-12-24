@@ -47,7 +47,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                 setUserRating(0);
                 await fetchUpdatedAverages();
             } else {
-                const ProductRateRequestDTO = { rating: newRating, productId: product.id };
+                const ProductRateRequestDTO = {productId: product.id, rating: newRating  };
                 await axiosHelper(`/product-rate`, 'POST', ProductRateRequestDTO);
                 setUserRating(newRating);
                 await fetchUpdatedAverages();
@@ -102,6 +102,12 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                 {/* Star Ratings */}
                 <div className="flex flex-col items-end">
                     <div className="flex items-center mb-1">
+
+                        {isUser && (
+                            <span className="ml-2 text-gray-400 text-sm flex items-center">
+                                🔒
+                            </span>
+                        )}
                         <ReactRating
                             initialRating={currentAverageExpert}
                             readonly={isUser}
@@ -119,12 +125,17 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                         )}
                         {isUser && (
                             <span className="ml-2 text-gray-400 text-sm flex items-center">
-                                <span className="mr-1">{currentTotalRatersExpert} rated</span> 🔒
+                                <span className="mr-1">{currentTotalRatersExpert} rated</span>
                             </span>
                         )}
                     </div>
 
                     <div className="flex items-center mb-1">
+                        {!isUser && (
+                            <span className="ml-2 text-gray-400 text-sm flex items-center">
+                                🔒
+                            </span>
+                        )}
                         <ReactRating
                             initialRating={currentAverageRegular}
                             readonly={!isUser}
@@ -142,7 +153,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                         )}
                         {!isUser && (
                             <span className="ml-2 text-gray-400 text-sm flex items-center">
-                                <span className="mr-1">{currentTotalRatersRegular} rated</span> 🔒
+                                <span className="mr-1">{currentTotalRatersRegular} rated</span>
                             </span>
                         )}
                     </div>
@@ -176,18 +187,21 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                         <div className="flex items-center mb-1">
                             <span>🥓</span> <span className="ml-1">{product.fatGrams}g fat</span>
                         </div>
-                        <div className="mt-2 text-center">
-                            {product.calories} kcal
+                        {/*<div className="mt-2 text-center">*/}
+                        {/*    {product.calories} kcal*/}
+                        {/*</div>*/}
+                        <div className="flex items-center mb-1">
+                            <span>🔥</span> <span className="ml-1">{product.calories} calories</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Likes and Comments */}
                 <div className="flex space-x-4">
-                    <button className="flex items-center text-red-500">
-                        <FontAwesomeIcon icon={faHeart} className="mr-1" />
-                        {product.likes}
-                    </button>
+                    {/*<button className="flex items-center text-red-500">*/}
+                    {/*    <FontAwesomeIcon icon={faHeart} className="mr-1" />*/}
+                    {/*    {product.likes}*/}
+                    {/*</button>*/}
                     <button onClick={handleComments} className="flex items-center text-gray-500">
                         <FontAwesomeIcon icon={faCommentDots} className="mr-1" />
                         {product.comments}

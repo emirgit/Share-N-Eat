@@ -25,8 +25,12 @@ public class ProductRequestDTO {
     private Double fatGrams;
     private Double sugarGrams;
 
-    private Double rating;
-    private Integer ratingCount;
     private Integer numberOfComments;
+
+    private Double averageRateExpert = 0.0;
+    private Double averageRateRegular = 0.0;
+    private Integer totalRatersExpert = 0;
+    private Integer totalRatersRegular = 0;
+
 
 }

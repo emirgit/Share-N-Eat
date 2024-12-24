@@ -26,7 +26,7 @@ public class ProductRateController {
 
 
     @PostMapping
-    public ResponseEntity<Void> rateProduct(@RequestParam ProductRateRequestDTO productRateRequestDTO) {
+    public ResponseEntity<Void> rateProduct(@RequestBody ProductRateRequestDTO productRateRequestDTO) {
         productRateService.rateProduct(productRateRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }

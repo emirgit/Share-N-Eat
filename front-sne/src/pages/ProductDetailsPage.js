@@ -39,7 +39,9 @@ const ProductDetailsPage = () => {
             try {
                 setLoading(true); // Start loading
                 const data = await axiosHelper(`/products/${productId}`, 'GET');
-                setProduct(data); // Set the product data
+                const imageResponse = await axiosHelper(`/products/getImage/${productId}`, 'GET', null, { responseType: 'blob' });
+                const imageUrl = URL.createObjectURL(imageResponse);
+                setProduct({...data, imageUrl}); // Set the product data
             } catch (error) {
                 console.error('Error fetching product:', error);
                 setError('Failed to load the product.');
