@@ -5,36 +5,26 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import ProductComment from "./ProductComment";
+import ReactRating from 'react-rating';
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6']; // Yellow for fat, claret red for protein, blue for carbs
-
-const Star = ({ filled }) => (
-    <svg
-        className="w-5 h-5"
-        fill={filled ? 'currentColor' : 'none'}
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 17.27l5.18 3.73-1.64-6.03 4.46-4.3-6.07-.53L12 2l-2.93 7.34-6.07.53 4.46 4.3-1.64 6.03L12 17.27z"
-        />
-    </svg>
-);
 
 const ProductCard = ({ product, userRoles, currentUsername }) => {
     const navigate = useNavigate();
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
     const [userRating, setUserRating] = useState(0);
     const [loadingRating, setLoadingRating] = useState(false);
+    const [currentAverageExpert, setCurrentAverageExpert] = useState(product.averageRateExpert);
+    const [currentAverageRegular, setCurrentAverageRegular] = useState(product.averageRateRegular);
+    const [currentTotalRatersExpert, setCurrentTotalRatersExpert] = useState(product.totalRatersExpert);
+    const [currentTotalRatersRegular, setCurrentTotalRatersRegular] = useState(product.totalRatersRegular);
+
+    const isUser = userRoles.includes('ROLE_USER');
 
     useEffect(() => {
         const fetchUserRating = async () => {
             try {
-                const response = await axiosHelper(`/api/product-rate/current-user-rate/${product.id}`, 'GET');
+                const response = await axiosHelper(`/product-rate/current-user-rate/${product.id}`, 'GET');
                 setUserRating(response || 0);
             } catch (error) {
                 console.error('Error fetching user rating:', error);
@@ -53,12 +43,14 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
         setLoadingRating(true);
         try {
             if (userRating === newRating) {
-                await axiosHelper(`/api/product-rate/${product.id}`, 'DELETE');
+                await axiosHelper(`/product-rate/${product.id}`, 'DELETE');
                 setUserRating(0);
+                await fetchUpdatedAverages();
             } else {
-                const rateDto = { rating: newRating, productId: product.id };
-                await axiosHelper(`/api/product-rate`, 'POST', rateDto);
+                const ProductRateRequestDTO = { rating: newRating, productId: product.id };
+                await axiosHelper(`/product-rate`, 'POST', ProductRateRequestDTO);
                 setUserRating(newRating);
+                await fetchUpdatedAverages();
             }
         } catch (error) {
             console.error('Error updating rating:', error);
@@ -68,20 +60,23 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
         }
     };
 
+    const fetchUpdatedAverages = async () => {
+        try {
+            const updatedProduct = await axiosHelper(`/products/${product.id}`, 'GET');
+            setCurrentAverageExpert(updatedProduct.averageRateExpert);
+            setCurrentAverageRegular(updatedProduct.averageRateRegular);
+            setCurrentTotalRatersExpert(updatedProduct.totalRatersExpert);
+            setCurrentTotalRatersRegular(updatedProduct.totalRatersRegular);
+        } catch (error) {
+            console.error('Error fetching updated averages:', error);
+        }
+    };
+
     const pieData = [
         { name: 'Fat', value: product.fatGrams },
         { name: 'Protein', value: product.proteinGrams },
         { name: 'Carbs', value: product.carbonhydrateGrams },
     ];
-
-    const renderStars = (rating, maxStars = 5) => {
-        const filledStars = Math.round(rating);
-        return [...Array(maxStars)].map((_, index) => (
-            <Star key={index} filled={index < filledStars} onClick={() => handleRatingChange(index + 1)} />
-        ));
-    };
-
-    const formattedDate = new Date(product.created).toLocaleDateString();
 
     return (
         <div className="flex items-center justify-between bg-white rounded-lg shadow-md p-4 mb-4">
@@ -98,7 +93,7 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                     <div className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-lg inline-block">
                         {product.content}
                     </div>
-                    <p className="text-gray-500 text-sm mt-1">({formattedDate})</p>
+                    <p className="text-gray-500 text-sm mt-1">({new Date(product.created).toLocaleDateString()})</p>
                 </div>
             </div>
 
@@ -106,11 +101,50 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
             <div className="flex flex-col items-end space-y-2">
                 {/* Star Ratings */}
                 <div className="flex flex-col items-end">
-                    <div className="flex mb-1 text-blue-500">
-                        {renderStars(product.averageRateExpert)}
+                    <div className="flex items-center mb-1">
+                        <ReactRating
+                            initialRating={currentAverageExpert}
+                            readonly={isUser}
+                            emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
+                            fullSymbol={<span className="text-green-500 text-2xl">★</span>}
+                            fractions={2}
+                            onChange={(newRating) => {
+                                if (!isUser) {
+                                    handleRatingChange(newRating);
+                                }
+                            }}
+                        />
+                        {!isUser && (
+                            <span className="ml-2 text-gray-500 text-sm">{currentTotalRatersExpert} rated</span>
+                        )}
+                        {isUser && (
+                            <span className="ml-2 text-gray-400 text-sm flex items-center">
+                                <span className="mr-1">{currentTotalRatersExpert} rated</span> 🔒
+                            </span>
+                        )}
                     </div>
-                    <div className="flex text-yellow-500">
-                        {renderStars(product.averageRateRegular)}
+
+                    <div className="flex items-center mb-1">
+                        <ReactRating
+                            initialRating={currentAverageRegular}
+                            readonly={!isUser}
+                            emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
+                            fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
+                            fractions={2}
+                            onChange={(newRating) => {
+                                if (isUser) {
+                                    handleRatingChange(newRating);
+                                }
+                            }}
+                        />
+                        {isUser && (
+                            <span className="ml-2 text-gray-500 text-sm">{currentTotalRatersRegular} rated</span>
+                        )}
+                        {!isUser && (
+                            <span className="ml-2 text-gray-400 text-sm flex items-center">
+                                <span className="mr-1">{currentTotalRatersRegular} rated</span> 🔒
+                            </span>
+                        )}
                     </div>
                 </div>
 
