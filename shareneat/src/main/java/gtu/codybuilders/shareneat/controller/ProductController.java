@@ -103,4 +103,9 @@ public class ProductController {
         return new ResponseEntity<>(productCount, HttpStatus.OK);
     }
 
+    @GetMapping(PathConstants.DAILY_COUNT)
+    public ResponseEntity<Long> getDailyProductCount() {
+        Long dailyProductCount = productService.getDailyProductCount();
+        return new ResponseEntity<>(dailyProductCount, HttpStatus.OK);
+    }
 }

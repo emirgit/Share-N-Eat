@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -231,6 +232,13 @@ public class PostServiceImpl implements PostService{
     @Override
     public Long getPostsCount(){
         return postRepository.count();
+    }
+
+    @Override
+    public Long getDailyPostCount(){
+        Instant startOfDay = Instant.now().truncatedTo(ChronoUnit.DAYS); // Start of today
+        Instant endOfDay = startOfDay.plus(1, ChronoUnit.DAYS); // End of today
+        return postRepository.countPostsCreatedBetween(startOfDay, endOfDay);
     }
 
     /*

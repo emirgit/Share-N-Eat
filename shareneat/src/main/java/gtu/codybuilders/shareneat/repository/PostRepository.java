@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -36,5 +37,8 @@ public interface PostRepository extends JpaRepository<Post, Long> , JpaSpecifica
     @Modifying
     @Query("UPDATE Post p SET p.likeCount = p.likeCount + :delta WHERE p.id = :postId")
     void updateLikeCount(@Param("postId") Long postId, @Param("delta") int delta);
+
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.createdDate BETWEEN :startDate AND :endDate")
+    long countPostsCreatedBetween(Instant startDate, Instant endDate);
 
 }

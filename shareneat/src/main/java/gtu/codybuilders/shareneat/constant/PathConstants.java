@@ -51,6 +51,8 @@ public class PathConstants {
     public static final String BY_USER_USERNAME_RANGE = BY_USER_USERNAME + RANGE;
 
     public static final String COUNT = "/count";
+    public static final String DAILY_COUNT = "/count/daily";
+    public static final String SEARCH_USER_BY_STATUS_ROLE = SEARCH + "/status-role";
 
 
     //image upload paths

@@ -100,4 +100,9 @@ public class PostController {
         return new ResponseEntity<>(postCount, HttpStatus.OK);
     }
 
+    @GetMapping(PathConstants.DAILY_COUNT)
+    public ResponseEntity<Long> getDailyPostsCount() {
+        Long postCount = postService.getDailyPostCount();
+        return new ResponseEntity<>(postCount, HttpStatus.OK);
+    }
 }

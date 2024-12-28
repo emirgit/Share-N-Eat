@@ -1,6 +1,7 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.UserFilterDto;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.exception.UserAlreadyExistsException;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +43,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetTokenRepository tokenRepository;
     private final ImageService imageService;
-    private final UserRepository userRepository;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
     @Override
@@ -71,18 +72,18 @@ public class UserServiceImpl implements UserService {
     public void deleteCurrentUser(){
         Long userId = AuthUtil.getUserId();
 
-        User user = userRepository.findById(userId)
+        User user = repository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
     
-        userRepository.delete(user);
+        repository.delete(user);
     }
 
     @Override
     public void deleteUserByUsername(String username){
-        User user = userRepository.findByUsername(username)
+        User user = repository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
     
-        userRepository.delete(user);
+        repository.delete(user);
     }
 
 
@@ -116,11 +117,11 @@ public class UserServiceImpl implements UserService {
     public void changeEmail(String newEmail){
         Long userId = AuthUtil.getUserId();
 
-        User user = userRepository.findById(userId)
+        User user = repository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
         
         user.setEmail(newEmail);
-        userRepository.save(user);
+        repository.save(user);
     }
 
 
@@ -195,7 +196,7 @@ public class UserServiceImpl implements UserService {
         // Mark user as verified
         User user = verificationToken.getUser();
         user.setEnabled(true);
-        userRepository.save(user);
+        repository.save(user);
 
         // Optionally delete the token after verification
         emailVerificationTokenRepository.delete(verificationToken);
@@ -326,6 +327,66 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long getUsersCount(){
-        return userRepository.count();
+        return repository.count();
+    }
+
+    @Override
+    public Long getDailyUserCount(){
+        Instant startOfDay = Instant.now().truncatedTo(ChronoUnit.DAYS); // Start of today
+        Instant endOfDay = startOfDay.plus(1, ChronoUnit.DAYS); // End of today
+        return repository.countUsersRegisteredBetween(startOfDay, endOfDay);
+    }
+
+    @Override
+    public Page<User> searchUsersbyUsername(String query, String role, String status, Pageable pageable) {
+        Role userRole = parseRole(role); // Helper method
+        boolean userStatus = parseStatus(status); // Helper method
+    
+        return repository.searchUsersByUsername(query, userRole, userStatus, pageable);
+    }
+    
+    @Override
+    public Page<User> searchUsersbyEmail(String query, String role, String status, Pageable pageable) {
+        Role userRole = parseRole(role); // Helper method
+        boolean userStatus = parseStatus(status); // Helper method
+    
+        return repository.searchUsersByEmail(query, userRole, userStatus, pageable);
+    }
+    
+    // Helper method to parse role
+    private Role parseRole(String role) {
+        switch (role.toLowerCase()) {
+            case "admin":
+                return Role.ROLE_ADMIN;
+            case "expert":
+                return Role.ROLE_EXPERT;
+            case "user":
+                return Role.ROLE_USER;
+            default:
+                throw new IllegalArgumentException("Invalid role: " + role);
+        }
+    }
+    
+    // Helper method to parse status
+    private boolean parseStatus(String status) {
+        switch (status.toLowerCase()) {
+            case "banned":
+                return true;
+            case "active":
+                return false;
+            default:
+                throw new IllegalArgumentException("Invalid status: " + status);
+        }
+    }
+
+    @Override
+    public UserFilterDto convertToUserFilterDto(User user) {
+        return UserFilterDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .isBanned(user.isBanned())
+                .enabled(user.isEnabled())
+                .build();
     }
 }

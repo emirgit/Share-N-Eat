@@ -28,6 +28,7 @@ public interface PostService {
     List<PostResponse> filterPosts(Map<String, String> filters);
 
     Long getPostsCount();
+    Long getDailyPostCount();
 
 
 }

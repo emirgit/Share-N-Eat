@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -194,6 +195,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long getProductsCount(){
         return productRepository.count();
+    }
+
+    @Override
+    public Long getDailyProductCount(){
+        Instant startOfDay = Instant.now().truncatedTo(ChronoUnit.DAYS); // Start of today
+        Instant endOfDay = startOfDay.plus(1, ChronoUnit.DAYS); // End of today
+        return productRepository.countProductsCreatedBetween(startOfDay, endOfDay);
     }
 
 }

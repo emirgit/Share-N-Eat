@@ -34,5 +34,5 @@ public interface ProductService {
     void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO,  List<MultipartFile> files);
 
     Long getProductsCount();
-
+    Long getDailyProductCount();
 }
