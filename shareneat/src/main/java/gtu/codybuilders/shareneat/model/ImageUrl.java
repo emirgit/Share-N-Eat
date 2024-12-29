@@ -17,7 +17,5 @@ public class ImageUrl {
 
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adminProductRequestId")
-    private AdminProductRequest adminProductRequest;
+
 }

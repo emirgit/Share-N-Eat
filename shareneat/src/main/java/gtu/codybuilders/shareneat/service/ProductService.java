@@ -31,7 +31,7 @@ public interface ProductService {
 
     Resource getImage(Long productId);
 
-    void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO,  List<MultipartFile> files);
+    void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, MultipartFile file);
 
     Long getProductsCount();
     Long getDailyProductCount();

@@ -4,6 +4,7 @@ package gtu.codybuilders.shareneat.controller;
 import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
+import gtu.codybuilders.shareneat.model.AdminProductRequest;
 import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.service.AdminProductRequestService;
@@ -12,6 +13,7 @@ import gtu.codybuilders.shareneat.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(PathConstants.ADMIN)
@@ -40,8 +44,14 @@ public class AdminController {
     //admin product request operations
     @GetMapping("/product-requests")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> getAllProductRequests() {
+    public ResponseEntity<List<AdminProductRequest>> getAllProductRequests() {
         return ResponseEntity.ok(adminProductRequestService.getAll());
+    }
+
+    @GetMapping("/product-requests/getImage/{requestId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Resource> getProductRequestImage(@PathVariable Long requestId) {
+        return ResponseEntity.ok(adminProductRequestService.getImage(requestId));
     }
 
     //admin product operations

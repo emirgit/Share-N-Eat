@@ -10,6 +10,7 @@ import gtu.codybuilders.shareneat.model.ImageUrl;
 import gtu.codybuilders.shareneat.model.Product;
 import gtu.codybuilders.shareneat.repository.AdminProductRequestRepository;
 import gtu.codybuilders.shareneat.repository.ProductRepository;
+import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private UserRepository userRepository;
     private ProductRepository productRepository;
     private ImageService imageService;
     private AdminProductRequestRepository adminProductRequestRepository;
@@ -139,32 +141,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, List<MultipartFile> files) {
+    public void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, MultipartFile file) {
         AdminProductRequest adminProductRequest = new AdminProductRequest();
         adminProductRequest.setName(adminProductRequestRequestDTO.getName());
         adminProductRequest.setBrand(adminProductRequestRequestDTO.getBrand());
         adminProductRequest.setDescription(adminProductRequestRequestDTO.getDescription());
         adminProductRequest.setCalories(adminProductRequestRequestDTO.getCalories());
         adminProductRequest.setProteinGrams(adminProductRequestRequestDTO.getProteinGrams());
-        adminProductRequest.setCarbohydrateGrams(adminProductRequestRequestDTO.getCarbohydrateGrams());
+        adminProductRequest.setCarbonhydrateGrams(adminProductRequestRequestDTO.getCarbonhydrateGrams());
         adminProductRequest.setFatGrams(adminProductRequestRequestDTO.getFatGrams());
         adminProductRequest.setSugarGrams(adminProductRequestRequestDTO.getSugarGrams());
         adminProductRequest.setCategory(adminProductRequestRequestDTO.getCategory());
+        adminProductRequest.setQuantity(adminProductRequestRequestDTO.getQuantity());
+        adminProductRequest.setRequestTime(Instant.now());
 
-        List<ImageUrl> images = new ArrayList<>();
-        for (MultipartFile file : files) {
-            try {
-                String imageUrl = imageService.saveImage(file, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
-                ImageUrl imageUrlObject = new ImageUrl();
-                imageUrlObject.setUrl(imageUrl);
-                imageUrlObject.setAdminProductRequest(adminProductRequest);
+//        User user = userRepository.findById(AuthUtil.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+//        adminProductRequest.setUser(user);
 
-                images.add(imageUrlObject);
-            } catch (IOException e) {
-                System.out.println("Error saving image");
-            }
+        List<ImageUrl> imageUrls = new ArrayList<>();
+        try {
+            String imageUrl = imageService.saveImage(file, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+            adminProductRequest.setImageUrl(imageUrl);
+
+            // file2 file3 olucnma buraya ekleme yap. sadece yukardakilerin aynisini yazcaksin
+
+        } catch (IOException e) {
+            System.out.println("Error saving image");
         }
-        adminProductRequest.setImageUrls(images);
 
         adminProductRequestRepository.save(adminProductRequest);
     }

@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 public class AdminProductRequestRequestDTO {
 
     private String name;
-    private String brand;
-    private String description;
+    private String brand = "some hardcoded brand";
+    private String description = "some hardcoded description";
     private Double calories;
     private Double proteinGrams;
-    private Double carbohydrateGrams;
+    private Double carbonhydrateGrams;
     private Double fatGrams;
-    private Double sugarGrams;
-    private String category;
+    private Double sugarGrams = 0.0;
+    private String category = "seafood";
     private Double quantity;
 }

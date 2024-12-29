@@ -78,8 +78,8 @@ public class ProductController {
 
     @PostMapping(PathConstants.PRODUCT_REQUEST)
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createAddProductRequest(@Valid @ModelAttribute AdminProductRequestRequestDTO adminProductRequestRequestDTO, @RequestPart("files") List<MultipartFile> files){
-        productService.createAddProductRequest(adminProductRequestRequestDTO, files);
+    public void createAddProductRequest(@Valid @ModelAttribute AdminProductRequestRequestDTO adminProductRequestRequestDTO, @RequestPart("file") MultipartFile file){
+        productService.createAddProductRequest(adminProductRequestRequestDTO, file);
     }
 
 

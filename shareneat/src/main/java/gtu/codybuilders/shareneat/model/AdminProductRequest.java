@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @Entity
@@ -18,8 +17,7 @@ public class AdminProductRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "adminProductRequest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageUrl> imageUrls;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
@@ -27,16 +25,16 @@ public class AdminProductRequest {
 
     private Instant requestTime;
 
-    private String description;
     private String name;
     private String brand;
+    private String description;
     private Double calories;
     private Double proteinGrams;
-    private Double carbohydrateGrams;
+    private Double carbonhydrateGrams;
     private Double fatGrams;
     private Double sugarGrams;
     private String category;
-
+    private Double quantity;
 
 
 

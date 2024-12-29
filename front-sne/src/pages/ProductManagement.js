@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Slider from 'react-slick';
 import AdminNavbar from '../components/AdminNavbar';
 import AdminMenu from '../components/AdminMenu';
@@ -7,8 +7,12 @@ import { faRecycle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Milk from '../assets/Milk.jpg';
+import axiosHelper from "../axiosHelper";
 
 const ProductManagement = () => {
+
+    const [requests, setRequests] = useState([]);
+
     const [products, setProducts] = useState([
         {
             id: 1,
@@ -22,9 +26,27 @@ const ProductManagement = () => {
         },
     ]);
 
-    const [requests, setRequests] = useState([
+    useEffect(() => {
+        const fetchProductRequests = async () => {
+            try {
+                const allProductRequests = await axiosHelper('/admin/product-requests', 'GET');
+                console.log(allProductRequests);
+                const productRequestsWithImages = await Promise.all(
+                    allProductRequests.map(async (request) => {
+                        const imageResponse = await axiosHelper(`/admin/product-requests/getImage/${request.id}`, 'GET', null, { responseType: 'blob' });
+                        const imageUrl = URL.createObjectURL(imageResponse);
+                        return { ...request, imageUrl };
+                    })
+                );
+                setRequests(productRequestsWithImages);
+            } catch (error) {
+                console.error('Error fetching product requests:', error);
+                // setError('Failed to load product requests. Please try again later.');
+            }
+        };
 
-    ]);
+        fetchProductRequests();
+    }, []);
 
     const sliderSettings = {
         dots: true,
@@ -298,7 +320,7 @@ const ProductManagement = () => {
                                 >
                                     <div className="w-40">
                                         <Slider {...sliderSettings}>
-                                            {request.images.map((image, index) => (
+                                            {[request.imageUrl].map((image, index) => (
                                                 <div key={index} className="relative">
                                                     <img
                                                         key={index}
@@ -351,12 +373,12 @@ const ProductManagement = () => {
                                                         className="ml-2 border rounded px-1"
                                                     />
                                                 </div>
-                                            {['protein', 'carbs', 'fat', 'sugar'].map((macro) => (
+                                            {[request.proteinGrams, request.carbonhydrateGrams, request.fatGrams].map((macro) => (
                                                 <div key={macro} className="flex items-center mb-2">
                                                     <span className="capitalize">{macro}:</span>
                                                     <input
                                                         type="number"
-                                                        value={request.macronutrients[macro]}
+                                                        value={macro}
                                                         onChange={(e) =>
                                                             handleEditMacros(request.id, macro, e.target.value)
                                                         }
@@ -377,7 +399,7 @@ const ProductManagement = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <p className="text-gray-500 italic">"{request.reason}"</p>
+                                        <p className="text-gray-500 italic">"{request.description}"</p>
                                     </div>
                                     <div className="flex flex-col space-y-2 sm:mt-0 sm:ml-4">
                                         <button
