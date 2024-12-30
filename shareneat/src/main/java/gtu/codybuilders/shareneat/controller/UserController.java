@@ -1,10 +1,10 @@
 package gtu.codybuilders.shareneat.controller;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.UserAddressDto;
 import gtu.codybuilders.shareneat.dto.UserFilterDto;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
-import gtu.codybuilders.shareneat.model.Role;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.service.UserService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
@@ -44,9 +44,27 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/my-account")
-    public ResponseEntity<Void> deleteMyAccount(){
-        userService.deleteCurrentUser();
+    public ResponseEntity<Void> deleteMyAccount(@RequestParam String password) {
+        userService.deleteCurrentUser(password);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/change-password/my-account")
+    public ResponseEntity<Void> changePassword(@RequestParam String currentPassword, @RequestParam String newPassword, @RequestParam String newPasswordtoConfirm) {
+        userService.changePasswordByChecking(currentPassword, newPassword, newPasswordtoConfirm);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/update-address/my-account")
+    public ResponseEntity<Void> updateAddress(@RequestBody UserAddressDto userAddressDto, @RequestParam String password) {
+        userService.updateUserAddress(userAddressDto, password);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }  
+
+    @GetMapping("/get-adress-info/my-account")
+    public ResponseEntity<UserAddressDto> getAddressInfo() {
+        UserAddressDto userAddressDto = userService.getAddressInfo();
+        return new ResponseEntity<>(userAddressDto, HttpStatus.OK);
     }
 
     @PutMapping("/my-account")

@@ -80,7 +80,13 @@ public class User{
     private Integer followersCount; // Number of followers
     private Integer followingCount; // Number of accounts the user follows
     private Integer postsCount; // Number of posts the user has made
-    private String location; // Optional location field for user location
+
+    //New fields for user location
+    private String country;
+    private String city;
+    private String region;
+    private Integer postalCode;
+    private String fullAddress; 
 
     private Instant lastLogin; // Track last login time
 

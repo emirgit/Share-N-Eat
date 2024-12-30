@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service;
 
+import gtu.codybuilders.shareneat.dto.UserAddressDto;
 import gtu.codybuilders.shareneat.dto.UserFilterDto;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
@@ -34,8 +35,13 @@ public interface UserService {
     User resetPassword(String token, String newPassword);
 
     void deleteUser(String email);
-    void deleteCurrentUser();
+    void deleteCurrentUser(String rawPassword);
     void deleteUserByUsername(String username);
+
+    void changePasswordByChecking(String currentPassword, String newPassword, String newPasswordtoConfirm);
+
+    void updateUserAddress(UserAddressDto userAddressDto, String password);
+    UserAddressDto getAddressInfo();
 
     Page<User> searchUsers(String query, Pageable pageable); // Added for SearchController
 

@@ -1,9 +1,11 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.UserAddressDto;
 import gtu.codybuilders.shareneat.dto.UserFilterDto;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
+import gtu.codybuilders.shareneat.exception.InvalidPasswordException;
 import gtu.codybuilders.shareneat.exception.UserAlreadyExistsException;
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.model.EmailVerificationToken;
@@ -69,11 +71,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteCurrentUser(){
+    public void deleteCurrentUser(String rawPassword){
         Long userId = AuthUtil.getUserId();
 
         User user = repository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found !"));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new InvalidPasswordException("Invalid password to delete account.");
+        }
     
         repository.delete(user);
     }
@@ -234,9 +240,63 @@ public class UserServiceImpl implements UserService {
         return savedUser;
     }
 
+    @Override
+    public void changePasswordByChecking(String currentPassword, String newPassword, String newPasswordtoConfirm) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InvalidPasswordException("Invalid current password.");
+        }
+
+        if (!newPassword.equals(newPasswordtoConfirm)) {
+            throw new InvalidPasswordException("New passwords do not match.");
+        }
+
+        changePassword(user, newPassword);
+    }
+ 
     private User changePassword(User user, String newPassword){
         user.setPassword(passwordEncoder.encode(newPassword));
         return repository.save(user);
+    }
+
+    @Override
+    public void updateUserAddress(UserAddressDto userAddressDto, String password) {
+        Long userId = AuthUtil.getUserId();
+
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidPasswordException("Invalid password. Cannot update address.");
+        }
+
+        user.setCountry(userAddressDto.getCountry() != null ? userAddressDto.getCountry() : user.getCountry());
+        user.setCity(userAddressDto.getCity() != null ? userAddressDto.getCity() : user.getCity());
+        user.setRegion(userAddressDto.getRegion() != null ? userAddressDto.getRegion() : user.getRegion());
+        user.setPostalCode(userAddressDto.getPostalCode() != null ? userAddressDto.getPostalCode() : user.getPostalCode());
+        user.setFullAddress(userAddressDto.getFullAddress() != null ? userAddressDto.getFullAddress() : user.getFullAddress());
+
+        repository.save(user);
+    }
+
+    @Override
+    public UserAddressDto getAddressInfo() {
+        Long userId = AuthUtil.getUserId();
+
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        return UserAddressDto.builder()
+                .country(user.getCountry())
+                .city(user.getCity())
+                .region(user.getRegion())
+                .postalCode(user.getPostalCode())
+                .fullAddress(user.getFullAddress())
+                .build();
     }
 
     // Added for SearchController
