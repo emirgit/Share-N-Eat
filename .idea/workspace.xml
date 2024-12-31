@@ -5,35 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7077bcda-2784-45d2-9b21-10e6c2f431bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/SiteSettingsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/FeedbackRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/FeedbackResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/dto/SiteSettingsDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/SiteSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/repository/SiteSettingsRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/SiteSettingsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/SiteSettingsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/NutritionInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/ImageProcessingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/ImageProcessingServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/static/images/testImage/content.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/static/images/testImage/macroTable.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/tessdata/eng.traineddata" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/tessdata/tur.traineddata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Share-N-Eat.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Share-N-Eat.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2_11_2024_13_41__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2_11_2024_13_41__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/AdminPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/AdminPanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/HelpPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/HelpPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProductManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/ProductManagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/SettingsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/SettingsPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/SiteSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/SiteSettings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/Support.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/Support.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/UserManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/UserManagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/spring-boot-app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/spring-boot-app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shareneat/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/constant/PathConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/constant/PathConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/FeedbackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/FeedbackController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/FeedbackStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/FeedbackStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/FeedbackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/FeedbackService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/FeedbackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/FeedbackServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,28 +67,50 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;sprint__prototype&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lenovo/Documents/GitHub/Share-N-Eat/front-sne&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "sprint__prototype",
+    "jdk.selected.JAVA_MODULE": "21",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Lenovo/Documents/GitHub/Share-N-Eat",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="gtu.codybuilders.shareneat.dto" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Lenovo\Documents\GitHub\Share-N-Eat" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Lenovo\Documents\GitHub\Share-N-Eat\shareneat\src\main\resources\static\images\users" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="gtu.codybuilders.shareneat.service.impl.Main" />
+      <module name="shareneat" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="gtu.codybuilders.shareneat.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ShareneatApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="gtu.codybuilders.shareneat.ShareneatApplication" />
       <module name="shareneat" />
       <extension name="coverage">
@@ -114,8 +123,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.ShareneatApplication" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.ShareneatApplication" />
       </list>
     </recent_temporary>
