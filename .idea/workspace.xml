@@ -5,22 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7077bcda-2784-45d2-9b21-10e6c2f431bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/model/NutritionInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/ImageProcessingService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/ImageProcessingServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/service/impl/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/static/images/testImage/content.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/static/images/testImage/macroTable.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/tessdata/eng.traineddata" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shareneat/src/main/resources/tessdata/tur.traineddata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Share-N-Eat.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Share-N-Eat.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2_11_2024_13_41__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2_11_2024_13_41__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/components/RecipeCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/components/RecipeCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/MainPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/MainPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/ProfilePage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-sne/src/pages/UserProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/front-sne/src/pages/UserProfilePage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/spring-boot-app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/spring-boot-app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/constant/PathConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/shareneat/src/main/java/gtu/codybuilders/shareneat/constant/PathConstants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,22 +59,22 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "sprint__prototype",
-    "jdk.selected.JAVA_MODULE": "21",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Lenovo/Documents/GitHub/Share-N-Eat",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;sprint__prototype&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lenovo/Documents/GitHub/Share-N-Eat&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="gtu.codybuilders.shareneat.dto" />
@@ -94,7 +86,7 @@
       <recent name="C:\Users\Lenovo\Documents\GitHub\Share-N-Eat\shareneat\src\main\resources\static\images\users" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.ShareneatApplication">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="gtu.codybuilders.shareneat.service.impl.Main" />
       <module name="shareneat" />
@@ -129,8 +121,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.ShareneatApplication" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>

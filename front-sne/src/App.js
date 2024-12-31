@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import UploadPage from './pages/UploadPage';
-import ProfilePage from './pages/ProfilePage';
+import ProfileSwitch from './components/ProfileSwitch';
 import ChangeUsername from './pages/ChangeUsername';
 import ChangePassword from './pages/ChangePassword';
 import ChangePhoto from './pages/ChangePhoto';
@@ -39,8 +39,8 @@ function App() {
         {/* Protected Routes */}
         <Route path="/" element={<PrivateRoute element={MainPage} />} />
         <Route path="/upload" element={<PrivateRoute element={UploadPage} />} />
-        <Route path="/profile" element={<PrivateRoute element={ProfilePage} />} /> {/* Own Profile */}
-        <Route path="/profile/:username" element={<PrivateRoute element={ProfilePage} />} /> {/* Other's Profile */}
+        <Route path="/profile" element={<PrivateRoute element={ProfileSwitch} />} /> {/* Own Profile */}
+        <Route path="/profile/:username" element={<PrivateRoute element={ProfileSwitch} />} /> {/* Other's Profile */}
         <Route path="/post/:postId" element={<PrivateRoute element={PostPage} />} />
         <Route path="/change-username" element={<PrivateRoute element={ChangeUsername} />} />
         <Route path="/change-password" element={<PrivateRoute element={ChangePassword} />} />

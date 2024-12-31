@@ -1,12 +1,17 @@
-// src/pages/UserProfilePage.js
+// src/pages/MyProfilePage.js
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import axiosHelper from '../axiosHelper';
 import RecipeCard from '../components/RecipeCard';
 
-function UserProfilePage({ currentUsername, viewUsername }) {
-  // The user being viewed
+function MyProfilePage({ currentUsername }) {
+  // This username is guaranteed to be the logged-in user's
+  // so you can use it if needed, e.g., for validating data
+
+  // Holds the user data for the current (logged-in) user
   const [user, setUser] = useState({
     username: '',
     role: '',
@@ -16,14 +21,12 @@ function UserProfilePage({ currentUsername, viewUsername }) {
   });
 
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [newBio, setNewBio] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Follow/Unfollow states
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followLoading, setFollowLoading] = useState(false);
-
-  // Posts for the user being viewed
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [postsError, setPostsError] = useState(null);
@@ -42,20 +45,15 @@ function UserProfilePage({ currentUsername, viewUsername }) {
     }
   };
 
-  // Fetches user data from /user/:viewUsername
+  // Fetch profile data from /user/my-account
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const fetchedUser = await axiosHelper(`/user/${viewUsername}`, 'GET');
-        const pictureResponse = await axiosHelper(
-          `/user/${viewUsername}/profile-picture`,
-          'GET',
-          null,
-          {
-            responseType: 'blob',
-          }
-        );
+        const fetchedUser = await axiosHelper('/user/my-account', 'GET');
+        const pictureResponse = await axiosHelper('/user/my-account/profile-picture', 'GET', null, {
+          responseType: 'blob',
+        });
 
         setUser({
           username: fetchedUser.username,
@@ -64,15 +62,10 @@ function UserProfilePage({ currentUsername, viewUsername }) {
           followers: fetchedUser.followersCount,
           following: fetchedUser.followingCount,
         });
+        setNewUsername(fetchedUser.username);
+        setNewBio(fetchedUser.bio);
 
         setProfilePictureUrl(URL.createObjectURL(pictureResponse));
-
-        // Check if the current user is following this user
-        const followingStatus = await axiosHelper(
-          `/follows/current-user/${viewUsername}/is-following`,
-          'GET'
-        );
-        setIsFollowing(followingStatus);
       } catch (err) {
         console.error('Error fetching user data', err);
         setError('Failed to fetch user data.');
@@ -81,17 +74,15 @@ function UserProfilePage({ currentUsername, viewUsername }) {
       }
     };
 
-    if (viewUsername) {
-      fetchUserData();
-    }
-  }, [viewUsername]);
+    fetchUserData();
+  }, []);
 
-  // Fetch posts from /posts/by-user/:viewUsername
+  // Fetch posts by the current user
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setPostsLoading(true);
-        const fetchedPosts = await axiosHelper(`/posts/by-user/${viewUsername}`, 'GET');
+        const fetchedPosts = await axiosHelper(`/posts/by-user/${currentUsername}`, 'GET');
         setPosts(fetchedPosts);
       } catch (err) {
         console.error('Error fetching posts:', err);
@@ -101,39 +92,49 @@ function UserProfilePage({ currentUsername, viewUsername }) {
       }
     };
 
-    if (viewUsername) {
+    if (currentUsername) {
       fetchPosts();
     }
-  }, [viewUsername]);
+  }, [currentUsername]);
 
-  // Follow/Unfollow logic
-  const handleFollowToggle = async () => {
-    if (followLoading) return;
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
-    setFollowLoading(true);
+  const handleSaveChanges = async () => {
     try {
-      if (isFollowing) {
-        // Unfollow
-        await axiosHelper('/follows/unfollow', 'DELETE', {
-          followerUsername: currentUsername,
-          followedUsername: user.username,
-        });
-        setIsFollowing(false);
-        setUser((prev) => ({ ...prev, followers: prev.followers - 1 }));
-      } else {
-        // Follow
-        await axiosHelper('/follows/follow', 'POST', {
-          followerUsername: currentUsername,
-          followedUsername: user.username,
-        });
-        setIsFollowing(true);
-        setUser((prev) => ({ ...prev, followers: prev.followers + 1 }));
-      }
+      await axiosHelper('/user/my-account', 'PUT', {
+        username: newUsername,
+        bio: newBio,
+      });
+      setUser((prev) => ({
+        ...prev,
+        username: newUsername,
+        bio: newBio,
+      }));
+      setIsEditing(false);
     } catch (err) {
-      console.error('Error toggling follow status', err);
-      setError('Failed to update follow status.');
-    } finally {
-      setFollowLoading(false);
+      console.error('Error saving user data', err);
+      setError('Failed to save changes.');
+    }
+  };
+
+  const handlePhotoChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append('profilePhoto', file);
+
+        await axiosHelper('/user/my-account/upload-photo', 'PUT', formData, {
+          'Content-Type': 'multipart/form-data',
+        });
+
+        setProfilePictureUrl(URL.createObjectURL(file));
+      } catch (err) {
+        console.error('Error uploading profile photo', err);
+        setError('Failed to upload profile photo.');
+      }
     }
   };
 
@@ -167,12 +168,33 @@ function UserProfilePage({ currentUsername, viewUsername }) {
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover"
               />
-              {/* No camera overlay since this is another user's profile */}
+              <div
+                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                onClick={() => document.getElementById('fileInput').click()}
+              >
+                <FontAwesomeIcon icon={faCamera} className="text-white text-2xl" />
+              </div>
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
             </div>
             <div className="flex flex-col w-full">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
-                  <div className="text-2xl font-bold mr-4">{user.username}</div>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      className="text-2xl font-bold mr-4 border p-1 rounded"
+                    />
+                  ) : (
+                    <div className="text-2xl font-bold mr-4">{user.username}</div>
+                  )}
                   <div className="flex items-center text-gray-600 space-x-4">
                     <div>
                       <span className="font-semibold">{user.followers}</span> Followers
@@ -182,20 +204,35 @@ function UserProfilePage({ currentUsername, viewUsername }) {
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={handleFollowToggle}
-                  className={`px-4 py-2 rounded-lg ${
-                    isFollowing ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
-                  }`}
-                  disabled={followLoading}
-                >
-                  {followLoading ? 'Processing...' : isFollowing ? 'Unfollow' : 'Follow'}
-                </button>
+                {!isEditing && (
+                  <button
+                    onClick={handleEditClick}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Edit Profile
+                  </button>
+                )}
               </div>
               <div className="text-gray-500 mt-1">{getDisplayRole(user.role)}</div>
               <div className="mt-4">
-                <p className="text-gray-700">{user.bio}</p>
+                {isEditing ? (
+                  <textarea
+                    value={newBio}
+                    onChange={(e) => setNewBio(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  />
+                ) : (
+                  <p className="text-gray-700">{user.bio}</p>
+                )}
               </div>
+              {isEditing && (
+                <button
+                  onClick={handleSaveChanges}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg mt-4"
+                >
+                  Save Changes
+                </button>
+              )}
             </div>
           </div>
 
@@ -204,9 +241,11 @@ function UserProfilePage({ currentUsername, viewUsername }) {
             <h2 className="text-2xl font-semibold mb-4">Posts</h2>
             {postsLoading && <p className="text-center text-gray-500">Loading posts...</p>}
             {postsError && <p className="text-center text-red-500">{postsError}</p>}
+
             {!postsLoading && !postsError && posts.length === 0 && (
               <p className="text-center text-gray-500">No posts available.</p>
             )}
+
             {!postsLoading && !postsError && posts.length > 0 && (
               <div className="space-y-4">
                 {posts.map((post) => (
@@ -225,4 +264,4 @@ function UserProfilePage({ currentUsername, viewUsername }) {
   );
 }
 
-export default UserProfilePage;
+export default MyProfilePage;

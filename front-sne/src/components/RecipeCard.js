@@ -1,6 +1,6 @@
 // src/components/RecipeCard.js
 import React, { useState, useEffect } from 'react';
-import ReactRating from 'react-rating';
+import RatingComponent from './RatingComponent'; // <-- Import new component
 import axiosHelper from '../axiosHelper';
 import { PieChart, Pie, Cell } from 'recharts';
 import Comment from '../components/Comment';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6'];
 
-const RecipeCard = ({ post, userRoles, currentUsername }) => {
+const RecipeCard = ({ post, currentUsername }) => {
     const {
         postId,
         postName,
@@ -33,43 +33,51 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
     const [loadingLike, setLoadingLike] = useState(false);
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
-    // Rating States
-    const [userRating, setUserRating] = useState(0);
-    const [currentAverageExpert, setCurrentAverageExpert] = useState(averageRateExpert);
-    const [currentAverageRegular, setCurrentAverageRegular] = useState(averageRateRegular);
-    const [currentTotalRatersExpert, setCurrentTotalRatersExpert] = useState(totalRatersExpert);
-    const [currentTotalRatersRegular, setCurrentTotalRatersRegular] = useState(totalRatersRegular);
-    const [loadingRating, setLoadingRating] = useState(false);
+    // New States for User Roles
+    const [currentUserRole, setCurrentUserRole] = useState([]); // State to hold current user roles
+    const [rolesLoading, setRolesLoading] = useState(true); // Loading state for roles
+    const [rolesError, setRolesError] = useState(null); // Error state for roles
 
-    const isUser = userRoles.includes('ROLE_USER');
+    useEffect(() => {
+        const fetchUserRoles = async () => {
+            try {
+                const data = await axiosHelper('/user/my-account/roles', 'GET'); // Endpoint to fetch user roles
+                setCurrentUserRole(data); // Set the retrieved roles in state
+            } catch (error) {
+                console.error('Error fetching user roles:', error);
+                setRolesError('Failed to load user roles.');
+            } finally {
+                setRolesLoading(false); // Mark roles loading as complete
+            }
+        };
+
+        fetchUserRoles(); // Call the fetchUserRoles function
+    }, []);
+
+    // Determine if the user has ROLE_USER
+    const isUser = currentUserRole.includes('ROLE_USER');
 
     useEffect(() => {
         const fetchRecipeImage = async () => {
             try {
-                const response = await axiosHelper(`/posts/getImage/${postId}`, 'GET', null, {
-                    responseType: 'blob',
-                });
+                const response = await axiosHelper(`/posts/getImage/${postId}`, 'GET', null, { responseType: 'blob' });
                 setRecipeImage(URL.createObjectURL(response));
             } catch (error) {
                 console.error('Error fetching recipe image:', error);
             }
         };
-
         if (postId) fetchRecipeImage();
     }, [postId]);
 
     useEffect(() => {
         const fetchProfileImage = async () => {
             try {
-                const response = await axiosHelper(`/user/${username}/profile-picture`, 'GET', null, {
-                    responseType: 'blob'
-                });
+                const response = await axiosHelper(`/user/${username}/profile-picture`, 'GET', null, { responseType: 'blob' });
                 setProfileImage(URL.createObjectURL(response));
             } catch (error) {
                 console.error('Error fetching profile image:', error);
             }
         };
-
         if (username) fetchProfileImage();
     }, [username]);
 
@@ -82,23 +90,10 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
                 console.error('Error fetching like status:', error);
             }
         };
-
         fetchLikeStatus();
     }, [postId]);
 
-    useEffect(() => {
-        const fetchUserRating = async () => {
-            try {
-                const response = await axiosHelper(`/rates/current-user-rate/${postId}`, 'GET');
-                setUserRating(response || 0);
-            } catch (error) {
-                console.error('Error fetching user rating:', error);
-            }
-        };
-
-        fetchUserRating();
-    }, [postId]);
-
+    // Like / Unlike logic
     const handleLike = async () => {
         setLoadingLike(true);
         try {
@@ -119,10 +114,10 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
         }
     };
 
+    // Share logic
     const handleShare = () => {
-        // It will be changed instead of hardcoded t o widnow
         const link = `http://localhost:3000/post/${postId}`;
-        navigator.clipboard.writeText(link) // Copy the link to the clipboard
+        navigator.clipboard.writeText(link)
             .then(() => {
                 alert('Link copied to clipboard!');
             })
@@ -130,46 +125,13 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
                 alert('Failed to copy link. Please try again.');
             });
     };
-    
 
+    // Comments toggle
     const handleComments = () => {
         setIsCommentsOpen(!isCommentsOpen);
     };
 
-    const handleRatingChange = async (newRating) => {
-        if (loadingRating) return;
-        setLoadingRating(true);
-        try {
-            if (userRating === newRating) {
-                await axiosHelper(`/rates/${postId}`, 'DELETE');
-                setUserRating(0);
-                await fetchUpdatedAverages();
-            } else {
-                const rateDto = { rating: newRating, postId };
-                await axiosHelper(`/rates`, 'POST', rateDto);
-                setUserRating(newRating);
-                await fetchUpdatedAverages();
-            }
-        } catch (error) {
-            console.error('Error updating rating:', error);
-            alert('An error occurred while updating your rating. Please try again.');
-        } finally {
-            setLoadingRating(false);
-        }
-    };
-
-    const fetchUpdatedAverages = async () => {
-        try {
-            const updatedPost = await axiosHelper(`/posts/${postId}`, 'GET');
-            setCurrentAverageExpert(updatedPost.averageRateExpert);
-            setCurrentAverageRegular(updatedPost.averageRateRegular);
-            setCurrentTotalRatersExpert(updatedPost.totalRatersExpert);
-            setCurrentTotalRatersRegular(updatedPost.totalRatersRegular);
-        } catch (error) {
-            console.error('Error fetching updated averages:', error);
-        }
-    };
-
+    // Pie chart data
     const pieData = [
         { name: 'Fat', value: fat },
         { name: 'Protein', value: protein },
@@ -183,7 +145,7 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
                     <img
                         src={profileImage}
                         alt="User"
-                        className="w-10 h-10 rounded-full"
+                        className="w-10 h-10 rounded-full cursor-pointer"
                         onClick={() => navigate(`/profile/${username}`)}
                     />
                 )}
@@ -207,55 +169,42 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
                 />
             )}
 
+            {/* Rating + Pie Chart section */}
             <div className="p-4 flex items-center">
-                <div className="flex flex-col items-start mr-4">
-                    <div className="flex items-center mb-1">
-                        <ReactRating
-                            initialRating={currentAverageExpert}
-                            readonly={isUser}
-                            emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
-                            fullSymbol={<span className="text-green-500 text-2xl">★</span>}
-                            fractions={2}
-                            onChange={(newRating) => {
-                                if (!isUser) {
-                                    handleRatingChange(newRating);
-                                }
-                            }}
-                        />
-                        {!isUser && (
-                            <span className="ml-2 text-gray-500 text-sm">{currentTotalRatersExpert} rated</span>
-                        )}
-                        {isUser && (
-                            <span className="ml-2 text-gray-400 text-sm flex items-center">
-                                <span className="mr-1">{currentTotalRatersExpert} rated</span> 🔒
-                            </span>
-                        )}
-                    </div>
+                {/* Handle loading and error states for roles */}
+                {rolesLoading && (
+                    <p className="text-gray-500 mr-4">Loading roles...</p>
+                )}
+                {rolesError && (
+                    <p className="text-red-500 mr-4">{rolesError}</p>
+                )}
 
-                    <div className="flex items-center mb-1">
-                        <ReactRating
-                            initialRating={currentAverageRegular}
-                            readonly={!isUser}
-                            emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
-                            fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
-                            fractions={2}
-                            onChange={(newRating) => {
-                                if (isUser) {
-                                    handleRatingChange(newRating);
-                                }
-                            }}
+                {/* Only show ratings if roles are loaded and no error */}
+                {!rolesLoading && !rolesError && (
+                    <div className="flex flex-col items-start mr-4">
+                        {/* Expert Rating */}
+                        <RatingComponent
+                            postId={postId}
+                            isExpertRating={true}
+                            isReadOnly={!isUser} // If the user has ROLE_USER, they cannot rate as expert
+                            initialAverage={averageRateExpert}
+                            initialTotalRaters={totalRatersExpert}
+                            currentUserRole={currentUserRole}
                         />
-                        {isUser && (
-                            <span className="ml-2 text-gray-500 text-sm">{currentTotalRatersRegular} rated</span>
-                        )}
-                        {!isUser && (
-                            <span className="ml-2 text-gray-400 text-sm flex items-center">
-                                <span className="mr-1">{currentTotalRatersRegular} rated</span> 🔒
-                            </span>
-                        )}
-                    </div>
-                </div>
 
+                        {/* Regular Rating */}
+                        <RatingComponent
+                            postId={postId}
+                            isExpertRating={false}
+                            isReadOnly={!isUser} // If the user is not role user, rating is read-only for regular
+                            initialAverage={averageRateRegular}
+                            initialTotalRaters={totalRatersRegular}
+                            currentUserRole={currentUserRole}
+                        />
+                    </div>
+                )}
+
+                {/* Pie Chart */}
                 <PieChart width={80} height={80} className="mx-4">
                     <Pie
                         data={pieData}
@@ -271,6 +220,7 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
                     </Pie>
                 </PieChart>
 
+                {/* Macronutrient Info */}
                 <div className="flex flex-col ml-4 text-sm text-gray-600">
                     <div className="flex items-center mb-1">
                         <span>🍗</span> <span className="ml-1">{protein}g protein</span>
@@ -287,13 +237,17 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
                 </div>
             </div>
 
+            {/* Like / Comment / Share Section */}
             <div className="flex items-center justify-between p-4 border-t border-gray-200">
                 <div className="flex space-x-4">
                     <button
                         onClick={handleLike}
                         disabled={loadingLike}
-                        className={`flex items-center ${liked ? 'text-red-500' : 'text-blue-500'} 
-                                   ${loadingLike ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                        className={`
+                            flex items-center 
+                            ${liked ? 'text-red-500' : 'text-blue-500'}
+                            ${loadingLike ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+                        `}
                     >
                         {liked ? '💔 Unlike' : '👍 Like'} {currentLikeCount}
                     </button>
@@ -307,7 +261,6 @@ const RecipeCard = ({ post, userRoles, currentUsername }) => {
             </div>
 
             {isCommentsOpen && (
-                // Pass both postId and currentUsername (logged-in user's username) to Comment
                 <Comment postId={postId} username={currentUsername} />
             )}
         </div>
