@@ -1,53 +1,105 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
+import { useNavigate } from 'react-router-dom';
+import '../styles/SettingsPage.css';
 
 const ChangePassword = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleChangePassword = async (e) => {
         e.preventDefault();
-        // Submit the new password to the backend
-        console.log('New Password:', newPassword);
+        
+        if (newPassword !== confirmPassword) {
+            alert("New passwords don't match!");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8080/auth/change/password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    currentPassword,
+                    newPassword
+                }),
+                credentials: 'include'
+            });
+
+            const data = await response.text();
+            
+            if (response.ok) {
+                alert(data);
+                // Redirect to settings page with Account Management tab selected
+                navigate('/settings', { state: { selectedMenu: 'Account Management' } });
+            } else {
+                alert(data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        }
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50">
-            {/* Navbar */}
-            <Navbar />
+        <div className="change-password-container flex items-center justify-center">
+            <div className="change-password-form p-8 w-full max-w-md mx-4">
+                <h2 className="settings-title text-2xl font-semibold mb-6 text-center">Change Password</h2>
+                <form onSubmit={handleChangePassword} className="space-y-4">
+                    <div>
+                        <label className="settings-label block mb-2">Current Password</label>
+                        <input
+                            type="password"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            className="change-password-input w-full"
+                            placeholder="Enter current password"
+                            required
+                        />
+                    </div>
+                    
+                    <div>
+                        <label className="settings-label block mb-2">New Password</label>
+                        <input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            className="change-password-input w-full"
+                            placeholder="Enter new password"
+                            required
+                        />
+                    </div>
 
-            <div className="flex flex-row w-full">
-                {/* Sidebar */}
-                <Sidebar />
+                    <div>
+                        <label className="settings-label block mb-2">Confirm New Password</label>
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="change-password-input w-full"
+                            placeholder="Confirm new password"
+                            required
+                        />
+                    </div>
 
-                {/* Main Content */}
-                <div className="flex-1 flex flex-col items-center p-8">
-                    <h1 className="text-2xl font-semibold mb-6">Change Password</h1>
-                    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-                        <label className="block mb-4">
-                            <span className="text-gray-700">Current Password</span>
-                            <input
-                                type="password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                className="mt-1 block w-full p-2 border rounded-md"
-                            />
-                        </label>
-                        <label className="block mb-4">
-                            <span className="text-gray-700">New Password</span>
-                            <input
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                className="mt-1 block w-full p-2 border rounded-md"
-                            />
-                        </label>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg">
-                            Save Changes
-                        </button>
-                    </form>
-                </div>
+                    <button
+                        type="submit"
+                        className="change-password-button w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition mt-6"
+                    >
+                        Change Password
+                    </button>
+                    
+                    <button
+                        type="button"
+                        onClick={() => navigate('/settings', { state: { selectedMenu: 'Account Management' } })}
+                        className="change-password-button w-full bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition"
+                    >
+                        Cancel
+                    </button>
+                </form>
             </div>
         </div>
     );
