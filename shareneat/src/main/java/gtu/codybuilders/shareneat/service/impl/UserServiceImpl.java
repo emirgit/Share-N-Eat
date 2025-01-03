@@ -2,7 +2,7 @@ package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.UserAddressDto;
-import gtu.codybuilders.shareneat.dto.UserFilterDto;
+import gtu.codybuilders.shareneat.dto.UserManagementDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.exception.InvalidPasswordException;
@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -398,55 +399,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> searchUsersbyUsername(String query, String role, String status, Pageable pageable) {
-        Role userRole = parseRole(role); // Helper method
-        boolean userStatus = parseStatus(status); // Helper method
-    
-        return repository.searchUsersByUsername(query, userRole, userStatus, pageable);
-    }
-    
-    @Override
-    public Page<User> searchUsersbyEmail(String query, String role, String status, Pageable pageable) {
-        Role userRole = parseRole(role); // Helper method
-        boolean userStatus = parseStatus(status); // Helper method
-    
-        return repository.searchUsersByEmail(query, userRole, userStatus, pageable);
-    }
-    
-    // Helper method to parse role
-    private Role parseRole(String role) {
-        switch (role.toLowerCase()) {
-            case "admin":
-                return Role.ROLE_ADMIN;
-            case "expert":
-                return Role.ROLE_EXPERT;
-            case "user":
-                return Role.ROLE_USER;
-            default:
-                throw new IllegalArgumentException("Invalid role: " + role);
+    public Page<UserManagementDTO> getUsersForManagement(String search, String role, String status, Pageable pageable) {
+        Specification<User> spec = Specification.where(null);
+        System.out.println(role);
+        if (search != null && !search.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.or(
+                            cb.like(cb.lower(root.get("username")), "%" + search.toLowerCase() + "%"),
+                            cb.like(cb.lower(root.get("email")), "%" + search.toLowerCase() + "%")
+                    )
+            );
         }
-    }
-    
-    // Helper method to parse status
-    private boolean parseStatus(String status) {
-        switch (status.toLowerCase()) {
-            case "banned":
-                return true;
-            case "active":
-                return false;
-            default:
-                throw new IllegalArgumentException("Invalid status: " + status);
+
+        if (role != null && !role.isEmpty()) {
+            Role roleEnum = Role.valueOf("ROLE_" + role.toUpperCase());
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("role"), roleEnum));
         }
+
+        if (status != null && !status.isEmpty()) {
+            boolean isBanned = status.equals("banned");
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("isBanned"), isBanned));
+        }
+
+        Page<User> users = repository.findAll(spec, pageable);
+        return users.map(this::convertToUserManagementDTO);
     }
 
     @Override
-    public UserFilterDto convertToUserFilterDto(User user) {
-        return UserFilterDto.builder()
+    public UserManagementDTO convertToUserManagementDTO(User user) {
+        return UserManagementDTO.builder()
+                .id(user.getUserId())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .role(user.getRole())
-                .isBanned(user.isBanned())
-                .enabled(user.isEnabled())
+                .role(user.getRole().toString().replace("ROLE_", "").toLowerCase())
+                .status(user.isBanned() ? "banned" : "active")
+                .verified(user.isEnabled())
                 .build();
     }
 }

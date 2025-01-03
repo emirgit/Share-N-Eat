@@ -8,7 +8,6 @@ const AdminMenu = () => {
         { name: 'Dashboard', onClick: () => navigate('/admin') },
         { name: 'User Management', onClick: () => navigate('/admin/user') },
         { name: 'Product Management', onClick: () => navigate('/admin/product') },
-        { name: 'Post Management', onClick: () => navigate('/admin/posts') },
         { name: 'Site Settings', onClick: () => navigate('/admin/settings') },
         { name: 'Support', onClick: () => navigate('/admin/support') },
     ];

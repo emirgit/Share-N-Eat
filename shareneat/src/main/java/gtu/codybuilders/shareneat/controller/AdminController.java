@@ -3,6 +3,7 @@ package gtu.codybuilders.shareneat.controller;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
+import gtu.codybuilders.shareneat.dto.UserManagementDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.model.AdminProductRequest;
 import gtu.codybuilders.shareneat.model.Role;
@@ -17,6 +18,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -172,4 +174,17 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<UserManagementDTO>> getUsers(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserManagementDTO> users = userService.getUsersForManagement(search, role, status, pageable);
+        return ResponseEntity.ok(users);
+    }
 }

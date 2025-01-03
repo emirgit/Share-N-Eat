@@ -2,7 +2,6 @@ package gtu.codybuilders.shareneat.controller;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.UserAddressDto;
-import gtu.codybuilders.shareneat.dto.UserFilterDto;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.model.User;
@@ -10,9 +9,6 @@ import gtu.codybuilders.shareneat.service.UserService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -179,30 +175,4 @@ public class UserController {
         return new ResponseEntity<>(dailyUserCount, HttpStatus.OK);
     }
 
-    @GetMapping(PathConstants.SEARCH_USER_BY_STATUS_ROLE)
-    public ResponseEntity<?> searchUserByStatusAndRole(
-            @RequestParam String param,
-            @RequestParam String query,
-            @RequestParam String role,
-            @RequestParam String status,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-    
-            if ("username".equalsIgnoreCase(param)) {
-                Page<User> userPage = userService.searchUsersbyUsername(query, role, status, pageable);
-                Page<UserFilterDto> userFilterDtoPage = userPage.map(userService::convertToUserFilterDto);
-                return ResponseEntity.ok(userFilterDtoPage);
-            } else if ("email".equalsIgnoreCase(param)) {
-                Page<User> userPage = userService.searchUsersbyEmail(query, role, status, pageable);
-                Page<UserFilterDto> userFilterDtoPage = userPage.map(userService::convertToUserFilterDto);
-                return ResponseEntity.ok(userFilterDtoPage);
-            } else {
-                return ResponseEntity.badRequest().body("Invalid search parameter. Use 'username' or 'email'.");
-            }
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 }

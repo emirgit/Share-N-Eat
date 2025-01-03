@@ -17,7 +17,6 @@ import PostPage from './pages/PostPage';
 
 import PrivateRoute from './components/PrivateRoute';
 import AdminPanel from './pages/AdminPanel';
-import PostManagement from './pages/PostManagement';
 import Support from './pages/Support';
 import SiteSettings from './pages/SiteSettings';
 import ProductManagement from './pages/ProductManagement';
@@ -53,7 +52,6 @@ function App() {
 
         {/* Admin Routes */}
         <Route path="/admin" element={<PrivateRoute element={AdminPanel} />} />
-        <Route path="/admin/posts" element={<PrivateRoute element={PostManagement} />} />
         <Route path="/admin/support" element={<PrivateRoute element={Support} />} />
         <Route path="/admin/settings" element={<PrivateRoute element={SiteSettings} />} />
         <Route path="/admin/product" element={<PrivateRoute element={ProductManagement} />} />

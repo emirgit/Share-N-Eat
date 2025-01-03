@@ -1,7 +1,7 @@
 package gtu.codybuilders.shareneat.service;
 
 import gtu.codybuilders.shareneat.dto.UserAddressDto;
-import gtu.codybuilders.shareneat.dto.UserFilterDto;
+import gtu.codybuilders.shareneat.dto.UserManagementDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileDTO;
 import gtu.codybuilders.shareneat.dto.UserProfileRequestDTO;
 import gtu.codybuilders.shareneat.model.PasswordResetToken;
@@ -66,7 +66,6 @@ public interface UserService {
     Long getUsersCount();
     Long getDailyUserCount();
 
-    Page<User> searchUsersbyUsername(String query, String role, String status, Pageable pageable);
-    Page<User> searchUsersbyEmail(String query, String role, String status, Pageable pageable);
-    UserFilterDto convertToUserFilterDto(User user);
+    Page<UserManagementDTO> getUsersForManagement(String search, String role, String status, Pageable pageable);
+    UserManagementDTO convertToUserManagementDTO(User user);
 }

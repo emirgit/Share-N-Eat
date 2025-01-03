@@ -1,22 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminMenu from '../components/AdminMenu';
 import AdminNavbar from '../components/AdminNavbar';
 import axiosHelper from '../axiosHelper';
 
 const UserManagement = () => {
-    const [users, setUsers] = useState([
-        { id: 1, username: 'theAdmin', email: 'm.emir.kara@outlook.com', role: 'admin', status: 'active', verified: true },
-        { id: 2, username: 'DummyTheUser', email: 'dummy@outlook.com', role: 'user', status: 'active', verified: true },
-        { id: 3, username: 'DieticianPro', email: 'dietician@outlook.com', role: 'expert', status: 'active', verified: true },
-        { id: 4, username: 'trial', email: 'trial@outlook.com', role: 'user', status: 'active', verified: false },
-    ]);
-
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [page, setPage] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [resetModalVisible, setResetModalVisible] = useState(false);
     const [selectedUserEmail, setSelectedUserEmail] = useState('');
     const [resetLink, setResetLink] = useState('');
+
+    const fetchUsers = useCallback(async () => {
+        if (loading || !hasMore) return;
+
+        setLoading(true);
+        try {
+            const params = new URLSearchParams({
+                page: page,
+                size: 10,
+                ...(searchQuery && { search: searchQuery }),
+                ...(roleFilter && { role: roleFilter }),
+                ...(statusFilter && { status: statusFilter })
+            });
+
+            const response = await axiosHelper(`/admin/users?${params}`);
+            const newUsers = response.content;
+            
+            if (page === 0) {
+                setUsers(newUsers);
+            } else {
+                setUsers(prevUsers => [...prevUsers, ...newUsers]);
+            }
+            
+            setHasMore(!response.last);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, [page, searchQuery, roleFilter, statusFilter, loading, hasMore]);
+
+    // Reset everything when filters change
+    useEffect(() => {
+        setUsers([]);
+        setPage(0);
+        setHasMore(true);
+    }, [searchQuery, roleFilter, statusFilter]);
+
+    // Initial load and when page changes
+    useEffect(() => {
+        fetchUsers();
+    }, [fetchUsers]);
+
+    const handleScroll = useCallback((event) => {
+        const { scrollTop, clientHeight, scrollHeight } = event.target;
+        
+        if (scrollHeight - scrollTop <= clientHeight * 1.5 && !loading && hasMore) {
+            setPage(prev => prev + 1);
+        }
+    }, [loading, hasMore]);
 
     const handleRoleChange = async (username, newRole) => {
         try {
@@ -30,17 +77,20 @@ const UserManagement = () => {
             alert('Failed to change role. Please try again.');
         }
     };
-    
 
     const handleBanUser = async (username) => {
         try {
             const targetUser = users.find((user) => user.username === username);
             if (targetUser.status === 'banned') {
                 await axiosHelper(`/admin/user/unban/${username}`, 'PUT');
-                setUsers(users.map((user) => (user.username === username ? { ...user, status: 'active' } : user)));
+                setUsers(users.map((user) => (
+                    user.username === username ? { ...user, status: 'active' } : user
+                )));
             } else {
                 await axiosHelper(`/admin/user/ban/${username}`, 'PUT');
-                setUsers(users.map((user) => (user.username === username ? { ...user, status: 'banned' } : user)));
+                setUsers(users.map((user) => (
+                    user.username === username ? { ...user, status: 'banned' } : user
+                )));
             }
         } catch (error) {
             console.error(`Error banning/unbanning user ${username}:`, error);
@@ -55,7 +105,7 @@ const UserManagement = () => {
     const handleResetPassword = async () => {
         try {
             const response = await axiosHelper(`/admin/reset/password/${selectedUserEmail}`, 'POST');
-            setResetLink(response); // Set reset link from backend response
+            setResetLink(response); // Assuming response is the reset link string
         } catch (error) {
             console.error(`Error resetting password for ${selectedUserEmail}:`, error);
         }
@@ -67,22 +117,11 @@ const UserManagement = () => {
         setResetLink('');
     };
 
-    const filteredUsers = users.filter((user) => {
-        const matchesSearch = searchQuery
-            ? user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              user.email.toLowerCase().includes(searchQuery.toLowerCase())
-            : true;
-        const matchesRole = roleFilter ? user.role === roleFilter : true;
-        const matchesStatus = statusFilter ? user.status === statusFilter : true;
-
-        return matchesSearch && matchesRole && matchesStatus;
-    });
-
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
             <AdminNavbar />
             <div className="flex">
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-8 overflow-auto" onScroll={handleScroll}>
                     <h1 className="text-3xl font-bold mb-6">User Management</h1>
 
                     {/* Search and Filters */}
@@ -129,7 +168,7 @@ const UserManagement = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsers.map((user) => (
+                                {users.map((user) => (
                                     <tr key={user.id} className="border-t">
                                         <td className="px-4 py-2">{user.username}</td>
                                         <td className="px-4 py-2">{user.email}</td>
@@ -184,6 +223,18 @@ const UserManagement = () => {
                                 ))}
                             </tbody>
                         </table>
+                        
+                        {loading && (
+                            <div className="text-center py-4">
+                                Loading more users...
+                            </div>
+                        )}
+                        
+                        {!hasMore && users.length > 0 && (
+                            <div className="text-center py-4 text-gray-500">
+                                No more users to load.
+                            </div>
+                        )}
                     </div>
 
                     {/* Reset Password Modal */}
