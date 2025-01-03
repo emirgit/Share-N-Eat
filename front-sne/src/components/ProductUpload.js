@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import axiosHelper from "../axiosHelper";
-
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ProductUpload = () => {
     const [isActive, setIsActive] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
-        proteinGrams: 0,
-        carbonhydrateGrams: 0,
-        fatGrams: 0,
-        quantity: 0,
-        calories: 0,
-        contents: '',
-        thumbnail: null,
+        brand: '',
+        images: [null, null, null], // Array for 3 images
     });
 
     const handleChange = (e) => {
@@ -19,13 +15,23 @@ const ProductUpload = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleThumbnailChange = (e) => {
-        setFormData((prev) => ({ ...prev, thumbnail: e.target.files[0] }));
+
+
+    // const handleThumbnailChange = (e) => {
+    //     setFormData((prev) => ({ ...prev, thumbnail: e.target.files[0] }));
+    // };
+
+    const handleImageChange = (index, file) => {
+        setFormData((prev) => {
+            const updatedImages = [...prev.images];
+            updatedImages[index] = file;
+            return { ...prev, images: updatedImages };
+        });
     };
 
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
-    //
+
     //     const data = new FormData();
     //     data.append('name', formData.name);
     //     data.append('proteinGrams', formData.proteinGrams);
@@ -37,7 +43,7 @@ const ProductUpload = () => {
     //     if (formData.thumbnail) {
     //         data.append('file', formData.thumbnail);
     //     }
-    //
+
     //     try {
     //         const response = await axiosHelper('/products', 'POST', data, {
     //             'Content-Type': 'multipart/form-data',
@@ -48,24 +54,17 @@ const ProductUpload = () => {
     //         console.error('Error uploading product:', error);
     //     }
     // };
-    //
-    //
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const data = new FormData();
         data.append('name', formData.name);
-        data.append('proteinGrams', formData.proteinGrams);
-        data.append('carbonhydrateGrams', formData.carbonhydrateGrams);
-        data.append('fatGrams', formData.fatGrams);
-        data.append('quantity', formData.quantity);
-        data.append('calories', formData.calories);
-        data.append('contents', formData.contents);
-        if (formData.thumbnail) {
-            data.append('file', formData.thumbnail);
-        }
+        data.append('brand', formData.brand);
+
+        formData.images.forEach((image, index) => {
+            if (image) data.append(`image${index + 1}`, image); // Add images to FormData
+        });
 
         try {
             const response = await axiosHelper('/products/product-request', 'POST', data, {
@@ -77,6 +76,33 @@ const ProductUpload = () => {
             console.error('Error uploading product:', error);
         }
     };
+
+    /*
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('proteinGrams', formData.proteinGrams);
+        data.append('carbonhydratesGrams', formData.carbonhydratesGrams);
+        data.append('fatGrams', formData.fatGrams);
+        data.append('quantity', formData.quantity);
+        data.append('calories', formData.calories);
+        data.append('contents', formData.contents);
+        if (formData.thumbnail) {
+            data.append('files', formData.thumbnail);
+        }
+
+        try {
+            const response = await axiosHelper('/products/product-request', 'POST', data, {
+                'Content-Type': 'multipart/form-data',
+            });
+            console.log('Product uploaded successfully:', response);
+            setIsActive(false); // Collapse after submission
+        } catch (error) {
+            console.error('Error uploading product:', error);
+        }
+    };*/
 
     return (
         <div
@@ -90,13 +116,11 @@ const ProductUpload = () => {
             }}
             onClick={() => !isActive && setIsActive(true)}
         >
-            {/* Inactive State */}
             {!isActive ? (
                 <div className="flex items-center justify-center h-full">
                     <span className="text-gray-600 font-semibold">Add Product</span>
                 </div>
             ) : (
-                // Active State
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         {/* Product Name */}
@@ -111,90 +135,50 @@ const ProductUpload = () => {
                                 className="border p-2 rounded w-full text-sm"
                             />
                         </div>
-                        {/* Quantity */}
+                        {/* Brand */}
                         <div>
-                            <label className="block text-gray-700 text-sm mb-1">Quantity</label>
+                            <label className="block text-gray-700 text-sm mb-1">Brand</label>
                             <input
                                 type="text"
-                                name="quantity"
-                                placeholder="e.g., 500ml"
-                                value={formData.quantity}
-                                onChange={handleChange}
-                                className="border p-2 rounded w-full text-sm"
-                            />
-                        </div>
-                        {/* Calories */}
-                        <div>
-                            <label className="block text-gray-700 text-sm mb-1">kcal</label>
-                            <input
-                                type="number"
-                                name="calories"
-                                placeholder="Calories"
-                                value={formData.calories}
-                                onChange={handleChange}
-                                className="border p-2 rounded w-full text-sm"
-                            />
-                        </div>
-                        {/* Contents */}
-                        <div>
-                            <label className="block text-gray-700 text-sm mb-1">Contents</label>
-                            <input
-                                type="text"
-                                name="contents"
-                                placeholder="e.g., Lactose-free, skimmed milk"
-                                value={formData.contents}
+                                name="brand"
+                                placeholder="e.g., DairyBest"
+                                value={formData.brand}
                                 onChange={handleChange}
                                 className="border p-2 rounded w-full text-sm"
                             />
                         </div>
                     </div>
 
-                    {/* Macronutrients */}
-                    <div className="grid grid-cols-3 gap-4">
-                        <div>
-                            <label className="block text-gray-700 text-sm mb-1">Protein (g)</label>
-                            <input
-                                type="number"
-                                name="proteinGrams"
-                                placeholder="Protein"
-                                value={formData.proteinGrams}
-                                onChange={handleChange}
-                                className="border p-2 rounded w-full text-sm"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-sm mb-1">Carbs (g)</label>
-                            <input
-                                type="number"
-                                name="carbonhydrateGrams"
-                                placeholder="Carbs"
-                                value={formData.carbonhydrateGrams}
-                                onChange={handleChange}
-                                className="border p-2 rounded w-full text-sm"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-sm mb-1">Fat (g)</label>
-                            <input
-                                type="number"
-                                name="fatGrams"
-                                placeholder="Fat"
-                                value={formData.fatGrams}
-                                onChange={handleChange}
-                                className="border p-2 rounded w-full text-sm"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Thumbnail Upload */}
+                    {/* Upload Images */}
                     <div>
-                        <label className="block text-gray-700 text-sm mb-1">Image</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleThumbnailChange}
-                            className="border p-2 rounded w-full text-sm"
-                        />
+                        <label className="block text-gray-700 text-sm mb-1">Upload 3 Images</label>
+                        <div className="flex space-x-4">
+                            {formData.images.map((image, index) => (
+                                <label
+                                    key={index}
+                                    className="flex items-center justify-center border border-gray-300 w-24 h-24 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer relative"
+                                >
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => handleImageChange(index, e.target.files[0])}
+                                    />
+                                    {image ? (
+                                        <img
+                                            src={URL.createObjectURL(image)}
+                                            alt={`Uploaded ${index + 1}`}
+                                            className="w-full h-full object-cover rounded-lg"
+                                        />
+                                    ) : (
+                                        <FontAwesomeIcon
+                                            icon={faCamera}
+                                            className="text-gray-400 text-2xl"
+                                        />
+                                    )}
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Buttons */}
