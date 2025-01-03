@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import axiosHelper from "../axiosHelper";
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { categories } from './CategoriesSection';
+
 const ProductUpload = () => {
     const [isActive, setIsActive] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         brand: '',
+        category: '',
         images: [null, null, null], // Array for 3 images
     });
 
@@ -61,6 +64,7 @@ const ProductUpload = () => {
         const data = new FormData();
         data.append('name', formData.name);
         data.append('brand', formData.brand);
+        data.append('category', formData.category);
 
         formData.images.forEach((image, index) => {
             if (image) data.append(`image${index + 1}`, image); // Add images to FormData
@@ -147,6 +151,24 @@ const ProductUpload = () => {
                                 className="border p-2 rounded w-full text-sm"
                             />
                         </div>
+                    </div>
+                    
+                    {/* Category Selection */}
+                    <div>
+                        <label className="block text-gray-700 text-sm mb-1">Category</label>
+                        <select
+                            name="category"
+                            value={formData.category}
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full text-sm"
+                        >
+                            <option value="">Select a category</option>
+                            {categories.map((category, index) => (
+                                <option key={index} value={category.name}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Upload Images */}

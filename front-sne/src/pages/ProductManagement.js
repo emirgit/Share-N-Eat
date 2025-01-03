@@ -7,11 +7,30 @@ import { faRecycle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Milk from '../assets/Milk.jpg';
+import tavukPilav from '../assets/tavukPilav.png';
+import ramen from '../assets/ramen.jpeg';
 import axiosHelper from "../axiosHelper";
 
 const ProductManagement = () => {
 
-    const [requests, setRequests] = useState([]);
+    const [requests, setRequests] = useState([
+        {
+            id: 2,
+            name: 'Milk',
+            brand: 'Sutas',
+            category: 'Dairy',
+            quantity: 1000,
+            proteinGrams:3,
+            carbonhydrateGrams:5,
+            fatGrams:2,
+            calories: 50,
+            imageUrl1:Milk,
+            imageUrl2:tavukPilav,
+            imageUrl3:ramen,
+            description: 'mr muscle ava cikti',
+            
+        }
+    ]);
 
     const [products, setProducts] = useState([
         {
@@ -22,7 +41,7 @@ const ProductManagement = () => {
             quantity: 1000,
             macronutrients: { protein: 3, carbs: 5, fat: 2, sugar: 4 },
             calories: 50,
-            images: [Milk],
+            images: [Milk,Milk],
         },
     ]);
 
@@ -38,7 +57,8 @@ const ProductManagement = () => {
                         return { ...request, imageUrl };
                     })
                 );
-                setRequests(productRequestsWithImages);
+                console.log(productRequestsWithImages)
+                //setRequests(productRequestsWithImages);
             } catch (error) {
                 console.error('Error fetching product requests:', error);
                 // setError('Failed to load product requests. Please try again later.');
@@ -320,15 +340,16 @@ const ProductManagement = () => {
                                 >
                                     <div className="w-40">
                                         <Slider {...sliderSettings}>
-                                            {[request.imageUrl].map((image, index) => (
+                                            {[request.imageUrl1, request.imageUrl2, request.imageUrl3].map((image, index) => (
                                                 <div key={index} className="relative">
                                                     <img
-                                                        key={index}
+                                                        
                                                         src={image}
                                                         alt={`Request ${request.id}`}
                                                         className="rounded-lg object-cover cursor-pointer"
                                                         onClick={() => handleImageClick(image)}
                                                     />
+                                                    
                                                     <button
                                                         onClick={() =>
                                                             handleImageChange(
