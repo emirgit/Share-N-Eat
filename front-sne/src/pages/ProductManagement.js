@@ -10,6 +10,7 @@ import Milk from '../assets/Milk.jpg';
 import tavukPilav from '../assets/tavukPilav.png';
 import ramen from '../assets/ramen.jpeg';
 import axiosHelper from "../axiosHelper";
+import { categories } from '../components/CategoriesSection';
 
 const ProductManagement = () => {
 
@@ -27,7 +28,7 @@ const ProductManagement = () => {
             imageUrl1:Milk,
             imageUrl2:tavukPilav,
             imageUrl3:ramen,
-            description: 'mr muscle ava cikti',
+            description: 'description',
             
         }
     ]);
@@ -377,51 +378,87 @@ const ProductManagement = () => {
                                             ))}
                                         </Slider>
                                     </div>
+                                    {/* Product Information */}
                                     <div className="flex-1 sm:ml-4">
                                         <h3 className="font-semibold">{request.name}</h3>
                                         <p className="text-gray-600">
                                             {request.category} - {request.quantity} g/ml
                                         </p>
+
+                                        {/* Nutrition Facts Section */}
                                         <div className="text-gray-600 text-sm">
-                                                <div className="flex items-center mb-2">
-                                                    <span>Brand:</span>
-                                                    <input
-                                                        type="text"
-                                                        value={request.brand}
-                                                        onChange={(e) =>
-                                                            handleProductAttributeChange(request.id, 'brand', e.target.value)
-                                                        }
-                                                        className="ml-2 border rounded px-1"
-                                                    />
-                                                </div>
-                                            {[request.proteinGrams, request.carbonhydrateGrams, request.fatGrams].map((macro) => (
-                                                <div key={macro} className="flex items-center mb-2">
-                                                    <span className="capitalize">{macro}:</span>
+                                            {/* Brand */}
+                                            <div className="flex items-center mb-2">
+                                                <span>Brand:</span>
+                                                <input
+                                                    type="text"
+                                                    value={request.brand}
+                                                    onChange={(e) =>
+                                                        handleProductAttributeChange(request.id, 'brand', e.target.value)
+                                                    }
+                                                    className="ml-2 border rounded px-1"
+                                                />
+                                            </div>
+
+                                            {/* Categories Dropdown */}
+                                            <div className="flex items-center mb-2">
+                                                <span>Category:</span>
+                                                <select
+                                                    value={request.category}
+                                                    onChange={(e) =>
+                                                        handleProductAttributeChange(request.id, 'category', e.target.value)
+                                                    }
+                                                    className="ml-2 border rounded px-2"
+                                                >
+                                                    {categories.map((cat, idx) => (
+                                                        <option key={idx} value={cat.name}>
+                                                            {cat.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            {/* Macronutrients */}
+                                            {[
+                                                [request.proteinGrams, 'protein'],
+                                                [request.carbonhydrateGrams, 'carbs'],
+                                                [request.fatGrams, 'fat'],
+                                            ].map(([value, name]) => (
+                                                <div key={name} className="flex items-center mb-2">
+                                                    <span className="capitalize">{name}:</span>
                                                     <input
                                                         type="number"
-                                                        value={macro}
+                                                        value={value}
                                                         onChange={(e) =>
-                                                            handleEditMacros(request.id, macro, e.target.value)
+                                                            handleEditMacros(request.id, name, e.target.value)
                                                         }
                                                         className="ml-2 w-16 border rounded px-1"
                                                     />
                                                     g
                                                 </div>
                                             ))}
+
+                                            {/* Calories */}
                                             <div className="flex items-center mb-2">
                                                 <span>Calories:</span>
                                                 <input
                                                     type="number"
                                                     value={request.calories}
-                                                    onChange={(e) =>
-                                                        handleEditCalories(request.id, e.target.value)
-                                                    }
+                                                    onChange={(e) => handleEditCalories(request.id, e.target.value)}
                                                     className="ml-2 w-16 border rounded px-1"
                                                 />
                                             </div>
                                         </div>
-                                        <p className="text-gray-500 italic">"{request.description}"</p>
+
+                                        
                                     </div>
+
+                                    {/* Description Section */}
+                                    <div className="flex-1 mt-4">
+                                        <h4 className="text-sm font-semibold">Description</h4>
+                                        <p className="text-gray-500 italic mt-1">"{request.description}"</p>
+                                    </div>
+
                                     <div className="flex flex-col space-y-2 sm:mt-0 sm:ml-4">
                                         <button
                                             onClick={() => handleAcceptRequest(request.id)}
