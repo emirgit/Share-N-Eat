@@ -4,6 +4,7 @@ import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
+import gtu.codybuilders.shareneat.dto.UploadProductDTO;
 import gtu.codybuilders.shareneat.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -76,10 +77,19 @@ public class ProductController {
         productService.createProduct(productRequestDTO, file);
     }
 
+//    @PostMapping(PathConstants.PRODUCT_REQUEST)
+//    @ResponseStatus(code = HttpStatus.CREATED)
+//    public void createAddProductRequest(@Valid @ModelAttribute AdminProductRequestRequestDTO adminProductRequestRequestDTO, @RequestPart("file") MultipartFile file){
+//        productService.createAddProductRequest(adminProductRequestRequestDTO, file);
+//    }
+
     @PostMapping(PathConstants.PRODUCT_REQUEST)
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createAddProductRequest(@Valid @ModelAttribute AdminProductRequestRequestDTO adminProductRequestRequestDTO, @RequestPart("file") MultipartFile file){
-        productService.createAddProductRequest(adminProductRequestRequestDTO, file);
+    public void createAddProductRequest(@Valid @ModelAttribute UploadProductDTO uploadProductDTO,
+                                        @RequestPart("image1") MultipartFile image,
+                                        @RequestPart("image2") MultipartFile contentImage,
+                                        @RequestPart("image3") MultipartFile macrotableImage){
+        productService.createAddProductRequest(uploadProductDTO, image, contentImage, macrotableImage);
     }
 
 

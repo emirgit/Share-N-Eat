@@ -59,10 +59,10 @@ const ProductManagement = () => {
                     })
                 );
                 console.log(productRequestsWithImages)
-                //setRequests(productRequestsWithImages);
+                setRequests(productRequestsWithImages);
             } catch (error) {
                 console.error('Error fetching product requests:', error);
-                // setError('Failed to load product requests. Please try again later.');
+                //setError('Failed to load product requests. Please try again later.');
             }
         };
 

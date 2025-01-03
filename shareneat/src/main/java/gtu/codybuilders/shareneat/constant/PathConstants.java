@@ -57,13 +57,13 @@ public class PathConstants {
 
     // Image processing path
 
-    private static final Path RESOURCES_DIR = Paths.get(System.getProperty("user.dir"),"src", "main", "resources");
+    private static final Path RESOURCES_DIR = Paths.get(System.getProperty("user.dir"),"shareneat","src", "main", "resources");
 
     public static final Path TESSDATA_PATH = RESOURCES_DIR.resolve("tessdata");
 
 
     //image upload paths
-    private static final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"),"src", "main", "resources", "static", "images");
+    private static final Path UPLOAD_DIR = Paths.get(System.getProperty("user.dir"),"shareneat","src", "main", "resources", "static", "images");
 
     public static final Path UPLOAD_DIR_DEFAULT = UPLOAD_DIR.resolve("default");
 

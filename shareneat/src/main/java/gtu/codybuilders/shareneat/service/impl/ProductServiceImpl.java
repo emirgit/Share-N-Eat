@@ -4,15 +4,17 @@ import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
+import gtu.codybuilders.shareneat.dto.UploadProductDTO;
 import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
-import gtu.codybuilders.shareneat.model.AdminProductRequest;
-import gtu.codybuilders.shareneat.model.ImageUrl;
-import gtu.codybuilders.shareneat.model.Product;
+import gtu.codybuilders.shareneat.exception.UserNotFoundException;
+import gtu.codybuilders.shareneat.model.*;
 import gtu.codybuilders.shareneat.repository.AdminProductRequestRepository;
 import gtu.codybuilders.shareneat.repository.ProductRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
+import gtu.codybuilders.shareneat.service.ImageProcessingService;
 import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.ProductService;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
@@ -141,6 +143,45 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void createAddProductRequest(UploadProductDTO uploadProductDTO,
+                                        MultipartFile image,
+                                        MultipartFile contentImage,
+                                        MultipartFile macrotableImage) {
+
+        AdminProductRequest adminProductRequest = new AdminProductRequest();
+        adminProductRequest.setName(uploadProductDTO.getName());
+        adminProductRequest.setBrand(uploadProductDTO.getBrand());
+        adminProductRequest.setCategory(uploadProductDTO.getCategory());
+        adminProductRequest.setRequestTime(Instant.now());
+        //User user = userRepository.findById(AuthUtil.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        //adminProductRequest.setUser(user);
+
+        try {
+            String imageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+            String contentImageUrl = imageService.saveImage(contentImage, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+            String macrotableImageUrl = imageService.saveImage(macrotableImage, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+
+            adminProductRequest.setImageUrl(imageUrl);
+
+            ImageProcessingService imageProcessingService = new ImageProcessingServiceImpl();
+            NutritionInfo nutritionInfo = imageProcessingService.parseImages(macrotableImageUrl, contentImageUrl);
+
+            adminProductRequest.setDescription(nutritionInfo.getContent());
+            adminProductRequest.setCalories(nutritionInfo.getCalories());
+            adminProductRequest.setProteinGrams(nutritionInfo.getProteinGrams());
+            adminProductRequest.setCarbonhydrateGrams(nutritionInfo.getCarbonhydrateGrams());
+            adminProductRequest.setFatGrams(nutritionInfo.getFatGrams());
+            adminProductRequest.setQuantity(100.0);
+
+        } catch (IOException e) {
+            System.out.println("Error saving image");
+        }
+
+        adminProductRequestRepository.save(adminProductRequest);
+    }
+
+/*
+    @Override
     public void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, MultipartFile file) {
         AdminProductRequest adminProductRequest = new AdminProductRequest();
         adminProductRequest.setName(adminProductRequestRequestDTO.getName());
@@ -171,7 +212,7 @@ public class ProductServiceImpl implements ProductService {
 
         adminProductRequestRepository.save(adminProductRequest);
     }
-
+*/
 
     @Override
     public void deleteProduct(long productId){
