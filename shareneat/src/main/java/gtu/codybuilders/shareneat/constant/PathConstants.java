@@ -57,7 +57,7 @@ public class PathConstants {
 
     // Image processing path
 
-    private static final Path RESOURCES_DIR = Paths.get(System.getProperty("user.dir"), "shareneat","src", "main", "resources");
+    private static final Path RESOURCES_DIR = Paths.get(System.getProperty("user.dir"),"src", "main", "resources");
 
     public static final Path TESSDATA_PATH = RESOURCES_DIR.resolve("tessdata");
 
