@@ -1,9 +1,11 @@
 // src/pages/UserProfilePage.js
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import axiosHelper from '../axiosHelper';
 import RecipeCard from '../components/RecipeCard';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 function UserProfilePage({ currentUsername, viewUsername }) {
   // The user being viewed
@@ -23,10 +25,13 @@ function UserProfilePage({ currentUsername, viewUsername }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
 
-  // Posts for the user being viewed
+  // Pagination-related state
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [postsError, setPostsError] = useState(null);
+  const [page, setPage] = useState(0);
+  const [size] = useState(3); // Adjust size as needed
+  const [hasMore, setHasMore] = useState(true);
 
   // Maps backend role to a user-friendly label
   const getDisplayRole = (role) => {
@@ -86,25 +91,46 @@ function UserProfilePage({ currentUsername, viewUsername }) {
     }
   }, [viewUsername]);
 
-  // Fetch posts from /posts/by-user/:viewUsername
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setPostsLoading(true);
-        const fetchedPosts = await axiosHelper(`/posts/by-user/${viewUsername}`, 'GET');
-        setPosts(fetchedPosts);
-      } catch (err) {
-        console.error('Error fetching posts:', err);
-        setPostsError('Failed to load posts.');
-      } finally {
-        setPostsLoading(false);
+  // Fetch posts function
+  const fetchPosts = async () => {
+    try {
+      setPostsLoading(true);
+      const fetchedPosts = await axiosHelper(
+        `/posts/by-user/${viewUsername}/range?page=${page}&size=${size}`,
+        'GET'
+      );
+      setPosts((prevPosts) => [...prevPosts, ...fetchedPosts]);
+      if (fetchedPosts.length < size) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
       }
-    };
+      setPostsLoading(false);
+    } catch (err) {
+      console.error('Error fetching posts:', err);
+      setPostsError('Failed to load posts.');
+      setPostsLoading(false);
+    }
+  };
 
+  // Fetch posts when page or viewUsername changes
+  useEffect(() => {
     if (viewUsername) {
       fetchPosts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, viewUsername]);
+
+  // Reset posts when viewUsername changes
+  useEffect(() => {
+    setPage(0);
+    setPosts([]);
+    setHasMore(true);
   }, [viewUsername]);
+
+  const loadMorePosts = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   // Follow/Unfollow logic
   const handleFollowToggle = async () => {
@@ -202,21 +228,34 @@ function UserProfilePage({ currentUsername, viewUsername }) {
           {/* Posts Section */}
           <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8">
             <h2 className="text-2xl font-semibold mb-4">Posts</h2>
-            {postsLoading && <p className="text-center text-gray-500">Loading posts...</p>}
             {postsError && <p className="text-center text-red-500">{postsError}</p>}
-            {!postsLoading && !postsError && posts.length === 0 && (
-              <p className="text-center text-gray-500">No posts available.</p>
+
+            {posts.length > 0 ? (
+              <InfiniteScroll
+                dataLength={posts.length}
+                next={loadMorePosts}
+                hasMore={hasMore}
+                loader={<p className="text-center text-gray-500">Loading more posts...</p>}
+                endMessage={<p className="text-center text-gray-500">No more posts available.</p>}
+              >
+                <div className="space-y-4">
+                  {posts.map((post) => (
+                    <RecipeCard
+                      key={post.id}
+                      post={post}
+                      currentUsername={currentUsername}
+                    />
+                  ))}
+                </div>
+              </InfiniteScroll>
+            ) : (
+              !postsLoading && (
+                <p className="text-center text-gray-500">No posts available.</p>
+              )
             )}
-            {!postsLoading && !postsError && posts.length > 0 && (
-              <div className="space-y-4">
-                {posts.map((post) => (
-                  <RecipeCard
-                    key={post.id}
-                    post={post}
-                    currentUsername={currentUsername}
-                  />
-                ))}
-              </div>
+
+            {postsLoading && page === 0 && (
+              <p className="text-center text-gray-500">Loading posts...</p>
             )}
           </div>
         </div>
