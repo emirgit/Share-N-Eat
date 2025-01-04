@@ -47,6 +47,8 @@ public class PathConstants {
     public static final String CURRENT_USER = "/current-user";
     public static final String GET_IMAGE_BY_POST_ID = GET_IMAGE + POST_ID;
     public static final String CURRENT_USER_RANGE = CURRENT_USER + RANGE;
+    public static final String CURRENT_USER_TRENDINGS = CURRENT_USER + "/trendings";
+    public static final String CURRENT_USER_FOLLOWINGS = CURRENT_USER + "/followings";
     public static final String BY_USER_USERNAME = BY_USER + USERNAME;
     public static final String BY_USER_USERNAME_RANGE = BY_USER_USERNAME + RANGE;
 

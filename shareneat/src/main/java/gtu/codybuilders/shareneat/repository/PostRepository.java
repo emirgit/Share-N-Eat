@@ -20,7 +20,10 @@ public interface PostRepository extends JpaRepository<Post, Long> , JpaSpecifica
     List<Post> findAllByUser(User user);
 
     @Query("SELECT p FROM Post p WHERE p.user.userId IN (SELECT f.followed.userId FROM Follow f WHERE f.follower.userId = :userId)")
-    List<Post> findPostsByFollowedUsers(@Param("userId") Long userId, Pageable pageable);
+    Page<Post> findPostsByFollowedUsers(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("SELECT p FROM Post p ORDER BY p.likeCount DESC")
+    List<Post> findTop20ByOrderByLikeCountDesc(Pageable pageable);
 
     @Query("SELECT p FROM Post p ORDER BY p.averageRateRegular DESC")
     List<Post> findTop20ByOrderByAverageRateRegularDesc(Pageable pageable);

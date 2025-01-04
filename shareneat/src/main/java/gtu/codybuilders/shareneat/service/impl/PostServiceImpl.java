@@ -160,60 +160,83 @@ public class PostServiceImpl implements PostService{
     }
 
 
-
-    
     @Override
-    public List<PostResponse> getPostsForUser() {
+    public List<PostResponse> getPostsForUserTrendings(Pageable pageable) {
         Long userId = AuthUtil.getUserId();
     
         // Step 1: Get the current user
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
-        // Step 2: Fetch posts from followeds (limit 2)
-        List<Post> followedPosts = postRepository.findPostsByFollowedUsers(currentUser.getUserId(), PageRequest.of(0, MAIN_PAGE_POST_LOAD_FROM_FOLLOWED_SIZE));
     
-        // Step 3: Track selected post IDs to avoid duplicates across all sources
-        Set<Long> selectedPostIds = followedPosts.stream()
-                .map(Post::getPostId)
-                .collect(Collectors.toSet());
+        // Track selected post IDs to avoid duplicates
+        Set<Long> selectedPostIds = new HashSet<>();
+        
+        //Track the posts that are already selected based on pageable
+        int mainPageSize = pageable.getPageSize();
+        int mainPageNumber = pageable.getPageNumber();
+
+        // Step 2: Fetch most liked posts
+        // Calculate the offset dynamically based on the main pageable's pageNumber
+        Pageable mostLikedPageable = PageRequest.of(mainPageNumber, 20); // Offset depends on main pageable
+        List<Post> mostLikedPosts = postRepository.findTop20ByOrderByLikeCountDesc(mostLikedPageable);
     
-        // Step 4: Fetch the top 20 highest-rated posts for both regular and expert ratings, and ensure no overlap with followedPosts
-        List<Post> topRatedRegularPosts = postRepository.findTop20ByOrderByAverageRateRegularDesc(PageRequest.of(0, 20)); //HARD CODED 20 FOR NOW
-        List<Post> topRatedExpertPosts = postRepository.findTop20ByOrderByAverageRateExpertDesc(PageRequest.of(0, 20)); //HARD CODED 20 FOR NOW
+        Collections.shuffle(mostLikedPosts);
+        List<Post> selectedMostLikedPosts = mostLikedPosts.stream()
+                .filter(post -> selectedPostIds.add(post.getPostId()))
+                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_LIKED_SIZE) // Pick 2 posts
+                .collect(Collectors.toList());
+    
+        // Step 3: Fetch top rated posts (regular and expert)
+        Pageable topRatedPageable = PageRequest.of(mainPageNumber, 20); // Adjusted based on main pageable
+        List<Post> topRatedRegularPosts = postRepository.findTop20ByOrderByAverageRateRegularDesc(topRatedPageable);
+        List<Post> topRatedExpertPosts = postRepository.findTop20ByOrderByAverageRateExpertDesc(topRatedPageable);
     
         Collections.shuffle(topRatedRegularPosts);
         Collections.shuffle(topRatedExpertPosts);
     
         List<Post> randomTopRatedRegularPosts = topRatedRegularPosts.stream()
-                .filter(post -> selectedPostIds.add(post.getPostId())) // Only add unique posts
-                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_RATED_REGULAR_SIZE)
+                .filter(post -> selectedPostIds.add(post.getPostId()))
+                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_RATED_REGULAR_SIZE) // Pick 2 post
                 .collect(Collectors.toList());
     
         List<Post> randomTopRatedExpertPosts = topRatedExpertPosts.stream()
-                .filter(post -> selectedPostIds.add(post.getPostId())) // Only add unique posts
-                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_RATED_EXPERT_SIZE)
+                .filter(post -> selectedPostIds.add(post.getPostId()))
+                .limit(MAIN_PAGE_POST_LOAD_RANDOM_MOST_RATED_EXPERT_SIZE) // Pick 2 post
                 .collect(Collectors.toList());
     
-        // Step 5: Fetch remaining random posts from the last 100, ensuring no duplicates
+        // Step 4: Fetch remaining random posts
         List<Post> recentPosts = postRepository.findTop100ByOrderByCreatedDateDesc();
         Collections.shuffle(recentPosts);
     
-        int remainingCount = MAIN_PAGE_POST_LOAD_SIZE - followedPosts.size() - randomTopRatedRegularPosts.size() - randomTopRatedExpertPosts.size();
+        int totalSelectedSize = selectedMostLikedPosts.size() + randomTopRatedRegularPosts.size() + randomTopRatedExpertPosts.size();
+        int remainingCount = mainPageSize - totalSelectedSize;
+    
         List<Post> randomPosts = recentPosts.stream()
-                .filter(post -> selectedPostIds.add(post.getPostId())) // Only add unique posts
-                .limit(remainingCount)
+                .filter(post -> selectedPostIds.add(post.getPostId()))
+                .limit(Math.max(remainingCount, 0)) // Ensure no negative limit
                 .collect(Collectors.toList());
     
-        // Combine all posts into a single list
-        List<Post> selectedPosts = new ArrayList<>(followedPosts);
+        // Combine all posts
+        List<Post> selectedPosts = new ArrayList<>(selectedMostLikedPosts);
         selectedPosts.addAll(randomTopRatedRegularPosts);
         selectedPosts.addAll(randomTopRatedExpertPosts);
         selectedPosts.addAll(randomPosts);
+        Collections.shuffle(selectedPosts);
     
         // Map posts to response DTOs
         return selectedPosts.stream()
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<PostResponse> getPostsForUserFollowings(Pageable pageable) {
+        Long userId = AuthUtil.getUserId();
+        User currentUser = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        return postRepository.findPostsByFollowedUsers(userId, pageable)
+                .map(postMapper::mapToPostResponse);
     }
 
     public Page<PostResponse> searchPosts(String query, Pageable pageable) {

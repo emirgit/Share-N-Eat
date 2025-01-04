@@ -7,6 +7,10 @@ import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -82,10 +86,22 @@ public class PostController {
     }
 
 
-    @GetMapping(PathConstants.CURRENT_USER)
-    public ResponseEntity<List<PostResponse>> getPostsForUser() {
-        List<PostResponse> posts = postService.getPostsForUser();
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    @GetMapping(PathConstants.CURRENT_USER_TRENDINGS)
+    public ResponseEntity<List<PostResponse>> getPostsForUserTrendings(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+            Pageable pageable = PageRequest.of(page, size);
+            List<PostResponse> posts = postService.getPostsForUserTrendings(pageable);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @GetMapping(PathConstants.CURRENT_USER_FOLLOWINGS)
+    public ResponseEntity<Page<PostResponse>> getPostsForUserFollowings(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+            Page<PostResponse> posts = postService.getPostsForUserFollowings(pageable);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping(PathConstants.FILTER)
