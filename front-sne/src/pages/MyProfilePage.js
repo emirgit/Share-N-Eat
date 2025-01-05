@@ -1,5 +1,7 @@
 // src/pages/MyProfilePage.js
+
 import React, { useState, useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,10 +10,6 @@ import axiosHelper from '../axiosHelper';
 import RecipeCard from '../components/RecipeCard';
 
 function MyProfilePage({ currentUsername }) {
-  // This username is guaranteed to be the logged-in user's
-  // so you can use it if needed, e.g., for validating data
-
-  // Holds the user data for the current (logged-in) user
   const [user, setUser] = useState({
     username: '',
     role: '',
@@ -27,9 +25,13 @@ function MyProfilePage({ currentUsername }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Posts-related state
   const [posts, setPosts] = useState([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [postsError, setPostsError] = useState(null);
+  const [page, setPage] = useState(0);
+  const [size] = useState(3); // Size set to 3 as requested
+  const [hasMore, setHasMore] = useState(true);
 
   // Maps backend role to a user-friendly label
   const getDisplayRole = (role) => {
@@ -77,25 +79,47 @@ function MyProfilePage({ currentUsername }) {
     fetchUserData();
   }, []);
 
-  // Fetch posts by the current user
+  // Fetch initial posts
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setPostsLoading(true);
-        const fetchedPosts = await axiosHelper(`/posts/by-user/${currentUsername}`, 'GET');
-        setPosts(fetchedPosts);
-      } catch (err) {
-        console.error('Error fetching posts:', err);
-        setPostsError('Failed to load posts.');
-      } finally {
-        setPostsLoading(false);
-      }
-    };
-
     if (currentUsername) {
       fetchPosts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUsername]);
+
+  // Function to fetch posts
+  const fetchPosts = async () => {
+    try {
+        setPostsLoading(true);
+      const fetchedPosts = await axiosHelper(
+        `/posts/current-user/range?page=${page}&size=${size}`,
+        'GET'
+      );
+      // Append new posts to existing ones
+      setPosts((prevPosts) => [...prevPosts, ...fetchedPosts]);
+      // If the number of fetched posts is less than the requested size, there's no more data
+      if (fetchedPosts.length < size) {
+        setHasMore(false);
+      }
+      setPostsLoading(false);
+    } catch (err) {
+      console.error('Error fetching posts:', err);
+      setPostsError('Failed to load posts.');
+      setPostsLoading(false);
+    }
+  };
+
+  const loadMorePosts = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  // Fetch more posts when page changes
+  useEffect(() => {
+    if (page > 0) {
+      fetchPosts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -239,23 +263,27 @@ function MyProfilePage({ currentUsername }) {
           {/* Posts Section */}
           <div className="w-full max-w-4xl bg-white rounded-3xl shadow-md p-8">
             <h2 className="text-2xl font-semibold mb-4">Posts</h2>
-            {postsLoading && <p className="text-center text-gray-500">Loading posts...</p>}
             {postsError && <p className="text-center text-red-500">{postsError}</p>}
 
-            {!postsLoading && !postsError && posts.length === 0 && (
-              <p className="text-center text-gray-500">No posts available.</p>
-            )}
-
-            {!postsLoading && !postsError && posts.length > 0 && (
+            <InfiniteScroll
+              dataLength={posts.length}
+              next={loadMorePosts}
+              hasMore={hasMore}
+              loader={<p className="text-center text-gray-500">Loading more posts...</p>}
+              endMessage={<p className="text-center text-gray-500">No more new posts.</p>}
+            >
               <div className="space-y-4">
                 {posts.map((post) => (
-                  <RecipeCard
-                    key={post.id}
-                    post={post}
-                    currentUsername={currentUsername}
-                  />
+                  <RecipeCard key={post.id} post={post} currentUsername={currentUsername} />
                 ))}
               </div>
+            </InfiniteScroll>
+
+            {postsLoading && page === 0 && (
+              <p className="text-center text-gray-500">Loading posts...</p>
+            )}
+            {!postsLoading && posts.length === 0 && (
+              <p className="text-center text-gray-500">No posts available.</p>
             )}
           </div>
         </div>

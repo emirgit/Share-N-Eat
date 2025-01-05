@@ -401,7 +401,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserManagementDTO> getUsersForManagement(String search, String role, String status, Pageable pageable) {
         Specification<User> spec = Specification.where(null);
-        System.out.println(role);
         if (search != null && !search.isEmpty()) {
             spec = spec.and((root, query, cb) ->
                     cb.or(
@@ -412,6 +411,8 @@ public class UserServiceImpl implements UserService {
         }
 
         if (role != null && !role.isEmpty()) {
+            System.out.println(role);
+            System.out.println(role.toUpperCase());
             Role roleEnum = Role.valueOf("ROLE_" + role.toUpperCase());
             spec = spec.and((root, query, cb) -> cb.equal(root.get("role"), roleEnum));
         }
@@ -429,6 +430,7 @@ public class UserServiceImpl implements UserService {
     public UserManagementDTO convertToUserManagementDTO(User user) {
         return UserManagementDTO.builder()
                 .id(user.getUserId())
+
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .role(user.getRole().toString().replace("ROLE_", "").toLowerCase())

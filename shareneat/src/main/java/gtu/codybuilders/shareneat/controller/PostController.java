@@ -73,15 +73,21 @@ public class PostController {
 
     //current user profile page feed
     @GetMapping(PathConstants.CURRENT_USER_RANGE)
-    public ResponseEntity<List<PostResponse>> getPostsForCurrentUserInRange(@RequestParam int page) {
-        List<PostResponse> posts = postService.getPostsForCurrentUserInRange(page);
+    public ResponseEntity<List<PostResponse>> getPostsForCurrentUserInRange(
+            @RequestParam int page,
+            @RequestParam int size) {
+        List<PostResponse> posts = postService.getPostsForCurrentUserInRange(page, size);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+
     //user profile page feed
     @GetMapping(PathConstants.BY_USER_USERNAME_RANGE)
-    public ResponseEntity<List<PostResponse>> getPostsByUsernameInRange(@PathVariable String username, @RequestParam int page) {
-        List<PostResponse> posts = postService.getPostsByUsernameInRange(username, page);
+    public ResponseEntity<List<PostResponse>> getPostsByUsernameInRange(
+            @PathVariable String username,
+            @RequestParam int page,
+            @RequestParam int size) {
+        List<PostResponse> posts = postService.getPostsByUsernameInRange(username, page, size);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 

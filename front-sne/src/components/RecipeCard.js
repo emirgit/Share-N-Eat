@@ -186,7 +186,7 @@ const RecipeCard = ({ post, currentUsername }) => {
                         <RatingComponent
                             postId={postId}
                             isExpertRating={true}
-                            isReadOnly={!isUser} // If the user has ROLE_USER, they cannot rate as expert
+                            isReadOnly={isUser} // If the user has ROLE_USER, they cannot rate as expert
                             initialAverage={averageRateExpert}
                             initialTotalRaters={totalRatersExpert}
                             currentUserRole={currentUserRole}

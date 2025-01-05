@@ -136,24 +136,30 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostResponse> getPostsByUsernameInRange(String username, int page) {
+    public List<PostResponse> getPostsByUsernameInRange(String username, int page, int size) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        // Fetch posts for the specified user with pagination
+        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(page, size));
 
-        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(page, PROFILE_PAGE_POST_LOAD_SIZE));
-
+        // Map posts to PostResponse objects
         return posts.stream()
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public List<PostResponse> getPostsForCurrentUserInRange(int page) {
+    public List<PostResponse> getPostsForCurrentUserInRange(int page, int size) {
         Long userId = AuthUtil.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
-        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(page, PROFILE_PAGE_POST_LOAD_SIZE));
+        // Fetch posts for the user with pagination
+        List<Post> posts = postRepository.findByUserOrderByCreatedDateDesc(user, PageRequest.of(page, size));
+
+        // Map posts to PostResponse objects
         return posts.stream()
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
