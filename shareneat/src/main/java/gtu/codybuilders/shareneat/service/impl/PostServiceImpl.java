@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -165,7 +166,7 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
     }
 
-
+/* 
     @Override
     public List<PostResponse> getPostsForUserTrendings(Pageable pageable) {
         Long userId = AuthUtil.getUserId();
@@ -234,6 +235,26 @@ public class PostServiceImpl implements PostService{
                 .map(postMapper::mapToPostResponse)
                 .collect(Collectors.toList());
     }
+*/
+
+    @Override
+    public Page<PostResponse> getPostsForUserTrendings(Pageable pageable) {
+        Long userId = AuthUtil.getUserId();
+        User currentUser = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        // Fetch posts sorted by likeCount, averageRateRegular, and averageRateExpert
+        Page<Post> posts = postRepository.findAllByOrderByLikeCountDescAverageRateRegularDescAverageRateExpertDesc(pageable);
+
+        // Map to PostResponse DTOs
+        List<PostResponse> postResponses = posts.getContent().stream()
+            .map(postMapper::mapToPostResponse)
+            .collect(Collectors.toList());
+
+        // Return as Page
+        return new PageImpl<>(postResponses, pageable, posts.getTotalElements());
+    }
+
 
     @Override
     public Page<PostResponse> getPostsForUserFollowings(Pageable pageable) {

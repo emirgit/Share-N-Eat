@@ -31,6 +31,8 @@ public interface PostRepository extends JpaRepository<Post, Long> , JpaSpecifica
     @Query("SELECT p FROM Post p ORDER BY p.averageRateExpert DESC")
     List<Post> findTop20ByOrderByAverageRateExpertDesc(Pageable pageable);
 
+    Page<Post> findAllByOrderByLikeCountDescAverageRateRegularDescAverageRateExpertDesc(Pageable pageable);
+
     List<Post> findTop100ByOrderByCreatedDateDesc();
 
     Page<Post> findByPostNameContainingIgnoreCase(String postName, Pageable pageable);

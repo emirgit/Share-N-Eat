@@ -93,11 +93,11 @@ public class PostController {
 
 
     @GetMapping(PathConstants.CURRENT_USER_TRENDINGS)
-    public ResponseEntity<List<PostResponse>> getPostsForUserTrendings(
+    public ResponseEntity<Page<PostResponse>> getPostsForUserTrendings(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
             Pageable pageable = PageRequest.of(page, size);
-            List<PostResponse> posts = postService.getPostsForUserTrendings(pageable);
+            Page<PostResponse> posts = postService.getPostsForUserTrendings(pageable);
             return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 

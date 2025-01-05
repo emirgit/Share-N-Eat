@@ -18,7 +18,7 @@ public interface PostService {
     List<PostResponse> getAllPosts(); 
     PostResponse getPostById(Long postId);   
     List<PostResponse> getAllPostsByUser(String username);  
-    List<PostResponse> getPostsForUserTrendings(Pageable pageable);
+    Page<PostResponse> getPostsForUserTrendings(Pageable pageable);
     Page<PostResponse> getPostsForUserFollowings(Pageable pageable);
     Page<PostResponse> searchPosts(String query, Pageable pageable);
     String returnProfilePhoto();
