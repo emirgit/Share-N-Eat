@@ -7,62 +7,88 @@ import { faRecycle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Milk from '../assets/Milk.jpg';
-import tavukPilav from '../assets/tavukPilav.png';
-import ramen from '../assets/ramen.jpeg';
+// import tavukPilav from '../assets/tavukPilav.png';
+// import ramen from '../assets/ramen.jpeg';
 import axiosHelper from "../axiosHelper";
 import { categories } from '../components/CategoriesSection';
 
 const ProductManagement = () => {
 
     const [requests, setRequests] = useState([
-        {
-            id: 2,
-            name: 'Milk',
-            brand: 'Sutas',
-            category: 'Dairy',
-            quantity: 1000,
-            proteinGrams:3,
-            carbonhydrateGrams:5,
-            fatGrams:2,
-            calories: 50,
-            imageUrl1:Milk,
-            imageUrl2:tavukPilav,
-            imageUrl3:ramen,
-            description: 'description',
-            
-        }
+        // {
+        //     id: 2,
+        //     name: 'Milk',
+        //     brand: 'Sutas',
+        //     category: 'Dairy',
+        //     quantity: 1000,
+        //     proteinGrams:3,
+        //     carbonhydrateGrams:5,
+        //     fatGrams:2,
+        //     calories: 50,
+        //     images: [Milk,Milk,Milk],
+        //     description: 'description',
+        // }
     ]);
 
-    const [products, setProducts] = useState([
-        {
-            id: 1,
-            name: 'Milk',
-            brand: 'İcim',
-            category: 'Dairy',
-            quantity: 1000,
-            macronutrients: { protein: 3, carbs: 5, fat: 2, sugar: 4 },
-            calories: 50,
-            images: [Milk,Milk],
-        },
-    ]);
+    const [products, setProducts] = useState([]);
+
+    //done
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const allProducts = await axiosHelper('/products/getAll');
+                //console.log(allProducts);
+                const productsWithImages = await Promise.all(
+                    allProducts.map(async (product) => {
+                        const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, {responseType: 'blob'});
+                        const imageUrl = URL.createObjectURL(imageResponse);
+                        return {...product, imageUrl};
+                    })
+                );
+                setProducts(productsWithImages);
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+
+    // useEffect(() => {
+    //     const fetchProductRequests = async () => {
+    //         try {
+    //             const allProductRequests = await axiosHelper('/admin/product-requests', 'GET');
+    //             const productRequestsWithImages = await Promise.all(
+    //                 allProductRequests.map(async (request) => {
+    //                     const imagesResponse = await axiosHelper(`/admin/product-requests/getImages/${request.id}`, 'GET', null, { responseType: 'json' });
+    //                     const images = imagesResponse.map(image => URL.createObjectURL(new Blob([new Uint8Array(image)])));
+    //                     return { ...request, images };
+    //                 })
+    //             );
+    //             setRequests(productRequestsWithImages);
+    //         } catch (error) {
+    //             console.error('Error fetching product requests:', error);
+    //         }
+    //     };
+    //
+    //     fetchProductRequests();
+    // }, []);
 
     useEffect(() => {
         const fetchProductRequests = async () => {
             try {
                 const allProductRequests = await axiosHelper('/admin/product-requests', 'GET');
-                console.log(allProductRequests);
                 const productRequestsWithImages = await Promise.all(
                     allProductRequests.map(async (request) => {
-                        const imageResponse = await axiosHelper(`/admin/product-requests/getImage/${request.id}`, 'GET', null, { responseType: 'blob' });
-                        const imageUrl = URL.createObjectURL(imageResponse);
-                        return { ...request, imageUrl };
+                        const imagesResponse = await axiosHelper(`/admin/product-requests/getImages/${request.id}`, 'GET', null, { responseType: 'json' });
+                        const images = imagesResponse.map(image => URL.createObjectURL(new Blob([new Uint8Array(image)])));
+                        const [imageUrl, contentImageUrl, macrotableImageUrl] = images;
+                        return { ...request, imageUrl, contentImageUrl, macrotableImageUrl };
                     })
                 );
-                console.log(productRequestsWithImages)
                 setRequests(productRequestsWithImages);
             } catch (error) {
                 console.error('Error fetching product requests:', error);
-                //setError('Failed to load product requests. Please try again later.');
             }
         };
 
@@ -106,27 +132,44 @@ const ProductManagement = () => {
         );
     };
 
-    const handleAcceptRequest = (id) => {
+    const handleAcceptRequest = async (id) => {
         const acceptedRequest = requests.find((request) => request.id === id);
         if (acceptedRequest) {
-            setProducts([
-                ...products,
-                {
-                    id: products.length + 1,
-                    name: acceptedRequest.name,
-                    category: acceptedRequest.category,
-                    quantity: acceptedRequest.quantity,
-                    macronutrients: acceptedRequest.macronutrients,
-                    calories: acceptedRequest.calories,
-                    images: acceptedRequest.images,
-                },
-            ]);
-            setRequests(requests.filter((request) => request.id !== id));
+
+            const data = new FormData();
+            data.append('name', acceptedRequest.name);
+            data.append('brand', acceptedRequest.brand);
+            data.append('category', acceptedRequest.category);
+            data.append('content', acceptedRequest.description);
+            data.append('file', acceptedRequest.imageUrl);
+            data.append('quantity', acceptedRequest.quantity);
+
+            data.append('calories', acceptedRequest.calories);
+            data.append('proteinGrams', acceptedRequest.proteinGrams);
+            data.append('carbonhydrateGrams', acceptedRequest.carbonhydrateGrams);
+            data.append('fatGrams', acceptedRequest.fatGrams);
+
+
+            try {
+                const response = await axiosHelper('/admin/products', 'POST', data, {
+                    'Content-Type': 'multipart/form-data',
+                });
+                console.log('Product uploaded successfully:', response);
+            } catch (error) {
+                console.error('Error uploading product:', error);
+            }
+
         }
     };
 
-    const handleDenyRequest = (id) => {
-        setRequests(requests.filter((request) => request.id !== id));
+    //done
+    const handleDenyRequest = async (id) => {
+        try {
+            await axiosHelper(`/admin/product-requests/reject/${id}`, 'DELETE');
+            setRequests(requests.filter((request) => request.id !== id));
+        } catch (error) {
+            console.error('Failed to deny request:', error);
+        }
     };
 
     const handleEditMacros = (id, macroKey, newValue) => {
@@ -163,7 +206,16 @@ const ProductManagement = () => {
     };
 
 
-    const toggleEditMode = (id) => {
+    const toggleEditMode = async (id) => {
+        const productToUpdate = products.find((product) => product.id === id);
+        if (productToUpdate.isEditing) {
+            try {
+                await axiosHelper(`/admin/products/${id}`, 'PUT', productToUpdate);
+                console.log('Product updated successfully');
+            } catch (error) {
+                console.error('Failed to update product:', error);
+            }
+        }
         setProducts((prevProducts) =>
             prevProducts.map((product) =>
                 product.id === id
@@ -172,6 +224,17 @@ const ProductManagement = () => {
             )
         );
     };
+
+    // const toggleEditMode = (id) => {
+    //     setProducts((prevProducts) =>
+    //         prevProducts.map((product) =>
+    //             product.id === id
+    //                 ? { ...product, isEditing: !product.isEditing }
+    //                 : product
+    //         )
+    //     );
+    // };
+
 
     // Update product macros and attributes
     const handleProductAttributeChange = (id, attribute, value) => {
@@ -193,10 +256,16 @@ const ProductManagement = () => {
         );
     };
 
-    const handleRemoveProduct = (id) => {
+    //done
+    const handleRemoveProduct = async (id) => {
         const confirmed = window.confirm('Are you sure you want to delete this product?');
         if (confirmed) {
-            setProducts(products.filter((product) => product.id !== id));
+            try {
+                await axiosHelper(`/admin/products/${id}`, 'DELETE');
+                setProducts(products.filter((product) => product.id !== id));
+            } catch (error) {
+                console.error('Failed to deny request:', error);
+            }
         }
     };
 
@@ -213,19 +282,13 @@ const ProductManagement = () => {
                         <ul className="space-y-4">
                             {products.map((product) => (
                                 <li key={product.id} className="flex items-center space-x-4">
-                                    {/* Product Image Slider */}
                                     <div className="w-40">
-                                        <Slider {...sliderSettings}>
-                                            {product.images.map((image, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={image}
-                                                    alt={`Product ${product.id}`}
-                                                    className="rounded-lg object-cover cursor-pointer"
-                                                    onClick={() => handleImageClick(image)}
-                                                />
-                                            ))}
-                                        </Slider>
+                                        <img
+                                            src={product.imageUrl}
+                                            alt={`Product ${product.id}`}
+                                            className="rounded-lg object-cover cursor-pointer"
+                                            onClick={() => handleImageClick(product.imageUrl)}
+                                        />
                                     </div>
                                     {/* Product Info */}
                                     <div className="flex-1">
@@ -247,12 +310,12 @@ const ProductManagement = () => {
                                                         className="ml-2 border rounded px-1"
                                                     />
                                                 </div>
-                                                {['protein', 'carbs', 'fat', 'sugar'].map((macro) => (
+                                                {[product.proteinGrams, product.carbonhydrateGrams, product.fatGrams].map((macro) => (
                                                     <div key={macro} className="flex items-center mb-2">
                                                         <span className="capitalize">{macro}:</span>
                                                         <input
                                                             type="number"
-                                                            value={product.macronutrients[macro]}
+                                                            value={macro}
                                                             onChange={(e) =>
                                                                 handleProductAttributeChange(
                                                                     product.id,
@@ -299,10 +362,9 @@ const ProductManagement = () => {
                                             </div>
                                         ) : (
                                             <p className="text-gray-600 text-sm">
-                                                Protein: {product.macronutrients.protein}g, Carbs:{' '}
-                                                {product.macronutrients.carbs}g, Fat:{' '}
-                                                {product.macronutrients.fat}g, Sugar:{' '}
-                                                {product.macronutrients.sugar}g, Calories:{' '}
+                                                Protein: {product.proteinGrams}g, Carbs:{' '}
+                                                {product.carbonhydrateGrams}g, Fat:{' '}
+                                                {product.fatGrams}g, Calories:{' '}
                                                 {product.calories}
                                             </p>
                                         )}
@@ -341,7 +403,7 @@ const ProductManagement = () => {
                                 >
                                     <div className="w-40">
                                         <Slider {...sliderSettings}>
-                                            {[request.imageUrl1, request.imageUrl2, request.imageUrl3].map((image, index) => (
+                                            {[request.imageUrl, request.contentImageUrl, request.macrotableImageUrl].map((image, index) => (
                                                 <div key={index} className="relative">
                                                     <img
                                                         

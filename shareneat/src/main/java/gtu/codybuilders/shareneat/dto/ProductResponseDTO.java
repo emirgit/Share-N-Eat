@@ -25,6 +25,7 @@ public class ProductResponseDTO {
     private Double carbonhydrateGrams;
     private Double fatGrams;
     private Double sugarGrams;
+    private Double quantity;
 
     private Double rating;
     private Integer ratingCount;

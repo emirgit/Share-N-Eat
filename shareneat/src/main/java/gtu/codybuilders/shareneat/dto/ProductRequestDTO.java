@@ -14,8 +14,8 @@ public class ProductRequestDTO {
     private String name;
     private String brand;
     private String category;
-    private String imageUrl;
     private String content;
+    private String imageUrl;
 
     private Double quantity;
 
@@ -23,14 +23,5 @@ public class ProductRequestDTO {
     private Double proteinGrams;
     private Double carbonhydrateGrams;
     private Double fatGrams;
-    private Double sugarGrams;
-
-    private Integer numberOfComments;
-
-    private Double averageRateExpert = 0.0;
-    private Double averageRateRegular = 0.0;
-    private Integer totalRatersExpert = 0;
-    private Integer totalRatersRegular = 0;
-
 
 }

@@ -95,9 +95,8 @@ public class ProductServiceImpl implements ProductService {
             case "brand" -> Comparator.comparing(Product::getBrand);
             case "calories" -> Comparator.comparing(Product::getCalories);
             case "protein" -> Comparator.comparing(Product::getProteinGrams);
-            case "carbohydrates" -> Comparator.comparing(Product::getCarbonhydrateGrams);
+            case "carbonhydrates" -> Comparator.comparing(Product::getCarbonhydrateGrams);
             case "fat" -> Comparator.comparing(Product::getFatGrams);
-            case "sugar" -> Comparator.comparing(Product::getSugarGrams);
             case "rating" -> Comparator.comparing(Product::getRating);
             case "created" -> Comparator.comparing(Product::getCreated);
             default -> throw new IllegalArgumentException("Invalid sorting criteria: " + criteria);
@@ -162,6 +161,8 @@ public class ProductServiceImpl implements ProductService {
             String macrotableImageUrl = imageService.saveImage(macrotableImage, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
 
             adminProductRequest.setImageUrl(imageUrl);
+            adminProductRequest.setContentImageUrl(contentImageUrl);
+            adminProductRequest.setMacrotableImageUrl(macrotableImageUrl);
 
             ImageProcessingService imageProcessingService = new ImageProcessingServiceImpl();
             NutritionInfo nutritionInfo = imageProcessingService.parseImages(macrotableImageUrl, contentImageUrl);
@@ -180,40 +181,6 @@ public class ProductServiceImpl implements ProductService {
         adminProductRequestRepository.save(adminProductRequest);
     }
 
-/*
-    @Override
-    public void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, MultipartFile file) {
-        AdminProductRequest adminProductRequest = new AdminProductRequest();
-        adminProductRequest.setName(adminProductRequestRequestDTO.getName());
-        adminProductRequest.setBrand(adminProductRequestRequestDTO.getBrand());
-        adminProductRequest.setDescription(adminProductRequestRequestDTO.getDescription());
-        adminProductRequest.setCalories(adminProductRequestRequestDTO.getCalories());
-        adminProductRequest.setProteinGrams(adminProductRequestRequestDTO.getProteinGrams());
-        adminProductRequest.setCarbonhydrateGrams(adminProductRequestRequestDTO.getCarbonhydrateGrams());
-        adminProductRequest.setFatGrams(adminProductRequestRequestDTO.getFatGrams());
-        adminProductRequest.setSugarGrams(adminProductRequestRequestDTO.getSugarGrams());
-        adminProductRequest.setCategory(adminProductRequestRequestDTO.getCategory());
-        adminProductRequest.setQuantity(adminProductRequestRequestDTO.getQuantity());
-        adminProductRequest.setRequestTime(Instant.now());
-
-//        User user = userRepository.findById(AuthUtil.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
-//        adminProductRequest.setUser(user);
-
-        List<ImageUrl> imageUrls = new ArrayList<>();
-        try {
-            String imageUrl = imageService.saveImage(file, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
-            adminProductRequest.setImageUrl(imageUrl);
-
-            // file2 file3 olucnma buraya ekleme yap. sadece yukardakilerin aynisini yazcaksin
-
-        } catch (IOException e) {
-            System.out.println("Error saving image");
-        }
-
-        adminProductRequestRepository.save(adminProductRequest);
-    }
-*/
-
     @Override
     public void deleteProduct(long productId){
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
@@ -231,7 +198,6 @@ public class ProductServiceImpl implements ProductService {
         product.setCarbonhydrateGrams(productRequestDTO.getCarbonhydrateGrams());
         product.setFatGrams(productRequestDTO.getFatGrams());
         product.setProteinGrams(productRequestDTO.getProteinGrams());
-        product.setSugarGrams(productRequestDTO.getSugarGrams());
 
         productRepository.save(product);
     }

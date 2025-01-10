@@ -23,7 +23,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(PathConstants.ADMIN)
@@ -54,8 +56,46 @@ public class AdminController {
         return ResponseEntity.ok(adminProductRequestService.getImage(requestId));
     }
 
+    @DeleteMapping("/product-requests/reject/{requestId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> rejectProductRequest(@PathVariable Long requestId) {
+        adminProductRequestService.rejectProductRequestAndDelete(requestId);
+        return ResponseEntity.ok("Product request rejected successfully");
+    }
+
+//    @GetMapping("/product-requests/getImages/{requestId}")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<List<Resource>> getProductRequestImages(@PathVariable Long requestId) {
+//        List<Resource> images = adminProductRequestService.getImages(requestId);
+//        return ResponseEntity.ok(images);
+//    }
+
+//    @GetMapping("/product-requests/getImages/{requestId}")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<List<byte[]>> getProductRequestImages(@PathVariable Long requestId) {
+//        List<Resource> images = adminProductRequestService.getImages(requestId);
+//        List<byte[]> imageBytes = images.stream()
+//                .map(resource -> {
+//                    try {
+//                        return resource.getInputStream().readAllBytes();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException("Error reading image", e);
+//                    }
+//                })
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(imageBytes);
+//    }
+
+    @GetMapping("/product-requests/getImages/{requestId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<byte[]>> getProductRequestImages(@PathVariable Long requestId) {
+        List<byte[]> images = adminProductRequestService.getImagesAsBytes(requestId);
+        return ResponseEntity.ok(images);
+    }
+
+
     //admin product operations
-    @PostMapping("/products")
+    @PostMapping(path = "/products", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> addProduct(@RequestBody ProductRequestDTO productRequest, MultipartFile file) {
         productService.createProduct(productRequest,file);

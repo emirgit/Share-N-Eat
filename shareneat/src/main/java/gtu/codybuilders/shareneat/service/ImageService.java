@@ -10,5 +10,6 @@ public interface ImageService {
     //returns the filename of the saved image
     String saveImage(MultipartFile file, Path directory) throws IOException;
     Resource loadImage(String filename, Path directory);
+    byte[] loadImageAsBytes(String filename, Path uploadDir);
     void deleteImage(String filename, Path directory);
 }

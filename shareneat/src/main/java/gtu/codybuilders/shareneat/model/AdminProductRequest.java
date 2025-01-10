@@ -18,6 +18,8 @@ public class AdminProductRequest {
     private Long id;
 
     private String imageUrl;
+    private String contentImageUrl;
+    private String macrotableImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
