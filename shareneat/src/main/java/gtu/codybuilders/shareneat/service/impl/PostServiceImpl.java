@@ -1,14 +1,19 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.PostNutritiveValuesDto;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
+import gtu.codybuilders.shareneat.dto.ProductQuantityDto;
 import gtu.codybuilders.shareneat.exception.PostNotFoundException;
+import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
 import gtu.codybuilders.shareneat.exception.UserNotFoundException;
 import gtu.codybuilders.shareneat.mapper.PostMapper;
 import gtu.codybuilders.shareneat.model.Post;
+import gtu.codybuilders.shareneat.model.Product;
 import gtu.codybuilders.shareneat.model.User;
 import gtu.codybuilders.shareneat.repository.PostRepository;
+import gtu.codybuilders.shareneat.repository.ProductRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
 import gtu.codybuilders.shareneat.service.PostService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
@@ -42,6 +47,7 @@ public class PostServiceImpl implements PostService{
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ImageServiceImpl imageService;
+    private final ProductRepository productRepository;
 
 
     @Override
@@ -62,8 +68,12 @@ public class PostServiceImpl implements PostService{
         } else {
             imageUrl = PathConstants.defaultPostImage;
         }
-    
-        Post createdPost = postMapper.mapToPost(postRequest, user, imageUrl);
+        
+        Map<Product, Double> productQuantityMap = new HashMap<>();
+        PostNutritiveValuesDto nutritiveValues = calculateNutritionalValues(postRequest.getProductQuantities(), productQuantityMap);
+
+        Post createdPost = postMapper.mapToPost(postRequest, nutritiveValues, user, imageUrl);
+        createdPost.setProductQuantities(productQuantityMap);
     
         // Increment postsCount
         user.setPostsCount((user.getPostsCount() == null ? 0 : user.getPostsCount()) + 1);
@@ -71,6 +81,40 @@ public class PostServiceImpl implements PostService{
     
         postRepository.save(createdPost); // Save the new post
     }
+
+    private PostNutritiveValuesDto calculateNutritionalValues(
+        List<ProductQuantityDto> productQuantities, 
+        Map<Product, Double> productQuantityMap
+    ) {
+        int totalCarbs = 0, totalProtein = 0, totalFat = 0, totalCalories = 0;
+    
+        if (productQuantities != null) {
+            for (ProductQuantityDto dto : productQuantities) {
+                Product product = productRepository.findById(dto.getProductId())
+                        .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+    
+                double usedQuantity = dto.getUsedQuantity();
+                double ratio = usedQuantity / product.getQuantity();
+    
+                // Accumulate nutritional values
+                totalCarbs += ratio * product.getCarbonhydrateGrams();
+                totalProtein += ratio * product.getProteinGrams();
+                totalFat += ratio * product.getFatGrams();
+                totalCalories += ratio * product.getCalories();
+    
+                // Populate the productQuantityMap
+                productQuantityMap.put(product, usedQuantity);
+            }
+        }
+    
+        return PostNutritiveValuesDto.builder()
+                .carbs(totalCarbs)
+                .protein(totalProtein)
+                .fat(totalFat)
+                .calories(totalCalories)
+                .build();
+    }
+    
     
     @Override
     public void delete(Long postId) {
@@ -90,17 +134,35 @@ public class PostServiceImpl implements PostService{
     
 
     @Override
-    public void update(Long postId, PostRequest postRequest) {
+    public void update(Long postId, PostRequest postRequest, MultipartFile image) {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
-
+    
+        // Update basic fields
         existingPost.setPostName(postRequest.getPostName());
         existingPost.setDescription(postRequest.getDescription());
-        existingPost.setFat(postRequest.getFat());
-        existingPost.setCarbs(postRequest.getCarbs());
-        existingPost.setProtein(postRequest.getProtein());
-        existingPost.setCalories(postRequest.getCalories());
-
+    
+        // Handle image update
+        if (image != null && !image.isEmpty()) {
+            try {
+                String newImageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_POST);
+                existingPost.setImageUrl(newImageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to update image for post", e);
+            }
+        }
+    
+        // Recalculate nutritional values and update product quantities
+        Map<Product, Double> productQuantityMap = new HashMap<>();
+        PostNutritiveValuesDto nutritiveValues = calculateNutritionalValues(postRequest.getProductQuantities(), productQuantityMap);
+    
+        existingPost.setProductQuantities(productQuantityMap);
+        existingPost.setCarbs(nutritiveValues.getCarbs());
+        existingPost.setProtein(nutritiveValues.getProtein());
+        existingPost.setFat(nutritiveValues.getFat());
+        existingPost.setCalories(nutritiveValues.getCalories());
+    
+        // Save the updated post
         postRepository.save(existingPost);
     }
 

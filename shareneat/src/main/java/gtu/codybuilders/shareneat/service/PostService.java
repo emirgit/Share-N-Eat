@@ -13,7 +13,7 @@ import java.util.Map;
 public interface PostService {
     void save(PostRequest postRequest, MultipartFile image);
     void delete(Long postId);
-    void update(Long postId, PostRequest postRequest);
+    void update(Long postId, PostRequest postRequest, MultipartFile image);
     Resource getImage(Long postId);
     List<PostResponse> getAllPosts(); 
     PostResponse getPostById(Long postId);   

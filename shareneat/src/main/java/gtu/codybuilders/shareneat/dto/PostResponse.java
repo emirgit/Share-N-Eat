@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Map;
+
+import gtu.codybuilders.shareneat.model.Product;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +26,7 @@ public class PostResponse {
     private Integer protein; // Protein in grams
     private Integer fat;     // Fat in grams
     private Integer calories; // Total calories
+    private Map<Product,Double> productQuantities;
     private Instant createdDate;
     private Integer likeCount; 
     private Double averageRateExpert;

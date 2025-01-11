@@ -42,8 +42,12 @@ public class PostController {
     }
 
     @PutMapping(PathConstants.POST_ID)
-    public ResponseEntity<Void> updatePost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
-        postService.update(postId, postRequest);
+    public ResponseEntity<Void> updatePost(
+        @PathVariable Long postId, 
+        @Valid @ModelAttribute PostRequest postRequest, 
+        @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        postService.update(postId, postRequest, image);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

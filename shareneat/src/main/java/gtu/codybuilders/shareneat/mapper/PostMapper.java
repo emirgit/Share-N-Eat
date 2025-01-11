@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.mapper;
 
+import gtu.codybuilders.shareneat.dto.PostNutritiveValuesDto;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.model.Post;
@@ -12,7 +13,7 @@ import java.time.Instant;
 @Component
 public class PostMapper {
 
-    public Post mapToPost(PostRequest postRequest, User user, String imageUrl) {
+    public Post mapToPost(PostRequest postRequest, PostNutritiveValuesDto postNutritiveValues, User user, String imageUrl) {
         return Post.builder()
                 .postName(postRequest.getPostName())
                 .description(postRequest.getDescription())
@@ -24,10 +25,10 @@ public class PostMapper {
                 .averageRateRegular(0.0) // Default to 0.0 as Double
                 .totalRatersExpert(0) // Default to 0 as no expert raters initially
                 .totalRatersRegular(0) // Default to 0 as no regular raters initially
-                .carbs(postRequest.getCarbs() != null ? postRequest.getCarbs() : 0)
-                .protein(postRequest.getProtein() != null ? postRequest.getProtein() : 0)
-                .fat(postRequest.getFat() != null ? postRequest.getFat() : 0) // Default to 0 if null
-                .calories(postRequest.getCalories() != null ? postRequest.getCalories() : 0)
+                .carbs(postNutritiveValues.getCarbs() != null ? postNutritiveValues.getCarbs() : 0)
+                .protein(postNutritiveValues.getProtein() != null ? postNutritiveValues.getProtein() : 0)
+                .fat(postNutritiveValues.getFat() != null ? postNutritiveValues.getFat() : 0) // Default to 0 if null
+                .calories(postNutritiveValues.getCalories() != null ? postNutritiveValues.getCalories() : 0)
                 .build();
     }
 
@@ -49,6 +50,7 @@ public class PostMapper {
                 .protein(post.getProtein())
                 .fat(post.getFat())
                 .calories(post.getCalories())
+                .productQuantities(post.getProductQuantities())
                 .build();
     }
 }

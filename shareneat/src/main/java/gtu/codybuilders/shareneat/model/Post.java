@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -37,6 +39,12 @@ public class Post {
     private Integer protein; // Protein in grams
     private Integer fat;     // Fat in grams
     private Integer calories; // Total calories
+
+    @ElementCollection
+    @CollectionTable(name = "post_product_quantities", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "used_quantity")
+    @MapKeyJoinColumn(name = "product_id")
+    private Map<Product, Double> productQuantities = new HashMap<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
