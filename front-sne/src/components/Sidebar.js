@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FindYourMealModal from './FindYourMealModal';
 
 const Sidebar = () => {
     const navigate = useNavigate();
-
-    // Mock admin check (Replace with actual auth logic)
-    //const isAdmin = true; // Replace this with real admin-check logic
+    const [isMealModalOpen, setIsMealModalOpen] = useState(false);
 
     const handleHomeClick = () => {
         navigate('/');
+    };
+
+    const handleMealSearch = (nutritionValues) => {
+        console.log('Search criteria:', nutritionValues);
+        // Here you would typically navigate to search results or filter the current view
+        // navigate('/', { state: { nutritionFilters: nutritionValues } });
     };
 
     return (
@@ -30,7 +35,7 @@ const Sidebar = () => {
             </div>
             <div
                 className="flex items-center mb-6 cursor-pointer"
-                onClick={() => navigate('/')}
+                onClick={() => setIsMealModalOpen(true)}
             >
                 <span className="mr-2">🍽️</span>
                 <span className="text-lg font-medium">Find Your Meal</span>
@@ -43,8 +48,11 @@ const Sidebar = () => {
                 <span className="text-lg font-medium">Products</span>
             </div>
             
-
-            
+            <FindYourMealModal 
+                isOpen={isMealModalOpen}
+                onClose={() => setIsMealModalOpen(false)}
+                onSubmit={handleMealSearch}
+            />
         </div>
     );
 };
