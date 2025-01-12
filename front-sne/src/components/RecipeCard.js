@@ -152,7 +152,15 @@ const RecipeCard = ({ post, currentUsername }) => {
                 <div className="ml-3 flex-1">
                     <div className="font-semibold">{username}</div>
                     <div className="text-sm text-gray-500">
-                        {'User'}
+                        {rolesLoading ? (
+                            'Loading role...'
+                        ) : rolesError ? (
+                            'Role unavailable'
+                        ) : (
+                            currentUserRole.length > 0
+                                ? currentUserRole[0].replace('ROLE_', '').toLowerCase()
+                                : 'No Role'
+                        )}
                     </div>
                 </div>
             </div>

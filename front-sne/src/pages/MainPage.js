@@ -1,117 +1,216 @@
 // src/pages/MainPage.js
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RecipeCard from '../components/RecipeCard';
 import UploadSection from '../components/UploadSection';
 import axiosHelper from '../axiosHelper';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const MainPage = () => {
-    const [posts, setPosts] = useState([]); // State to hold posts from the backend
-    const [loading, setLoading] = useState(false); // Loading state for posts
-    const [error, setError] = useState(null); // Error state for posts
-    const [currentUsername, setCurrentUsername] = useState(''); // State to hold the current username
-    const [usernameLoading, setUsernameLoading] = useState(true); // Loading state for username
-    const [usernameError, setUsernameError] = useState(null); // Error state for username
+  // --------------------------------------------
+  // State
+  // --------------------------------------------
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
+  const [usernameError, setUsernameError] = useState(null);
+  const [usernameLoading, setUsernameLoading] = useState(true);
+  const [currentUsername, setCurrentUsername] = useState('');
 
-    // Fetch the current username when the component mounts
-    useEffect(() => {
-        const fetchUsername = async () => {
-            try {
-                const data = await axiosHelper('/user/my-account/username', 'GET'); // Endpoint to fetch username
-                setCurrentUsername(data); // Set the retrieved username in state
-            } catch (error) {
-                console.error('Error fetching username:', error);
-                setUsernameError('Failed to load username.');
-            } finally {
-                setUsernameLoading(false); // Mark username loading as complete
-            }
-        };
+  // Pagination
+  const pageSize = 4;
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-        fetchUsername(); // Call the fetchUsername function
-    }, []);
+  // Which endpoint mode are we using? ("trendings" or "followings")
+  const [fetchMode, setFetchMode] = useState('trendings');
 
-    // Fetch posts only if username is successfully loaded
-    useEffect(() => {
-        if (!usernameError && !usernameLoading) {
-            const fetchPosts = async () => {
-                setLoading(true); // Start loading posts
-                try {
-                    const data = await axiosHelper('/posts', 'GET'); // Retrieve posts using axiosHelper
-                    setPosts(data); // Set the retrieved posts in state
-                } catch (error) {
-                    console.error('Error fetching posts:', error);
-                    setError('Failed to load posts. Please try again later.');
-                } finally {
-                    setLoading(false); // Mark loading as complete
-                }
-            };
+  // Refresh counter
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
-            fetchPosts(); // Call the fetchPosts function
-        }
-    }, [usernameError, usernameLoading]);
+  // Scroll container ref
+  const scrollContainerRef = useRef(null);
 
-    return (
-        <div className="flex flex-col min-h-screen bg-gray-50">
-            {/* Navbar */}
-            <Navbar />
+  // --------------------------------------------
+  // Fetch current user's username
+  // --------------------------------------------
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await axiosHelper('/user/my-account/username', 'GET');
+        setCurrentUsername(data);
+      } catch (err) {
+        console.error('Error fetching username:', err);
+        setUsernameError('Failed to load username.');
+      } finally {
+        setUsernameLoading(false);
+      }
+    })();
+  }, []);
 
-            {/* Main Content */}
-            <div className="flex flex-row">
-                {/* Sidebar */}
-                <Sidebar />
+  // --------------------------------------------
+  // Effect A: Reset when fetchMode or refreshCounter changes
+  // --------------------------------------------
+  useEffect(() => {
+    if (!usernameError && !usernameLoading) {
+      // 1) Clear old posts
+      setPosts([]);
+      // 2) Reset page
+      setPage(0);
+      // 3) Reset hasMore
+      setHasMore(true);
+    }
+  }, [fetchMode, refreshCounter, usernameError, usernameLoading]);
 
-                {/* Main Feed */}
-                <div className="flex-1 flex flex-col">
-                    {/* Upload Section */}
-                    <UploadSection />
+  // --------------------------------------------
+  // Effect B: Whenever the page, fetchMode, or refreshCounter changes, fetch new data
+  // --------------------------------------------
+  useEffect(() => {
+    if (!usernameError && !usernameLoading) {
+      fetchPosts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, fetchMode, refreshCounter, usernameError, usernameLoading]);
 
-                    {/* Loading State for Username */}
-                    {usernameLoading && (
-                        <p className="text-center text-gray-500 mt-4">Loading user data...</p>
-                    )}
+  // --------------------------------------------
+  // Scroll to top whenever fetchMode or refreshCounter changes
+  // --------------------------------------------
+  useEffect(() => {
+    window.scrollTo(0, 0); // Immediate scroll to top
+  }, [fetchMode, refreshCounter]);
 
-                    {/* Error State for Username */}
-                    {usernameError && (
-                        <p className="text-center text-red-500 mt-4">
-                            {usernameError}
-                        </p>
-                    )}
+  // --------------------------------------------
+  // fetchPosts - uses current page & fetchMode
+  // --------------------------------------------
+  const fetchPosts = async () => {
+    try {
+      let endpoint;
 
-                    {/* Loading Posts */}
-                    {loading && (
-                        <p className="text-center text-gray-500 mt-4">Loading posts...</p>
-                    )}
+      if (fetchMode === 'followings') {
+        endpoint = '/posts/current-user/followings';
+      } else {
+        // Default to "trendings" or "home"
+        endpoint = '/posts/current-user/trendings';
+      }
 
-                    {/* Error Loading Posts */}
-                    {error && (
-                        <p className="text-center text-red-500 mt-4">{error}</p>
-                    )}
+      const response = await axiosHelper(
+        `${endpoint}?page=${page}&size=${pageSize}`,
+        'GET'
+      );
 
-                    {/* Feed Section */}
-                    <div className="flex justify-center mt-4">
-                        <div className="w-full max-w-4xl">
-                            {!loading && posts.length > 0 ? (
-                                posts.map((post) => (
-                                    <RecipeCard
-                                        key={post.postId}
-                                        post={post}
-                                        currentUsername={currentUsername}
-                                    />
-                                ))
-                            ) : (
-                                !loading && !usernameLoading && (
-                                    <p className="text-center text-gray-500">
-                                        No posts available.
-                                    </p>
-                                )
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
+      const fetchedPosts = response.content || response;
+
+      // Append the new posts to our existing array
+      setPosts((prev) => [...prev, ...fetchedPosts]);
+
+      // If your backend provides totalPages
+      if (response.totalPages !== undefined) {
+        setHasMore(page + 1 < response.totalPages);
+      } else {
+        // If no totalPages, you'll need another approach for "hasMore"
+        // e.g. check if fetchedPosts.length < pageSize
+        setHasMore(fetchedPosts.length > 0);
+      }
+    } catch (err) {
+      console.error('Error fetching posts:', err);
+      setError('Failed to load posts. Please try again later.');
+      setHasMore(false);
+    }
+  };
+
+  // --------------------------------------------
+  // Handle Refresh
+  // --------------------------------------------
+  const handleRefresh = () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
+
+  // --------------------------------------------
+  // Render
+  // --------------------------------------------
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Main content */}
+      <div className="flex flex-row">
+        {/* Sidebar - pass down setFetchMode and handleRefresh */}
+        <Sidebar
+          setFetchMode={setFetchMode}
+          onRefresh={handleRefresh}
+          currentFetchMode={fetchMode}
+        />
+
+        {/* Main feed area */}
+        <div className="flex-1 flex flex-col" ref={scrollContainerRef}>
+          {/* Upload Section */}
+          <UploadSection />
+
+          {/* Loading username */}
+          {usernameLoading && (
+            <p className="text-center text-gray-500 mt-4">
+              Loading user data...
+            </p>
+          )}
+
+          {/* Username error */}
+          {usernameError && (
+            <p className="text-center text-red-500 mt-4">
+              {usernameError}
+            </p>
+          )}
+
+          {/* General posts error */}
+          {error && (
+            <p className="text-center text-red-500 mt-4">{error}</p>
+          )}
+
+          {/* If no posts and no more pages, show "No posts available" */}
+          {!usernameLoading &&
+            !usernameError &&
+            posts.length === 0 &&
+            !hasMore && (
+              <p className="text-center text-gray-500 mt-4">
+                No posts available.
+              </p>
+            )}
+
+          {/* Feed Section */}
+          {!usernameLoading && !usernameError && posts.length > 0 && (
+            <InfiniteScroll
+              key={`${fetchMode}-${refreshCounter}`} // Added key prop
+              dataLength={posts.length}
+              next={() => setPage((prev) => prev + 1)}
+              hasMore={hasMore}
+              loader={
+                <p className="text-center text-gray-500 mt-4">
+                  Loading more posts...
+                </p>
+              }
+              endMessage={
+                <p className="text-center text-gray-500 mt-4">
+                  You have seen all posts.
+                </p>
+              }
+              className="w-full flex flex-col items-center mt-4"
+            >
+              <div className="w-full max-w-4xl">
+                {posts.map((post) => (
+                  <RecipeCard
+                    key={post.postId}
+                    post={post}
+                    currentUsername={currentUsername}
+                  />
+                ))}
+              </div>
+            </InfiniteScroll>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default MainPage;
