@@ -30,6 +30,19 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public String moveImage(String filename, Path sourceDirectory, Path targetDirectory) throws IOException {
+        Files.createDirectories(targetDirectory);
+
+        Path sourcePath = sourceDirectory.resolve(filename);
+        Path targetPath = targetDirectory.resolve(filename);
+
+        Files.move(sourcePath, targetPath);
+
+        return filename;
+    }
+
+
+    @Override
     public Resource loadImage(String filename, Path directory) {
         try {
             Path filePath = directory.resolve(filename);

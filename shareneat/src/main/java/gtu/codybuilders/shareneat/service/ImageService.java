@@ -12,4 +12,5 @@ public interface ImageService {
     Resource loadImage(String filename, Path directory);
     byte[] loadImageAsBytes(String filename, Path uploadDir);
     void deleteImage(String filename, Path directory);
+    String moveImage(String filename, Path sourceDirectory, Path destinationDirectory) throws IOException;
 }

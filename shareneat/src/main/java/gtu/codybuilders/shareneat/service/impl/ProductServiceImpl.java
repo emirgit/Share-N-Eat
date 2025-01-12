@@ -142,6 +142,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void adminCreateProduct(Product product) {
+        product.setCreated(Instant.now());
+        productRepository.save(product);
+    }
+
+
+    @Override
     public void createAddProductRequest(UploadProductDTO uploadProductDTO,
                                         MultipartFile image,
                                         MultipartFile contentImage,
@@ -184,20 +191,26 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(long productId){
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
+        imageService.deleteImage(product.getImageUrl(), PathConstants.UPLOAD_DIR_PRODUCT);
         productRepository.delete(product);
     }
 
     @Override
     public void updateProduct(ProductRequestDTO productRequestDTO, long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
 
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
-
+        // Update the fields of the existing product
         product.setName(productRequestDTO.getName());
         product.setBrand(productRequestDTO.getBrand());
+        product.setCategory(productRequestDTO.getCategory());
+        product.setContent(productRequestDTO.getContent());
+        //product.setImageUrl(productRequestDTO.getImageUrl());
+        product.setQuantity(productRequestDTO.getQuantity());
         product.setCalories(productRequestDTO.getCalories());
+        product.setProteinGrams(productRequestDTO.getProteinGrams());
         product.setCarbonhydrateGrams(productRequestDTO.getCarbonhydrateGrams());
         product.setFatGrams(productRequestDTO.getFatGrams());
-        product.setProteinGrams(productRequestDTO.getProteinGrams());
 
         productRepository.save(product);
     }

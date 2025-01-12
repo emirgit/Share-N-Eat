@@ -14,6 +14,15 @@ import { categories } from '../components/CategoriesSection';
 
 const ProductManagement = () => {
 
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+    };
+
     const [requests, setRequests] = useState([
         // {
         //     id: 2,
@@ -32,48 +41,7 @@ const ProductManagement = () => {
 
     const [products, setProducts] = useState([]);
 
-    //done
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const allProducts = await axiosHelper('/products/getAll');
-                //console.log(allProducts);
-                const productsWithImages = await Promise.all(
-                    allProducts.map(async (product) => {
-                        const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, {responseType: 'blob'});
-                        const imageUrl = URL.createObjectURL(imageResponse);
-                        return {...product, imageUrl};
-                    })
-                );
-                setProducts(productsWithImages);
-            } catch (error) {
-                console.error('Failed to fetch products:', error);
-            }
-        };
-        fetchProducts();
-    }, []);
-
-
-    // useEffect(() => {
-    //     const fetchProductRequests = async () => {
-    //         try {
-    //             const allProductRequests = await axiosHelper('/admin/product-requests', 'GET');
-    //             const productRequestsWithImages = await Promise.all(
-    //                 allProductRequests.map(async (request) => {
-    //                     const imagesResponse = await axiosHelper(`/admin/product-requests/getImages/${request.id}`, 'GET', null, { responseType: 'json' });
-    //                     const images = imagesResponse.map(image => URL.createObjectURL(new Blob([new Uint8Array(image)])));
-    //                     return { ...request, images };
-    //                 })
-    //             );
-    //             setRequests(productRequestsWithImages);
-    //         } catch (error) {
-    //             console.error('Error fetching product requests:', error);
-    //         }
-    //     };
-    //
-    //     fetchProductRequests();
-    // }, []);
-
+    //done request management
     useEffect(() => {
         const fetchProductRequests = async () => {
             try {
@@ -81,9 +49,9 @@ const ProductManagement = () => {
                 const productRequestsWithImages = await Promise.all(
                     allProductRequests.map(async (request) => {
                         const imagesResponse = await axiosHelper(`/admin/product-requests/getImages/${request.id}`, 'GET', null, { responseType: 'json' });
-                        const images = imagesResponse.map(image => URL.createObjectURL(new Blob([new Uint8Array(image)])));
-                        const [imageUrl, contentImageUrl, macrotableImageUrl] = images;
-                        return { ...request, imageUrl, contentImageUrl, macrotableImageUrl };
+                        const images = imagesResponse.map(image => `data:image/jpeg;base64,${image}`);
+                        const [imageUrlLocal, contentImageUrlLocal, macrotableImageUrlLocal] = images;
+                        return { ...request, imageUrlLocal, contentImageUrlLocal, macrotableImageUrlLocal };
                     })
                 );
                 setRequests(productRequestsWithImages);
@@ -95,74 +63,82 @@ const ProductManagement = () => {
         fetchProductRequests();
     }, []);
 
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-    };
 
-    const handleImageChange = (requestId, imageIndex, newImageUrl) => {
+    // const handleImageChange = (requestId, imageIndex, newImageUrl) => {
+    //     setRequests((prevRequests) =>
+    //         prevRequests.map((request) =>
+    //             request.id === requestId
+    //                 ? {
+    //                       ...request,
+    //                       images: request.images.map((img, idx) =>
+    //                           idx === imageIndex ? newImageUrl : img
+    //                       ),
+    //                   }
+    //                 : request
+    //         )
+    //     );
+    // };
+
+    const handleImageChange = (requestId, imageIndex, file) => {
         setRequests((prevRequests) =>
             prevRequests.map((request) =>
                 request.id === requestId
                     ? {
-                          ...request,
-                          images: request.images.map((img, idx) =>
-                              idx === imageIndex ? newImageUrl : img
-                          ),
-                      }
+                        ...request,
+                        newImage: file,
+                        imageUrlLocal: URL.createObjectURL(file),
+                    }
                     : request
             )
         );
     };
 
-    const handleRemoveImage = (requestId, imageIndex) => {
-        setRequests((prevRequests) =>
-            prevRequests.map((request) =>
-                request.id === requestId
-                    ? {
-                          ...request,
-                          images: request.images.filter((_, idx) => idx !== imageIndex),
-                      }
-                    : request
-            )
-        );
-    };
+    // const handleRemoveImage = (requestId, imageIndex) => {
+    //     setRequests((prevRequests) =>
+    //         prevRequests.map((request) =>
+    //             request.id === requestId
+    //                 ? {
+    //                       ...request,
+    //                       images: request.images.filter((_, idx) => idx !== imageIndex),
+    //                   }
+    //                 : request
+    //         )
+    //     );
+    // };
 
+    //done request management
     const handleAcceptRequest = async (id) => {
         const acceptedRequest = requests.find((request) => request.id === id);
         if (acceptedRequest) {
-
             const data = new FormData();
             data.append('name', acceptedRequest.name);
             data.append('brand', acceptedRequest.brand);
             data.append('category', acceptedRequest.category);
-            data.append('content', acceptedRequest.description);
-            data.append('file', acceptedRequest.imageUrl);
+            data.append('content', acceptedRequest.description); // content of the product
             data.append('quantity', acceptedRequest.quantity);
-
             data.append('calories', acceptedRequest.calories);
             data.append('proteinGrams', acceptedRequest.proteinGrams);
             data.append('carbonhydrateGrams', acceptedRequest.carbonhydrateGrams);
             data.append('fatGrams', acceptedRequest.fatGrams);
 
+            if (acceptedRequest.newImage) {
+                data.append('file', acceptedRequest.newImage);
+            } else {
+                data.append('file', null);
+            }
 
             try {
-                const response = await axiosHelper('/admin/products', 'POST', data, {
+                const response = await axiosHelper(`/admin/approve-product-request/${id}`, 'POST', data, {
                     'Content-Type': 'multipart/form-data',
                 });
                 console.log('Product uploaded successfully:', response);
             } catch (error) {
                 console.error('Error uploading product:', error);
             }
-
         }
     };
 
-    //done
+    //done request management
     const handleDenyRequest = async (id) => {
         try {
             await axiosHelper(`/admin/product-requests/reject/${id}`, 'DELETE');
@@ -172,40 +148,49 @@ const ProductManagement = () => {
         }
     };
 
-    const handleEditMacros = (id, macroKey, newValue) => {
+    //done request management
+    const handleRequestAttributeChange = (id, attribute, value) => {
         setRequests((prevRequests) =>
             prevRequests.map((request) =>
                 request.id === id
                     ? {
-                          ...request,
-                          macronutrients: {
-                              ...request.macronutrients,
-                              [macroKey]: parseFloat(newValue) || 0,
-                          },
-                      }
+                        ...request,
+                        [attribute]:
+                            attribute === 'quantity' || attribute === 'calories' || attribute === 'proteinGrams' || attribute === 'carbonhydrateGrams' || attribute === 'fatGrams'
+                                ? parseFloat(value) || 0
+                                : value,
+                    }
                     : request
             )
         );
-    };
-
-    const handleEditCalories = (id, newValue) => {
-        setRequests((prevRequests) =>
-            prevRequests.map((request) =>
-                request.id === id
-                    ? {
-                          ...request,
-                          calories: parseInt(newValue, 10) || 0,
-                      }
-                    : request
-            )
-        );
-    };
+    }
 
     const handleImageClick = (imageUrl) => {
         window.open(imageUrl, '_blank'); // Open image in a new tab
     };
 
+    //done product management
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const allProducts = await axiosHelper('/products/getAll');
+                //console.log(allProducts);
+                const productsWithImages = await Promise.all(
+                    allProducts.map(async (product) => {
+                        const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, {responseType: 'blob'});
+                        const imageUrlLocal = URL.createObjectURL(imageResponse);
+                        return {...product, imageUrlLocal};
+                    })
+                );
+                setProducts(productsWithImages);
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+            }
+        };
+        fetchProducts();
+    }, []);
 
+    //done product management
     const toggleEditMode = async (id) => {
         const productToUpdate = products.find((product) => product.id === id);
         if (productToUpdate.isEditing) {
@@ -225,38 +210,24 @@ const ProductManagement = () => {
         );
     };
 
-    // const toggleEditMode = (id) => {
-    //     setProducts((prevProducts) =>
-    //         prevProducts.map((product) =>
-    //             product.id === id
-    //                 ? { ...product, isEditing: !product.isEditing }
-    //                 : product
-    //         )
-    //     );
-    // };
-
-
-    // Update product macros and attributes
+    //done product management
     const handleProductAttributeChange = (id, attribute, value) => {
         setProducts((prevProducts) =>
             prevProducts.map((product) =>
                 product.id === id
                     ? {
-                          ...product,
-                          [attribute]:
-                              attribute === 'quantity' || attribute === 'calories'
-                                  ? parseInt(value, 10) || 0
-                                  : product[attribute],
-                          macronutrients: attribute in product.macronutrients
-                              ? { ...product.macronutrients, [attribute]: parseFloat(value) || 0 }
-                              : product.macronutrients,
-                      }
+                        ...product,
+                        [attribute]:
+                            attribute === 'quantity' || attribute === 'calories' || attribute === 'proteinGrams' || attribute === 'carbonhydrateGrams' || attribute === 'fatGrams'
+                                ? parseFloat(value) || 0
+                                : value,
+                    }
                     : product
             )
         );
     };
 
-    //done
+    //done product management
     const handleRemoveProduct = async (id) => {
         const confirmed = window.confirm('Are you sure you want to delete this product?');
         if (confirmed) {
@@ -284,10 +255,10 @@ const ProductManagement = () => {
                                 <li key={product.id} className="flex items-center space-x-4">
                                     <div className="w-40">
                                         <img
-                                            src={product.imageUrl}
+                                            src={product.imageUrlLocal}
                                             alt={`Product ${product.id}`}
                                             className="rounded-lg object-cover cursor-pointer"
-                                            onClick={() => handleImageClick(product.imageUrl)}
+                                            onClick={() => handleImageClick(product.imageUrlLocal)}
                                         />
                                     </div>
                                     {/* Product Info */}
@@ -310,16 +281,20 @@ const ProductManagement = () => {
                                                         className="ml-2 border rounded px-1"
                                                     />
                                                 </div>
-                                                {[product.proteinGrams, product.carbonhydrateGrams, product.fatGrams].map((macro) => (
-                                                    <div key={macro} className="flex items-center mb-2">
-                                                        <span className="capitalize">{macro}:</span>
+                                                {[
+                                                    { key: 'proteinGrams', value: product.proteinGrams },
+                                                    { key: 'carbonhydrateGrams', value: product.carbonhydrateGrams },
+                                                    { key: 'fatGrams', value: product.fatGrams }
+                                                ].map((macro) => (
+                                                    <div key={macro.key} className="flex items-center mb-2">
+                                                        <span className="capitalize">{macro.key}:</span>
                                                         <input
                                                             type="number"
-                                                            value={macro}
+                                                            value={macro.value}
                                                             onChange={(e) =>
                                                                 handleProductAttributeChange(
                                                                     product.id,
-                                                                    macro,
+                                                                    macro.key,
                                                                     e.target.value
                                                                 )
                                                             }
@@ -403,39 +378,103 @@ const ProductManagement = () => {
                                 >
                                     <div className="w-40">
                                         <Slider {...sliderSettings}>
-                                            {[request.imageUrl, request.contentImageUrl, request.macrotableImageUrl].map((image, index) => (
+                                            {/*{[request.imageUrlLocal, request.contentImageUrlLocal, request.macrotableImageUrlLocal].map((image, index) => (*/}
+                                            {/*    <div key={index} className="relative">*/}
+                                            {/*        <img*/}
+
+                                            {/*            src={image}*/}
+                                            {/*            alt={`Request ${request.id}`}*/}
+                                            {/*            className="rounded-lg object-cover cursor-pointer"*/}
+                                            {/*            onClick={() => handleImageClick(image)}*/}
+                                            {/*            onLoad={() => console.log(`Image loaded successfully for request ${request.id}`)}*/}
+                                            {/*            onError={() => console.error(`Failed to load image for request ${request.id}`)}*/}
+                                            {/*        />*/}
+                                            {/*        */}
+                                            {/*        <button*/}
+                                            {/*            onClick={() =>*/}
+                                            {/*                handleImageChange(*/}
+                                            {/*                    request.id,*/}
+                                            {/*                    index,*/}
+                                            {/*                    prompt(*/}
+                                            {/*                        'Enter new image URL:',*/}
+                                            {/*                        image*/}
+                                            {/*                    ) || image*/}
+                                            {/*                )*/}
+                                            {/*            }*/}
+                                            {/*            className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"*/}
+                                            {/*        >*/}
+                                            {/*            <FontAwesomeIcon icon={faRecycle} />*/}
+                                            {/*        </button>*/}
+                                            {/*        <button*/}
+                                            {/*            onClick={() =>*/}
+                                            {/*                handleRemoveImage(request.id, index)*/}
+                                            {/*            }*/}
+                                            {/*            className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}
+                                            {/*        >*/}
+                                            {/*            <FontAwesomeIcon icon={faTimes} />*/}
+                                            {/*        </button>*/}
+                                            {/*    </div>*/}
+                                            {/*))}*/}
+                                            {/*{[request.imageUrlLocal, request.contentImageUrlLocal, request.macrotableImageUrlLocal].map((image, index) => (*/}
+                                            {/*    <div key={index} className="relative">*/}
+                                            {/*        <input*/}
+                                            {/*            type="file"*/}
+                                            {/*            accept="image/*"*/}
+                                            {/*            className="hidden"*/}
+                                            {/*            onChange={(e) => handleImageChange(request.id, index, e.target.files[0])}*/}
+                                            {/*        />*/}
+                                            {/*        <img*/}
+                                            {/*            src={image}*/}
+                                            {/*            alt={`Request ${request.id}`}*/}
+                                            {/*            className="rounded-lg object-cover cursor-pointer"*/}
+                                            {/*            onClick={() => handleImageClick(image)}*/}
+                                            {/*        />*/}
+                                            {/*        <button*/}
+                                            {/*            onClick={() =>*/}
+                                            {/*                handleImageChange(*/}
+                                            {/*                    request.id,*/}
+                                            {/*                    index,*/}
+                                            {/*                    prompt('Enter new image URL:', image) || image*/}
+                                            {/*                )*/}
+                                            {/*            }*/}
+                                            {/*            className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"*/}
+                                            {/*        >*/}
+                                            {/*            <FontAwesomeIcon icon={faRecycle} />*/}
+                                            {/*        </button>*/}
+                                            {/*        <button*/}
+                                            {/*            onClick={() => handleRemoveImage(request.id, index)}*/}
+                                            {/*            className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}
+                                            {/*        >*/}
+                                            {/*            <FontAwesomeIcon icon={faTimes} />*/}
+                                            {/*        </button>*/}
+                                            {/*    </div>*/}
+                                            {/*))}*/}
+                                            {[request.imageUrlLocal, request.contentImageUrlLocal, request.macrotableImageUrlLocal].map((image, index) => (
                                                 <div key={index} className="relative">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        className="hidden"
+                                                        onChange={(e) => handleImageChange(request.id, index, e.target.files[0])}
+                                                    />
                                                     <img
-                                                        
                                                         src={image}
                                                         alt={`Request ${request.id}`}
                                                         className="rounded-lg object-cover cursor-pointer"
                                                         onClick={() => handleImageClick(image)}
                                                     />
-                                                    
                                                     <button
-                                                        onClick={() =>
-                                                            handleImageChange(
-                                                                request.id,
-                                                                index,
-                                                                prompt(
-                                                                    'Enter new image URL:',
-                                                                    image
-                                                                ) || image
-                                                            )
-                                                        }
+                                                        onClick={() => document.querySelector(`input[type="file"]`).click()}
                                                         className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"
                                                     >
                                                         <FontAwesomeIcon icon={faRecycle} />
                                                     </button>
-                                                    <button
-                                                        onClick={() =>
-                                                            handleRemoveImage(request.id, index)
-                                                        }
-                                                        className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
-                                                    >
-                                                        <FontAwesomeIcon icon={faTimes} />
-                                                    </button>
+                                                    {/*<button*/}
+                                                    {/*    onClick={() => handleRemoveImage(request.id, index)}*/}
+                                                    {/*    className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}
+                                                    {/*>*/}
+                                                    {/*    <FontAwesomeIcon icon={faTimes} />*/}
+                                                    {/*</button>*/}
                                                 </div>
                                             ))}
                                         </Slider>
@@ -456,7 +495,7 @@ const ProductManagement = () => {
                                                     type="text"
                                                     value={request.brand}
                                                     onChange={(e) =>
-                                                        handleProductAttributeChange(request.id, 'brand', e.target.value)
+                                                        handleRequestAttributeChange(request.id, 'brand', e.target.value)
                                                     }
                                                     className="ml-2 border rounded px-1"
                                                 />
@@ -468,7 +507,7 @@ const ProductManagement = () => {
                                                 <select
                                                     value={request.category}
                                                     onChange={(e) =>
-                                                        handleProductAttributeChange(request.id, 'category', e.target.value)
+                                                        handleRequestAttributeChange(request.id, 'category', e.target.value)
                                                     }
                                                     className="ml-2 border rounded px-2"
                                                 >
@@ -482,17 +521,17 @@ const ProductManagement = () => {
 
                                             {/* Macronutrients */}
                                             {[
-                                                [request.proteinGrams, 'protein'],
-                                                [request.carbonhydrateGrams, 'carbs'],
-                                                [request.fatGrams, 'fat'],
-                                            ].map(([value, name]) => (
+                                                ['proteinGrams', request.proteinGrams],
+                                                ['carbonhydrateGrams', request.carbonhydrateGrams],
+                                                ['fatGrams', request.fatGrams],
+                                            ].map(([name, value]) => (
                                                 <div key={name} className="flex items-center mb-2">
-                                                    <span className="capitalize">{name}:</span>
+                                                    <span className="capitalize">{name.replace('Grams', '')}:</span>
                                                     <input
                                                         type="number"
                                                         value={value}
                                                         onChange={(e) =>
-                                                            handleEditMacros(request.id, name, e.target.value)
+                                                            handleRequestAttributeChange(request.id, name, e.target.value)
                                                         }
                                                         className="ml-2 w-16 border rounded px-1"
                                                     />
@@ -506,18 +545,18 @@ const ProductManagement = () => {
                                                 <input
                                                     type="number"
                                                     value={request.calories}
-                                                    onChange={(e) => handleEditCalories(request.id, e.target.value)}
+                                                    onChange={(e) => handleRequestAttributeChange(request.id, 'calories', e.target.value)}
                                                     className="ml-2 w-16 border rounded px-1"
                                                 />
                                             </div>
                                         </div>
 
-                                        
+
                                     </div>
 
                                     {/* Description Section */}
                                     <div className="flex-1 mt-4">
-                                        <h4 className="text-sm font-semibold">Description</h4>
+                                    <h4 className="text-sm font-semibold">Description</h4>
                                         <p className="text-gray-500 italic mt-1">"{request.description}"</p>
                                     </div>
 
