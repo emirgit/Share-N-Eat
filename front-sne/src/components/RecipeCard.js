@@ -56,11 +56,20 @@ const RecipeCard = ({ post, currentUsername }) => {
 
     // Determine if the user has ROLE_USER
     const isUser = currentUserRole.includes('ROLE_USER');
+    
+    // Determine if the user is owner of the post or admin
+    const isOwnerOrAdmin = 
+        username === currentUsername || currentUserRole.includes('ROLE_ADMIN');
 
     useEffect(() => {
         const fetchRecipeImage = async () => {
             try {
-                const response = await axiosHelper(`/posts/getImage/${postId}`, 'GET', null, { responseType: 'blob' });
+                const response = await axiosHelper(
+                    `/posts/getImage/${postId}`,
+                    'GET',
+                    null,
+                    { responseType: 'blob' }
+                );
                 setRecipeImage(URL.createObjectURL(response));
             } catch (error) {
                 console.error('Error fetching recipe image:', error);
@@ -72,7 +81,12 @@ const RecipeCard = ({ post, currentUsername }) => {
     useEffect(() => {
         const fetchProfileImage = async () => {
             try {
-                const response = await axiosHelper(`/user/${username}/profile-picture`, 'GET', null, { responseType: 'blob' });
+                const response = await axiosHelper(
+                    `/user/${username}/profile-picture`,
+                    'GET',
+                    null,
+                    { responseType: 'blob' }
+                );
                 setProfileImage(URL.createObjectURL(response));
             } catch (error) {
                 console.error('Error fetching profile image:', error);
@@ -131,6 +145,22 @@ const RecipeCard = ({ post, currentUsername }) => {
         setIsCommentsOpen(!isCommentsOpen);
     };
 
+    // Delete Post logic
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this post?")) {
+            return;
+        }
+        try {
+            await axiosHelper(`/posts/${postId}`, 'DELETE');
+            alert('Post deleted successfully.');
+            // e.g., navigate to another page or refresh:
+            navigate('/');
+        } catch (error) {
+            console.error('Error deleting post:', error);
+            alert('An error occurred while deleting the post. Please try again.');
+        }
+    };
+
     // Pie chart data
     const pieData = [
         { name: 'Fat', value: fat },
@@ -139,7 +169,17 @@ const RecipeCard = ({ post, currentUsername }) => {
     ];
 
     return (
-        <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl">
+        <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl relative">
+            {/* Delete button (only if owner or admin) */}
+            {isOwnerOrAdmin && (
+                <button
+                    onClick={handleDelete}
+                    className="absolute top-4 right-4 bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700"
+                >
+                    Delete
+                </button>
+            )}
+
             <div className="flex items-center p-4 border-b border-gray-200">
                 {profileImage && (
                     <img
@@ -166,7 +206,10 @@ const RecipeCard = ({ post, currentUsername }) => {
             </div>
 
             <div className="p-4 text-gray-700">
-                <p>{description || 'This is a delicious recipe that you will love. Try it out and enjoy the flavors!'}</p>
+                <p>
+                    {description ||
+                        'This is a delicious recipe that you will love. Try it out and enjoy the flavors!'}
+                </p>
             </div>
 
             {recipeImage && (
@@ -194,7 +237,7 @@ const RecipeCard = ({ post, currentUsername }) => {
                         <RatingComponent
                             postId={postId}
                             isExpertRating={true}
-                            isReadOnly={isUser} // If the user has ROLE_USER, they cannot rate as expert
+                            isReadOnly={isUser} // If the user has ROLE_USER, they cannot rate as expert → make it read-only
                             initialAverage={averageRateExpert}
                             initialTotalRaters={totalRatersExpert}
                             currentUserRole={currentUserRole}
@@ -204,7 +247,7 @@ const RecipeCard = ({ post, currentUsername }) => {
                         <RatingComponent
                             postId={postId}
                             isExpertRating={false}
-                            isReadOnly={!isUser} // If the user is not role user, rating is read-only for regular
+                            isReadOnly={!isUser} // If the user is not ROLE_USER, rating is read-only for regular
                             initialAverage={averageRateRegular}
                             initialTotalRaters={totalRatersRegular}
                             currentUserRole={currentUserRole}
@@ -223,7 +266,10 @@ const RecipeCard = ({ post, currentUsername }) => {
                         isAnimationActive={false}
                     >
                         {pieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                            />
                         ))}
                     </Pie>
                 </PieChart>
@@ -231,17 +277,18 @@ const RecipeCard = ({ post, currentUsername }) => {
                 {/* Macronutrient Info */}
                 <div className="flex flex-col ml-4 text-sm text-gray-600">
                     <div className="flex items-center mb-1">
-                        <span>🍗</span> <span className="ml-1">{protein}g protein</span>
+                        <span>🍗</span>{' '}
+                        <span className="ml-1">{protein}g protein</span>
                     </div>
                     <div className="flex items-center mb-1">
-                        <span>🍞</span> <span className="ml-1">{carbs}g carbs</span>
+                        <span>🍞</span>{' '}
+                        <span className="ml-1">{carbs}g carbs</span>
                     </div>
                     <div className="flex items-center mb-1">
-                        <span>🥓</span> <span className="ml-1">{fat}g fat</span>
+                        <span>🥓</span>{' '}
+                        <span className="ml-1">{fat}g fat</span>
                     </div>
-                    <div className="mt-2 text-center">
-                        {calories} kcal
-                    </div>
+                    <div className="mt-2 text-center">{calories} kcal</div>
                 </div>
             </div>
 
@@ -259,7 +306,10 @@ const RecipeCard = ({ post, currentUsername }) => {
                     >
                         {liked ? '💔 Unlike' : '👍 Like'} {currentLikeCount}
                     </button>
-                    <button onClick={handleComments} className="flex items-center text-blue-500">
+                    <button
+                        onClick={handleComments}
+                        className="flex items-center text-blue-500"
+                    >
                         💬 Comments
                     </button>
                 </div>
