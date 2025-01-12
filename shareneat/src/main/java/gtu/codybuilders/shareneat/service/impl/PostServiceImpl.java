@@ -1,6 +1,7 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.NutritionFilterDto;
 import gtu.codybuilders.shareneat.dto.PostNutritiveValuesDto;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
@@ -86,7 +87,7 @@ public class PostServiceImpl implements PostService{
         List<ProductQuantityDto> productQuantities, 
         Map<Product, Double> productQuantityMap
     ) {
-        int totalCarbs = 0, totalProtein = 0, totalFat = 0, totalCalories = 0;
+        int totalCarbs = 0, totalProtein = 0, totalFat = 0, totalCalories = 0, totalGrams = 0;
     
         if (productQuantities != null) {
             for (ProductQuantityDto dto : productQuantities) {
@@ -94,18 +95,25 @@ public class PostServiceImpl implements PostService{
                         .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     
                 double usedQuantity = dto.getUsedQuantity();
-                double ratio = usedQuantity / product.getQuantity();
+                double ratio = usedQuantity / 100.0;
     
                 // Accumulate nutritional values
                 totalCarbs += ratio * product.getCarbonhydrateGrams();
                 totalProtein += ratio * product.getProteinGrams();
                 totalFat += ratio * product.getFatGrams();
                 totalCalories += ratio * product.getCalories();
+                totalGrams += usedQuantity;
     
                 // Populate the productQuantityMap
                 productQuantityMap.put(product, usedQuantity);
             }
         }
+
+        double totalRatio = totalGrams / 100.0;
+        totalCarbs = (int) Math.round(totalCarbs / totalRatio);
+        totalProtein = (int) Math.round(totalProtein / totalRatio);
+        totalFat = (int) Math.round(totalFat / totalRatio);
+        totalCalories = (int) Math.round(totalCalories / totalRatio);
     
         return PostNutritiveValuesDto.builder()
                 .carbs(totalCarbs)
@@ -151,17 +159,19 @@ public class PostServiceImpl implements PostService{
                 throw new RuntimeException("Failed to update image for post", e);
             }
         }
-    
-        // Recalculate nutritional values and update product quantities
-        Map<Product, Double> productQuantityMap = new HashMap<>();
-        PostNutritiveValuesDto nutritiveValues = calculateNutritionalValues(postRequest.getProductQuantities(), productQuantityMap);
-    
-        existingPost.setProductQuantities(productQuantityMap);
-        existingPost.setCarbs(nutritiveValues.getCarbs());
-        existingPost.setProtein(nutritiveValues.getProtein());
-        existingPost.setFat(nutritiveValues.getFat());
-        existingPost.setCalories(nutritiveValues.getCalories());
-    
+        
+        if(postRequest.getProductQuantities() != null){
+            // Recalculate nutritional values and update product quantities
+            Map<Product, Double> productQuantityMap = new HashMap<>();
+            PostNutritiveValuesDto nutritiveValues = calculateNutritionalValues(postRequest.getProductQuantities(), productQuantityMap);
+        
+            existingPost.setProductQuantities(productQuantityMap);
+            existingPost.setCarbs(nutritiveValues.getCarbs());
+            existingPost.setProtein(nutritiveValues.getProtein());
+            existingPost.setFat(nutritiveValues.getFat());
+            existingPost.setCalories(nutritiveValues.getCalories());
+        }
+        
         // Save the updated post
         postRepository.save(existingPost);
     }
@@ -351,6 +361,47 @@ public class PostServiceImpl implements PostService{
         Instant startOfDay = Instant.now().truncatedTo(ChronoUnit.DAYS); // Start of today
         Instant endOfDay = startOfDay.plus(1, ChronoUnit.DAYS); // End of today
         return postRepository.countPostsCreatedBetween(startOfDay, endOfDay);
+    }
+
+    @Override
+    public Page<PostResponse> findYourMeal(NutritionFilterDto filterDTO, Pageable pageable) {
+        Specification<Post> spec = Specification.where(null);
+
+        if (filterDTO.getMinCarbs() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("carbs"), filterDTO.getMinCarbs()));
+        }
+        if (filterDTO.getMaxCarbs() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("carbs"), filterDTO.getMaxCarbs()));
+        }
+        if (filterDTO.getMinFat() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("fat"), filterDTO.getMinFat()));
+        }
+        if (filterDTO.getMaxFat() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("fat"), filterDTO.getMaxFat()));
+        }
+        if (filterDTO.getMinProtein() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("protein"), filterDTO.getMinProtein()));
+        }
+        if (filterDTO.getMaxProtein() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("protein"), filterDTO.getMaxProtein()));
+        }
+        if (filterDTO.getMinCalories() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThanOrEqualTo(root.get("calories"), filterDTO.getMinCalories()));
+        }
+        if (filterDTO.getMaxCalories() != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.lessThanOrEqualTo(root.get("calories"), filterDTO.getMaxCalories()));
+        }
+
+        return postRepository.findAll(spec, pageable)
+                .map(postMapper::mapToPostResponse); 
     }
 
     /*

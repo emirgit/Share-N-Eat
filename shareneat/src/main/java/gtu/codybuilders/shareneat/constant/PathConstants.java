@@ -51,6 +51,7 @@ public class PathConstants {
     public static final String CURRENT_USER_FOLLOWINGS = CURRENT_USER + "/followings";
     public static final String BY_USER_USERNAME = BY_USER + USERNAME;
     public static final String BY_USER_USERNAME_RANGE = BY_USER_USERNAME + RANGE;
+    public static final String FIND_YOUR_MEAL = "/find-your-meal";
 
     public static final String COUNT = "/count";
     public static final String DAILY_COUNT = "/count/daily";

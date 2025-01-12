@@ -375,6 +375,7 @@ public class UserServiceImpl implements UserService {
         User user = repository.findByUsername(username)
                         .orElseThrow(() -> new UserNotFoundException("User not found !"));
         user.setBanned(true);
+        user.setEnabled(false);
         repository.save(user);
     }
 

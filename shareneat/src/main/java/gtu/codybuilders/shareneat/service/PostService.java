@@ -1,5 +1,6 @@
 package gtu.codybuilders.shareneat.service;
 
+import gtu.codybuilders.shareneat.dto.NutritionFilterDto;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import org.springframework.core.io.Resource;
@@ -22,6 +23,8 @@ public interface PostService {
     Page<PostResponse> getPostsForUserFollowings(Pageable pageable);
     Page<PostResponse> searchPosts(String query, Pageable pageable);
     String returnProfilePhoto();
+
+    Page<PostResponse> findYourMeal(NutritionFilterDto nutritionFilterDto, Pageable pageable);
 
     List<PostResponse> getPostsForCurrentUserInRange(int page, int size);
 

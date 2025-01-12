@@ -1,6 +1,7 @@
 package gtu.codybuilders.shareneat.controller;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.dto.NutritionFilterDto;
 import gtu.codybuilders.shareneat.dto.PostRequest;
 import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
@@ -118,6 +119,16 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> filterPosts(@RequestParam Map<String, String> filters){
         List<PostResponse> posts = postService.filterPosts(filters);
         return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @GetMapping(PathConstants.FIND_YOUR_MEAL)
+    public ResponseEntity<Page<PostResponse>> findYourMeal(
+        @Valid @ModelAttribute NutritionFilterDto nutritionFilterDto,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+            Page<PostResponse> posts = postService.findYourMeal(nutritionFilterDto, pageable);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping(PathConstants.COUNT)
