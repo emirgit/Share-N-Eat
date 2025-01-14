@@ -481,9 +481,23 @@ const ProductManagement = () => {
                                     </div>
                                     {/* Product Information */}
                                     <div className="flex-1 sm:ml-4">
-                                        <h3 className="font-semibold">{request.name}</h3>
+                                        <h3 className="font-semibold">
+                                            <input
+                                                type="text"
+                                                value={request.name}
+                                                onChange={(e) => handleRequestAttributeChange(request.id, 'name', e.target.value)}
+                                                className="border rounded px-1"
+                                            />
+                                        </h3>
                                         <p className="text-gray-600">
-                                            {request.category} - {request.quantity} g/ml
+                                            {request.category} -
+                                            <input
+                                                type="number"
+                                                value={request.quantity}
+                                                onChange={(e) => handleRequestAttributeChange(request.id, 'quantity', e.target.value)}
+                                                className="border rounded px-1 ml-2 w-16"
+                                            />
+                                            g/ml
                                         </p>
 
                                         {/* Nutrition Facts Section */}
@@ -556,8 +570,12 @@ const ProductManagement = () => {
 
                                     {/* Description Section */}
                                     <div className="flex-1 mt-4">
-                                    <h4 className="text-sm font-semibold">Description</h4>
-                                        <p className="text-gray-500 italic mt-1">"{request.description}"</p>
+                                        <h4 className="text-sm font-semibold">Description</h4>
+                                        <textarea
+                                            value={request.description}
+                                            onChange={(e) => handleRequestAttributeChange(request.id, 'description', e.target.value)}
+                                            className="w-full border rounded px-1"
+                                        />
                                     </div>
 
                                     <div className="flex flex-col space-y-2 sm:mt-0 sm:ml-4">
