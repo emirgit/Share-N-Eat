@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axiosHelper from '../axiosHelper';
 import '../styles/SettingsPage.css';
 
 const ChangePassword = () => {
@@ -17,30 +18,28 @@ const ChangePassword = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/auth/change/password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    currentPassword,
-                    newPassword
-                }),
-                credentials: 'include'
+            // Use axiosHelper with the data in the request body
+            const params = new URLSearchParams({
+                currentPassword: currentPassword,
+                newPassword: newPassword,
+                newPasswordtoConfirm: confirmPassword
             });
 
-            const data = await response.text();
-            
-            if (response.ok) {
-                alert(data);
-                // Redirect to settings page with Account Management tab selected
-                navigate('/settings', { state: { selectedMenu: 'Account Management' } });
-            } else {
-                alert(data);
-            }
+            await axiosHelper(`/user/change-password/my-account?${params}`, 'PUT');
+
+            alert('Password changed successfully!');
+            navigate('/settings', { state: { selectedMenu: 'Account Management' } });
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again later.');
+            console.error('Password change error:', {
+                status: error.response?.status,
+                message: error.response?.data
+            });
+            
+            if (error.response?.status === 403) {
+                alert('Current password is incorrect. Please try again.');
+            } else {
+                alert('Failed to change password. Please try again.');
+            }
         }
     };
 

@@ -75,15 +75,47 @@ const SettingsPage = () => {
         }
     };
 
-    const handleVerifyPassword = () => {
-        alert('Profile information updated successfully!');
-        setCurrentEmail(email);
-        setCurrentCountry(country);
-        setCurrentCity(city);
-        setCurrentRegion(region);
-        setCurrentPostalCode(postalCode);
-        setCurrentAddress(address);
-        setIsVerifying(false);
+    const handleVerifyPassword = async () => {
+        try {
+            // Create the query parameters string for password
+            const params = new URLSearchParams({
+                password: password
+            });
+
+            // Create address data
+            const addressData = {
+                country: country,
+                city: city,
+                region: region,
+                postalCode: parseInt(postalCode) || 0,
+                fullAddress: address
+            };
+
+            // Call the backend endpoint using axiosHelper with query params in URL
+            await axiosHelper(`/user/update-address/my-account?${params}`, 'PUT', addressData);
+
+            // Update local state on success
+            setCurrentEmail(email);
+            setCurrentCountry(country);
+            setCurrentCity(city);
+            setCurrentRegion(region);
+            setCurrentPostalCode(postalCode);
+            setCurrentAddress(address);
+            setIsVerifying(false);
+            
+            alert('Profile information updated successfully!');
+        } catch (error) {
+            console.error('Update error:', {
+                status: error.response?.status,
+                data: error.response?.data
+            });
+
+            if (error.response?.status === 403) {
+                alert('Access denied. Please check your password and try again.');
+            } else {
+                alert('Failed to update profile information. Please try again.');
+            }
+        }
     };
 
     const handleCancelVerification = () => {
