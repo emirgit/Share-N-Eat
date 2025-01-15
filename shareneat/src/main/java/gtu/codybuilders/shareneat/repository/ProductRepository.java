@@ -3,6 +3,7 @@ package gtu.codybuilders.shareneat.repository;
 import gtu.codybuilders.shareneat.model.Product;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,8 @@ public interface ProductRepository extends JpaRepository<Product,Long>, JpaSpeci
 
     @Query("SELECT COUNT(pr) FROM Product pr WHERE pr.created BETWEEN :startDate AND :endDate")
     long countProductsCreatedBetween(Instant startDate, Instant endDate);
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(p.brand) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Product> searchProductsForProductPage(@Param("keyword") String keyword);
+
 }

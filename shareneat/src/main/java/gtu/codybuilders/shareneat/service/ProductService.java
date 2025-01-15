@@ -28,7 +28,7 @@ public interface ProductService {
     List<ProductResponseDTO> getSortedProducts(String criteria, String asc);
 
     Page<ProductResponseDTO> searchProducts(String keyword, Pageable pageable);
-
+    List<ProductResponseDTO> searchProductsForProductPage(String keyword);
     List<ProductResponseDTO> filterProducts(Map<String, String> filters);
 
     Resource getImage(Long productId);

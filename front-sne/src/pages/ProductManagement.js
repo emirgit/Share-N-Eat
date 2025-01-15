@@ -11,9 +11,10 @@ import Milk from '../assets/Milk.jpg';
 // import ramen from '../assets/ramen.jpeg';
 import axiosHelper from "../axiosHelper";
 import { categories } from '../components/CategoriesSection';
+import { useNavigate } from 'react-router-dom';
 
 const ProductManagement = () => {
-
+    const navigate = useNavigate();
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -165,8 +166,18 @@ const ProductManagement = () => {
         );
     }
 
+    // const handleImageClick = (imageUrl) => {
+    //     window.open(imageUrl, '_blank'); // Open image in a new tab
+    // };
+
     const handleImageClick = (imageUrl) => {
-        window.open(imageUrl, '_blank'); // Open image in a new tab
+        const newWindow = window.open();
+        newWindow.document.write(`<img src="${imageUrl}" alt="Image" />`);
+        newWindow.document.close();
+    };
+
+    const handleImageClickProduct = (productId) => {
+        navigate(`/product/${productId}`);
     };
 
     //done product management
@@ -258,7 +269,7 @@ const ProductManagement = () => {
                                             src={product.imageUrlLocal}
                                             alt={`Product ${product.id}`}
                                             className="rounded-lg object-cover cursor-pointer"
-                                            onClick={() => handleImageClick(product.imageUrlLocal)}
+                                            onClick={() => handleImageClickProduct(product.id)}
                                         />
                                     </div>
                                     {/* Product Info */}

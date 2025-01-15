@@ -99,7 +99,7 @@ const ProductPage = () => {
 
     const handleSearch = async () => {
         try {
-            const searchedProducts = await axiosHelper(`/products/search?keyword=${searchKeyword}`);
+            const searchedProducts = await axiosHelper(`/products/searchForProductPage?keyword=${searchKeyword}`);
             const productsWithImages = await Promise.all(
                 searchedProducts.map(async (product) => {
                     const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, {responseType: 'blob'});

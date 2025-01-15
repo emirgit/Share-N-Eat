@@ -77,6 +77,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDTO> searchProductsForProductPage(String keyword) {
+        List<Product> products = productRepository.searchProductsForProductPage(keyword);
+
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public List<ProductResponseDTO> filterProducts(Map<String, String> filters) {
         Specification<Product> spec = Specification.where(null);
 
