@@ -4,15 +4,17 @@ import gtu.codybuilders.shareneat.constant.PathConstants;
 import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
+import gtu.codybuilders.shareneat.dto.UploadProductDTO;
 import gtu.codybuilders.shareneat.exception.ProductNotFoundException;
-import gtu.codybuilders.shareneat.model.AdminProductRequest;
-import gtu.codybuilders.shareneat.model.ImageUrl;
-import gtu.codybuilders.shareneat.model.Product;
+import gtu.codybuilders.shareneat.exception.UserNotFoundException;
+import gtu.codybuilders.shareneat.model.*;
 import gtu.codybuilders.shareneat.repository.AdminProductRequestRepository;
 import gtu.codybuilders.shareneat.repository.ProductRepository;
 import gtu.codybuilders.shareneat.repository.UserRepository;
+import gtu.codybuilders.shareneat.service.ImageProcessingService;
 import gtu.codybuilders.shareneat.service.ImageService;
 import gtu.codybuilders.shareneat.service.ProductService;
+import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
@@ -93,9 +95,8 @@ public class ProductServiceImpl implements ProductService {
             case "brand" -> Comparator.comparing(Product::getBrand);
             case "calories" -> Comparator.comparing(Product::getCalories);
             case "protein" -> Comparator.comparing(Product::getProteinGrams);
-            case "carbohydrates" -> Comparator.comparing(Product::getCarbonhydrateGrams);
+            case "carbonhydrates" -> Comparator.comparing(Product::getCarbonhydrateGrams);
             case "fat" -> Comparator.comparing(Product::getFatGrams);
-            case "sugar" -> Comparator.comparing(Product::getSugarGrams);
             case "rating" -> Comparator.comparing(Product::getRating);
             case "created" -> Comparator.comparing(Product::getCreated);
             default -> throw new IllegalArgumentException("Invalid sorting criteria: " + criteria);
@@ -141,29 +142,44 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, MultipartFile file) {
+    public void adminCreateProduct(Product product) {
+        product.setCreated(Instant.now());
+        productRepository.save(product);
+    }
+
+
+    @Override
+    public void createAddProductRequest(UploadProductDTO uploadProductDTO,
+                                        MultipartFile image,
+                                        MultipartFile contentImage,
+                                        MultipartFile macrotableImage) {
+
         AdminProductRequest adminProductRequest = new AdminProductRequest();
-        adminProductRequest.setName(adminProductRequestRequestDTO.getName());
-        adminProductRequest.setBrand(adminProductRequestRequestDTO.getBrand());
-        adminProductRequest.setDescription(adminProductRequestRequestDTO.getDescription());
-        adminProductRequest.setCalories(adminProductRequestRequestDTO.getCalories());
-        adminProductRequest.setProteinGrams(adminProductRequestRequestDTO.getProteinGrams());
-        adminProductRequest.setCarbonhydrateGrams(adminProductRequestRequestDTO.getCarbonhydrateGrams());
-        adminProductRequest.setFatGrams(adminProductRequestRequestDTO.getFatGrams());
-        adminProductRequest.setSugarGrams(adminProductRequestRequestDTO.getSugarGrams());
-        adminProductRequest.setCategory(adminProductRequestRequestDTO.getCategory());
-        adminProductRequest.setQuantity(adminProductRequestRequestDTO.getQuantity());
+        adminProductRequest.setName(uploadProductDTO.getName());
+        adminProductRequest.setBrand(uploadProductDTO.getBrand());
+        adminProductRequest.setCategory(uploadProductDTO.getCategory());
         adminProductRequest.setRequestTime(Instant.now());
+        //User user = userRepository.findById(AuthUtil.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        //adminProductRequest.setUser(user);
 
-//        User user = userRepository.findById(AuthUtil.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
-//        adminProductRequest.setUser(user);
-
-        List<ImageUrl> imageUrls = new ArrayList<>();
         try {
-            String imageUrl = imageService.saveImage(file, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
-            adminProductRequest.setImageUrl(imageUrl);
+            String imageUrl = imageService.saveImage(image, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+            String contentImageUrl = imageService.saveImage(contentImage, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
+            String macrotableImageUrl = imageService.saveImage(macrotableImage, PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST);
 
-            // file2 file3 olucnma buraya ekleme yap. sadece yukardakilerin aynisini yazcaksin
+            adminProductRequest.setImageUrl(imageUrl);
+            adminProductRequest.setContentImageUrl(contentImageUrl);
+            adminProductRequest.setMacrotableImageUrl(macrotableImageUrl);
+
+            ImageProcessingService imageProcessingService = new ImageProcessingServiceImpl();
+            NutritionInfo nutritionInfo = imageProcessingService.parseImages(macrotableImageUrl, contentImageUrl);
+
+            adminProductRequest.setDescription(nutritionInfo.getContent());
+            adminProductRequest.setCalories(nutritionInfo.getCalories());
+            adminProductRequest.setProteinGrams(nutritionInfo.getProteinGrams());
+            adminProductRequest.setCarbonhydrateGrams(nutritionInfo.getCarbonhydrateGrams());
+            adminProductRequest.setFatGrams(nutritionInfo.getFatGrams());
+            adminProductRequest.setQuantity(100.0);
 
         } catch (IOException e) {
             System.out.println("Error saving image");
@@ -172,25 +188,29 @@ public class ProductServiceImpl implements ProductService {
         adminProductRequestRepository.save(adminProductRequest);
     }
 
-
     @Override
     public void deleteProduct(long productId){
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
+        imageService.deleteImage(product.getImageUrl(), PathConstants.UPLOAD_DIR_PRODUCT);
         productRepository.delete(product);
     }
 
     @Override
     public void updateProduct(ProductRequestDTO productRequestDTO, long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
 
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + productId));
-
+        // Update the fields of the existing product
         product.setName(productRequestDTO.getName());
         product.setBrand(productRequestDTO.getBrand());
+        product.setCategory(productRequestDTO.getCategory());
+        product.setContent(productRequestDTO.getContent());
+        //product.setImageUrl(productRequestDTO.getImageUrl());
+        product.setQuantity(productRequestDTO.getQuantity());
         product.setCalories(productRequestDTO.getCalories());
+        product.setProteinGrams(productRequestDTO.getProteinGrams());
         product.setCarbonhydrateGrams(productRequestDTO.getCarbonhydrateGrams());
         product.setFatGrams(productRequestDTO.getFatGrams());
-        product.setProteinGrams(productRequestDTO.getProteinGrams());
-        product.setSugarGrams(productRequestDTO.getSugarGrams());
 
         productRepository.save(product);
     }

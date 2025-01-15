@@ -12,7 +12,7 @@ public class Main {
         ImageProcessingService service = new ImageProcessingServiceImpl();
 
         Path path = Paths.get(System.getProperty("user.dir"), "shareneat","src", "main", "resources", "static", "images", "testImage");
-
+        System.out.println(path.toString());
         // Full paths for image files
                 String macroTableUrl = path.resolve("macroTable.png").toString();
                 String contentUrl = path.resolve("content.png").toString();

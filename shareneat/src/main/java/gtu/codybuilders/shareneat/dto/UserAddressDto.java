@@ -14,5 +14,5 @@ public class UserAddressDto {
     private String city;
     private String region;
     private Integer postalCode;
-    private String fullAddress; 
+    private String fullAddress;
 }

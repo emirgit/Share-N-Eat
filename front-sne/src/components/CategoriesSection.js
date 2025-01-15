@@ -1,7 +1,5 @@
 import React from 'react';
-
-const CategoriesSection = ({ onCategorySelect }) => {
-    const categories = [
+export const categories = [
         { name: 'All Products', icon: '🛒' }, // New "All Products" category
         { name: 'Drinks', icon: '🍹' },
         { name: 'Dairy', icon: '🧀' },
@@ -11,7 +9,9 @@ const CategoriesSection = ({ onCategorySelect }) => {
         { name: 'Grains and Legumes', icon: '🌾' },
         { name: 'Fruits and Vegetables', icon: '🍎' },
     ];
-
+    
+const CategoriesSection = ({ onCategorySelect }) => {
+    
     return (
         <div className="bg-gray-100 py-4 px-6 rounded-lg shadow-md mb-6">
             <h3 className="text-gray-700 font-semibold mb-4">Categories</h3>

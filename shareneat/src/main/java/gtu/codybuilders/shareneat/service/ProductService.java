@@ -3,6 +3,8 @@ package gtu.codybuilders.shareneat.service;
 import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
+import gtu.codybuilders.shareneat.dto.UploadProductDTO;
+import gtu.codybuilders.shareneat.model.Product;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,7 @@ public interface ProductService {
     List<ProductResponseDTO> getAll();
 
     void createProduct(ProductRequestDTO productRequestDTO, MultipartFile file);
-
+    void adminCreateProduct(Product product);
     void deleteProduct(long productId);
 
     void updateProduct(ProductRequestDTO productRequestDTO, long productId);
@@ -25,13 +27,13 @@ public interface ProductService {
 
     List<ProductResponseDTO> getSortedProducts(String criteria, String asc);
 
-    public Page<ProductResponseDTO> searchProducts(String keyword, Pageable pageable);
+    Page<ProductResponseDTO> searchProducts(String keyword, Pageable pageable);
 
     List<ProductResponseDTO> filterProducts(Map<String, String> filters);
 
     Resource getImage(Long productId);
 
-    void createAddProductRequest(AdminProductRequestRequestDTO adminProductRequestRequestDTO, MultipartFile file);
+    void createAddProductRequest(UploadProductDTO uploadProductDTO, MultipartFile image, MultipartFile contentImage, MultipartFile macrotableImage);
 
     Long getProductsCount();
     Long getDailyProductCount();

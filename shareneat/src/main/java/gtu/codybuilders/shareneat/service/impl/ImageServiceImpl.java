@@ -30,12 +30,35 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public String moveImage(String filename, Path sourceDirectory, Path targetDirectory) throws IOException {
+        Files.createDirectories(targetDirectory);
+
+        Path sourcePath = sourceDirectory.resolve(filename);
+        Path targetPath = targetDirectory.resolve(filename);
+
+        Files.move(sourcePath, targetPath);
+
+        return filename;
+    }
+
+
+    @Override
     public Resource loadImage(String filename, Path directory) {
         try {
             Path filePath = directory.resolve(filename);
             return new UrlResource(filePath.toUri());
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException("Could not load image: " + filename);
+        }
+    }
+
+    @Override
+    public byte[] loadImageAsBytes(String filename, Path uploadDir) {
+        try {
+            Path imagePath = uploadDir.resolve(filename);
+            return Files.readAllBytes(imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read image file: " + filename, e);
         }
     }
 

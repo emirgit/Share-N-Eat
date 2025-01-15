@@ -30,19 +30,18 @@ public class Product {
     private Double proteinGrams;
     private Double carbonhydrateGrams;
     private Double fatGrams;
-    private Double sugarGrams;
 
-    private Double rating;
-    private Integer ratingCount;
-    private Integer numberOfComments;
+    private Double rating = 0.0;
+    private Integer ratingCount = 0;
+    private Integer numberOfComments = 0;
     private Instant created;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductComment> comments;
 
-    private Double averageRateExpert;
-    private Double averageRateRegular;
-    private Integer totalRatersExpert;
-    private Integer totalRatersRegular;
+    private Double averageRateExpert = 0.0;
+    private Double averageRateRegular = 0.0;
+    private Integer totalRatersExpert = 0;
+    private Integer totalRatersRegular = 0;
 
 }

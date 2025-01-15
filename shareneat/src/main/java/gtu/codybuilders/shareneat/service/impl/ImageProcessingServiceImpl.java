@@ -40,7 +40,7 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
         // Maps recognized text to numeric fields on the model
         info.setCalories(parseDouble(macrosFound.get("energy")));
         info.setProteinGrams(parseDouble(macrosFound.get("protein")));
-        info.setCarbonhydrateGrams(parseDouble(macrosFound.get("carbohydrate")));
+        info.setCarbonhydrateGrams(parseDouble(macrosFound.get("carbonhydrate")));
         info.setFatGrams(parseDouble(macrosFound.get("fat")));
 
         // Places the OCR text from the second image into the 'content' field
@@ -74,7 +74,7 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
         Map<String, String[]> synonyms = new HashMap<>();
         synonyms.put("energy",        new String[] {"energy", "enerji"});
         synonyms.put("fat",           new String[] {"fat", "yağ"});
-        synonyms.put("carbohydrate",  new String[] {"carbohydrate", "karbonhidrat"});
+        synonyms.put("carbonhydrate",  new String[] {"carbonhydrate", "karbonhidrat"});
         synonyms.put("protein",       new String[] {"protein"});
         // Additional fields (e.g., "sugar", "salt", "kalsiyum", etc.) can be added here if needed
 
