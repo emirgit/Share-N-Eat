@@ -57,6 +57,12 @@ public class ProductController {
         return ResponseEntity.ok(productPage);
     }
 
+    @GetMapping("/searchForProductPage")
+    public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String keyword) {
+        List<ProductResponseDTO> productResponseDTOS = productService.searchProductsForProductPage(keyword);
+        return ResponseEntity.ok(productResponseDTOS);
+    }
+
     @GetMapping(PathConstants.FILTER)
     public ResponseEntity<List<ProductResponseDTO>> filterProducts(@RequestParam Map<String, String> filters) {
         List<ProductResponseDTO> productResponseDTOS = productService.filterProducts(filters);
