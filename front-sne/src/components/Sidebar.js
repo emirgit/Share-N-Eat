@@ -4,39 +4,27 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FindYourMealModal from './FindYourMealModal';
 
-const Sidebar = ({ setFetchMode, onRefresh, currentFetchMode }) => {
+const Sidebar = () => {
   const navigate = useNavigate();
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
 
+  // We simply navigate with query parameters:
   const handleHomeClick = () => {
-    if (currentFetchMode === 'trendings') {
-      onRefresh(); // Trigger refresh if already in 'trendings' mode
-    } else {
-      setFetchMode('trendings');
-      navigate('/');
-    }
+    // For "home," we assume it's the "trendings" fetchMode
+    navigate('/?fetchMode=trendings');
   };
 
   const handleFollowingsClick = () => {
-    if (currentFetchMode === 'followings') {
-      onRefresh(); // Trigger refresh if already in 'followings' mode
-    } else {
-      setFetchMode('followings');
-      navigate('/');
-    }
+    navigate('/?fetchMode=followings');
   };
 
   const handleTrendsClick = () => {
-    if (currentFetchMode === 'trendings') {
-      onRefresh(); // Trigger refresh if already in 'trendings' mode
-    } else {
-      setFetchMode('trendings');
-      navigate('/');
-    }
+    navigate('/?fetchMode=trendings');
   };
 
   const handleMealSearch = (nutritionValues) => {
-    // Implement meal search functionality
+    // If you need to do something else with the meal search,
+    // you can do it here. Otherwise, it's optional.
   };
 
   return (
@@ -48,6 +36,7 @@ const Sidebar = ({ setFetchMode, onRefresh, currentFetchMode }) => {
         <span className="mr-2">🏠</span>
         <span className="text-lg font-medium">Home</span>
       </div>
+
       <div
         className="flex items-center mb-6 cursor-pointer"
         onClick={handleFollowingsClick}
@@ -55,6 +44,7 @@ const Sidebar = ({ setFetchMode, onRefresh, currentFetchMode }) => {
         <span className="mr-2">📁</span>
         <span className="text-lg font-medium">Followings</span>
       </div>
+
       <div
         className="flex items-center mb-6 cursor-pointer"
         onClick={handleTrendsClick}
@@ -62,6 +52,7 @@ const Sidebar = ({ setFetchMode, onRefresh, currentFetchMode }) => {
         <span className="mr-2">🔥</span>
         <span className="text-lg font-medium">Trends</span>
       </div>
+
       <div
         className="flex items-center mb-6 cursor-pointer"
         onClick={() => setIsMealModalOpen(true)}
@@ -69,6 +60,7 @@ const Sidebar = ({ setFetchMode, onRefresh, currentFetchMode }) => {
         <span className="mr-2">🍽️</span>
         <span className="text-lg font-medium">Find Your Meal</span>
       </div>
+
       <div
         className="flex items-center mb-6 cursor-pointer"
         onClick={() => navigate('/products')}

@@ -1,61 +1,147 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axiosHelper from '../axiosHelper';
 
-const IngredientAdd = ({ existingProducts, onAddIngredient, onCancel }) => {
+const IngredientAdd = ({ onAddIngredient, onCancel }) => {
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [availableProducts, setAvailableProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState('');
 
-    const handleProductSelect = (product) => {
-        setSelectedProduct(product);
-    };
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
-    const handleAddIngredient = () => {
-        if (selectedProduct && quantity) {
-            onAddIngredient({ ...selectedProduct, quantity });
-            setSelectedProduct(null);
-            setQuantity('');
+    const fetchProducts = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            const allProducts = await axiosHelper('/products/getAll', 'GET');
+            const productsWithImages = await Promise.all(
+                allProducts.map(async (product) => {
+                    const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, { responseType: 'blob' });
+                    const imageUrl = URL.createObjectURL(imageResponse);
+                    return { ...product, imageUrl };
+                })
+            );
+            setAvailableProducts(productsWithImages);
+        } catch (error) {
+            console.error('Failed to fetch products:', error);
+            setError('Failed to load products. Please try again later.');
+        } finally {
+            setLoading(false);
         }
     };
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl">
-                <h3 className="text-lg font-semibold mb-4">Select a Product</h3>
+    const handleSearch = async () => {
+        if (!searchKeyword.trim()) {
+            fetchProducts();
+            return;
+        }
+        setLoading(true);
+        setError('');
+        try {
+            const searchedProducts = await axiosHelper(`/products/search?keyword=${encodeURIComponent(searchKeyword)}`, 'GET');
+            const productsWithImages = await Promise.all(
+                searchedProducts.map(async (product) => {
+                    const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, { responseType: 'blob' });
+                    const imageUrl = URL.createObjectURL(imageResponse);
+                    return { ...product, imageUrl };
+                })
+            );
+            setAvailableProducts(productsWithImages);
+        } catch (error) {
+            console.error('Failed to search products:', error);
+            setError('Failed to search products. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                {/* Product List */}
-                <div className="grid grid-cols-3 gap-4">
-                    {existingProducts.map((product) => (
+    const handleSelectProduct = (product) => {
+        setSelectedProduct(product);
+    };
+
+    const handleAdd = () => {
+        if (!selectedProduct) {
+            alert('Please select a product.');
+            return;
+        }
+        if (!quantity || isNaN(quantity) || Number(quantity) <= 0) {
+            alert('Please enter a valid quantity.');
+            return;
+        }
+        const ingredient = {
+            productId: selectedProduct.id,
+            name: selectedProduct.name,
+            quantity: Number(quantity),
+        };
+        onAddIngredient(ingredient);
+        // Reset selections
+        setSelectedProduct(null);
+        setQuantity('');
+    };
+
+    return (
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl">
+                <h2 className="text-lg font-semibold mb-4">Add Product</h2>
+                <div className="flex mb-4">
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        className="flex-1 p-2 border rounded-l-md"
+                    />
+                    <button
+                        onClick={handleSearch}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
+                    >
+                        Search
+                    </button>
+                </div>
+
+                {loading && <p>Loading products...</p>}
+                {error && <p className="text-red-500">{error}</p>}
+
+                <div className="flex space-x-4 overflow-x-auto py-4">
+                    {availableProducts.map((product) => (
                         <div
                             key={product.id}
-                            onClick={() => handleProductSelect(product)}
-                            className={`cursor-pointer p-2 border rounded-lg ${
-                                selectedProduct?.id === product.id
+                            className={`w-40 p-2 border rounded-md cursor-pointer ${
+                                selectedProduct && selectedProduct.id === product.id
                                     ? 'border-blue-500'
                                     : 'border-gray-300'
                             }`}
+                            onClick={() => handleSelectProduct(product)}
                         >
                             <img
                                 src={product.imageUrl}
                                 alt={product.name}
-                                className="w-full h-20 object-cover rounded-lg"
+                                className="w-full h-24 object-cover rounded-md"
                             />
-                            <p className="text-center mt-2 text-sm">{product.name}</p>
+                            <h3 className="mt-2 text-sm font-medium">{product.name}</h3>
+                            <p className="text-xs text-gray-600">{product.brand}</p>
                         </div>
                     ))}
                 </div>
 
-                {/* Quantity Input */}
-                <div className="mt-4">
-                    <label className="block text-sm font-semibold mb-1">Enter Quantity</label>
-                    <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        className="w-full p-2 border rounded-md"
-                    />
-                </div>
+                {selectedProduct && (
+                    <div className="mt-4">
+                        <label className="block mb-2">Quantity (g/ml):</label>
+                        <input
+                            type="number"
+                            min="0"
+                            value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)}
+                            className="w-full p-2 border rounded-md"
+                        />
+                    </div>
+                )}
 
-                {/* Buttons */}
-                <div className="flex justify-end space-x-4 mt-4">
+                <div className="flex justify-end space-x-4 mt-6">
                     <button
                         onClick={onCancel}
                         className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
@@ -63,15 +149,10 @@ const IngredientAdd = ({ existingProducts, onAddIngredient, onCancel }) => {
                         Cancel
                     </button>
                     <button
-                        onClick={handleAddIngredient}
-                        disabled={!selectedProduct || !quantity}
-                        className={`px-4 py-2 rounded-md ${
-                            selectedProduct && quantity
-                                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        }`}
+                        onClick={handleAdd}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                     >
-                        Add Ingredient
+                        Add
                     </button>
                 </div>
             </div>

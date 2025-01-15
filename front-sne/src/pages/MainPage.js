@@ -1,6 +1,7 @@
 // src/pages/MainPage.js
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RecipeCard from '../components/RecipeCard';
@@ -10,7 +11,26 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 const MainPage = () => {
   // --------------------------------------------
-  // State
+  // 1) Read `fetchMode` from the URL query param
+  // --------------------------------------------
+  const location = useLocation();
+  const [fetchMode, setFetchMode] = useState('trendings');
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const mode = searchParams.get('fetchMode');
+
+    if (mode === 'followings') {
+      setFetchMode('followings');
+    } else if (mode === 'findMeal') {
+      setFetchMode('findMeal');
+    } else {
+      setFetchMode('trendings');
+    }
+  }, [location.search]);
+
+  // --------------------------------------------
+  // 2) Other state
   // --------------------------------------------
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
@@ -23,17 +43,11 @@ const MainPage = () => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  // Which endpoint mode are we using? ("trendings" or "followings")
-  const [fetchMode, setFetchMode] = useState('trendings');
-
-  // Refresh counter
-  const [refreshCounter, setRefreshCounter] = useState(0);
-
   // Scroll container ref
   const scrollContainerRef = useRef(null);
 
   // --------------------------------------------
-  // Fetch current user's username
+  // 3) Fetch current user's username
   // --------------------------------------------
   useEffect(() => {
     (async () => {
@@ -50,66 +64,102 @@ const MainPage = () => {
   }, []);
 
   // --------------------------------------------
-  // Effect A: Reset when fetchMode or refreshCounter changes
+  // 4) Reset posts/page/hasMore on fetchMode or user load
   // --------------------------------------------
   useEffect(() => {
     if (!usernameError && !usernameLoading) {
-      // 1) Clear old posts
       setPosts([]);
-      // 2) Reset page
       setPage(0);
-      // 3) Reset hasMore
       setHasMore(true);
     }
-  }, [fetchMode, refreshCounter, usernameError, usernameLoading]);
+  }, [fetchMode, usernameError, usernameLoading]);
 
   // --------------------------------------------
-  // Effect B: Whenever the page, fetchMode, or refreshCounter changes, fetch new data
+  // 5) Fetch new data whenever page changes
   // --------------------------------------------
   useEffect(() => {
     if (!usernameError && !usernameLoading) {
       fetchPosts();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, fetchMode, refreshCounter, usernameError, usernameLoading]);
+  }, [page, fetchMode, usernameError, usernameLoading]);
 
   // --------------------------------------------
-  // Scroll to top whenever fetchMode or refreshCounter changes
+  // 6) Scroll to top whenever fetchMode changes
   // --------------------------------------------
   useEffect(() => {
-    window.scrollTo(0, 0); // Immediate scroll to top
-  }, [fetchMode, refreshCounter]);
+    window.scrollTo(0, 0); // immediate scroll to top
+  }, [fetchMode]);
 
   // --------------------------------------------
-  // fetchPosts - uses current page & fetchMode
+  // 7) fetchPosts
   // --------------------------------------------
   const fetchPosts = async () => {
     try {
       let endpoint;
+      let method = 'GET';
+      let body = null;
+      let headers = undefined;
+
+      // We'll parse the query from location.search
+      const searchParams = new URLSearchParams(location.search);
 
       if (fetchMode === 'followings') {
-        endpoint = '/posts/current-user/followings';
+        endpoint = `/posts/current-user/followings?page=${page}&size=${pageSize}`;
+      } else if (fetchMode === 'findMeal') {
+        // We'll POST to /posts/find-your-meal with FormData
+        endpoint = `/posts/find-your-meal?page=${page}&size=${pageSize}`;
+        method = 'POST';
+
+        // Build FormData for the model attribute
+        const formData = new FormData();
+
+        if (searchParams.get('minCarbs') !== null) {
+          formData.append('minCarbs', searchParams.get('minCarbs'));
+        }
+        if (searchParams.get('maxCarbs') !== null) {
+          formData.append('maxCarbs', searchParams.get('maxCarbs'));
+        }
+
+        if (searchParams.get('minFat') !== null) {
+          formData.append('minFat', searchParams.get('minFat'));
+        }
+        if (searchParams.get('maxFat') !== null) {
+          formData.append('maxFat', searchParams.get('maxFat'));
+        }
+
+        if (searchParams.get('minProtein') !== null) {
+          formData.append('minProtein', searchParams.get('minProtein'));
+        }
+        if (searchParams.get('maxProtein') !== null) {
+          formData.append('maxProtein', searchParams.get('maxProtein'));
+        }
+
+        if (searchParams.get('minCalories') !== null) {
+          formData.append('minCalories', searchParams.get('minCalories'));
+        }
+        if (searchParams.get('maxCalories') !== null) {
+          formData.append('maxCalories', searchParams.get('maxCalories'));
+        }
+
+        body = formData;
+        headers = { 'Content-Type': 'multipart/form-data' };
       } else {
-        // Default to "trendings" or "home"
-        endpoint = '/posts/current-user/trendings';
+        // default: "trendings"
+        endpoint = `/posts/current-user/trendings?page=${page}&size=${pageSize}`;
       }
 
-      const response = await axiosHelper(
-        `${endpoint}?page=${page}&size=${pageSize}`,
-        'GET'
-      );
-
+      // Call axiosHelper
+      const response = await axiosHelper(endpoint, method, body, headers);
       const fetchedPosts = response.content || response;
 
-      // Append the new posts to our existing array
+      // Append new posts
       setPosts((prev) => [...prev, ...fetchedPosts]);
 
-      // If your backend provides totalPages
+      // Check if there's more data
       if (response.totalPages !== undefined) {
         setHasMore(page + 1 < response.totalPages);
       } else {
-        // If no totalPages, you'll need another approach for "hasMore"
-        // e.g. check if fetchedPosts.length < pageSize
         setHasMore(fetchedPosts.length > 0);
       }
     } catch (err) {
@@ -120,14 +170,7 @@ const MainPage = () => {
   };
 
   // --------------------------------------------
-  // Handle Refresh
-  // --------------------------------------------
-  const handleRefresh = () => {
-    setRefreshCounter((prev) => prev + 1);
-  };
-
-  // --------------------------------------------
-  // Render
+  // 8) Render
   // --------------------------------------------
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -136,19 +179,14 @@ const MainPage = () => {
 
       {/* Main content */}
       <div className="flex flex-row">
-        {/* Sidebar - pass down setFetchMode and handleRefresh */}
-        <Sidebar
-          setFetchMode={setFetchMode}
-          onRefresh={handleRefresh}
-          currentFetchMode={fetchMode}
-        />
+        <Sidebar />
 
         {/* Main feed area */}
         <div className="flex-1 flex flex-col" ref={scrollContainerRef}>
           {/* Upload Section */}
           <UploadSection />
 
-          {/* Loading username */}
+          {/* Loading user data */}
           {usernameLoading && (
             <p className="text-center text-gray-500 mt-4">
               Loading user data...
@@ -167,7 +205,7 @@ const MainPage = () => {
             <p className="text-center text-red-500 mt-4">{error}</p>
           )}
 
-          {/* If no posts and no more pages, show "No posts available" */}
+          {/* If no posts and no more pages => "No posts available" */}
           {!usernameLoading &&
             !usernameError &&
             posts.length === 0 &&
@@ -180,7 +218,7 @@ const MainPage = () => {
           {/* Feed Section */}
           {!usernameLoading && !usernameError && posts.length > 0 && (
             <InfiniteScroll
-              key={`${fetchMode}-${refreshCounter}`} // Added key prop
+              key={fetchMode}
               dataLength={posts.length}
               next={() => setPage((prev) => prev + 1)}
               hasMore={hasMore}
