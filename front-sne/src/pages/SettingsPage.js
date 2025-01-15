@@ -13,12 +13,14 @@ const SettingsPage = () => {
     );
 
     // Account Preferences States
-    const [currentEmail, setCurrentEmail] = useState('currentEmail@example.com'); // Mock current email
-    const [email, setEmail] = useState('currentEmail@example.com'); // Form email state
-    const [isVerifying, setIsVerifying] = useState(false); // State to show verification step
-    const [password, setPassword] = useState(''); // State to capture password for verification
+    // Başlangıçta mock değerler atanmış durumda:
+    const [currentEmail, setCurrentEmail] = useState('currentEmail@example.com');
+    const [email, setEmail] = useState('currentEmail@example.com'); 
 
-    // Add new states for location information
+    const [isVerifying, setIsVerifying] = useState(false); 
+    const [password, setPassword] = useState(''); 
+
+    // Adres bilgisiyle ilgili state'ler
     const [currentCountry, setCurrentCountry] = useState('');
     const [currentCity, setCurrentCity] = useState('');
     const [currentRegion, setCurrentRegion] = useState('');
@@ -39,11 +41,11 @@ const SettingsPage = () => {
     const [loadingPrivacy, setLoadingPrivacy] = useState(true);
     const [errorPrivacy, setErrorPrivacy] = useState('');
 
-    // Add new states for delete account verification
+    // Hesap silme modal state'leri
     const [isDeleting, setIsDeleting] = useState(false);
     const [deletePassword, setDeletePassword] = useState('');
 
-    // Fetch site settings for Data Privacy Rules on component mount
+    // 1) Site Settings (Terms of Service & Privacy Policy) verilerini çekme
     useEffect(() => {
         const fetchSiteSettings = async () => {
             try {
@@ -61,31 +63,86 @@ const SettingsPage = () => {
         fetchSiteSettings();
     }, []);
 
+    // 2) Kullanıcının email'ini backend'den çekme
+    useEffect(() => {
+        const fetchEmail = async () => {
+            try {
+                // Burada /user/my-account/email endpoint'ine GET isteği atıyoruz
+                const userEmail = await axiosHelper('/user/my-account/email', 'GET');
+                
+                // State'leri gerçek email ile güncelliyoruz
+                setCurrentEmail(userEmail);
+                setEmail(userEmail);
+            } catch (error) {
+                console.error('Failed to fetch email:', error);
+            }
+        };
+
+        fetchEmail();
+    }, []);
+
+    // Değişiklikleri kaydetmek için "Save Changes" butonuna basıldığında çalışır
     const handleSaveChanges = () => {
-        // Check if any changes were made
-        if (email !== currentEmail ||
+        // email veya adres bilgileri değiştiyse verification modal açıyoruz
+        if (
+            email !== currentEmail ||
             country !== currentCountry ||
             city !== currentCity ||
             region !== currentRegion ||
             postalCode !== currentPostalCode ||
-            address !== currentAddress) {
+            address !== currentAddress
+        ) {
             setIsVerifying(true);
         } else {
             alert('No changes detected to save.');
         }
     };
 
-    const handleVerifyPassword = () => {
-        alert('Profile information updated successfully!');
-        setCurrentEmail(email);
-        setCurrentCountry(country);
-        setCurrentCity(city);
-        setCurrentRegion(region);
-        setCurrentPostalCode(postalCode);
-        setCurrentAddress(address);
-        setIsVerifying(false);
+    // "Verify and Save" butonuna basıldığında password doğrulaması ve update işlemi
+    const handleVerifyPassword = async () => {
+        try {
+            // password query param olarak geçecek
+            const params = new URLSearchParams({
+                password: password
+            });
+
+            // Adres bilgilerini body olarak hazırlıyoruz
+            const addressData = {
+                country: country,
+                city: city,
+                region: region,
+                postalCode: parseInt(postalCode) || 0,
+                fullAddress: address
+            };
+
+            // Backend'e PUT isteği (/user/update-address/my-account?password=xxx)
+            await axiosHelper(`/user/update-address/my-account?${params}`, 'PUT', addressData);
+
+            // Her şey başarılıysa, current değişkenleri güncelliyoruz
+            setCurrentEmail(email);
+            setCurrentCountry(country);
+            setCurrentCity(city);
+            setCurrentRegion(region);
+            setCurrentPostalCode(postalCode);
+            setCurrentAddress(address);
+
+            setIsVerifying(false);
+            alert('Profile information updated successfully!');
+        } catch (error) {
+            console.error('Update error:', {
+                status: error.response?.status,
+                data: error.response?.data
+            });
+
+            if (error.response?.status === 403) {
+                alert('Access denied. Please check your password and try again.');
+            } else {
+                alert('Failed to update profile information. Please try again.');
+            }
+        }
     };
 
+    // Verification modal iptal butonu
     const handleCancelVerification = () => {
         setEmail(currentEmail);
         setCountry(currentCountry);
@@ -96,52 +153,61 @@ const SettingsPage = () => {
         setIsVerifying(false);
     };
 
+    // Parola değiştirme butonu
     const handleChangePassword = () => {
         navigate('/change-password');
     };
 
+    // Hesap silme butonuna basıldığında açılacak modal
     const handleDeleteAccount = () => {
         setIsDeleting(true);
     };
 
-    const handleConfirmDelete = async () => {
-        try {
-            // Using axiosHelper instead of fetch
-            await axiosHelper('/user/delete/my-account', 'DELETE');
-            
-            // Clear storage and redirect on success
-            localStorage.clear();
-            sessionStorage.clear();
-            alert('Account deleted successfully');
-            navigate('/auth/login');
-        } catch (error) {
-            console.error('Delete error:', error);
-            if (error.response?.status === 403) {
-                alert('Access denied. Please check your password and try again.');
-            } else {
-                alert('An error occurred while trying to delete your account.');
-            }
+    // Hesabı gerçekten silmek için Confirm butonuna basılınca
+    // Delete Account Modal - Confirm Delete
+const handleConfirmDelete = async () => {
+    try {
+        const params = new URLSearchParams({
+            password: deletePassword
+        });
+        await axiosHelper(`/user/delete/my-account?${params}`, 'DELETE');
+        
+        localStorage.clear();
+        sessionStorage.clear();
+        alert('Account deleted successfully');
+        navigate('/auth/login');
+    } catch (error) {
+        console.error('Delete error:', error);
+        if (error.response?.status === 403) {
+            alert('Access denied. Please check your password and try again.');
+        } else {
+            alert('An error occurred while trying to delete your account.');
         }
-    };
+    }
+};
 
+
+    // Hesap silme modal'ını iptal
     const handleCancelDelete = () => {
         setIsDeleting(false);
         setDeletePassword('');
     };
 
+    // Modal kapatma - overlay click
     const handleDeleteOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
             handleCancelDelete();
         }
     };
 
-    // Add new function to handle modal close on overlay click
+    // Verification modal overlay tıklama
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
             handleCancelVerification();
         }
     };
 
+    // Basit stiller
     const styles = {
         input: {
             transition: 'all 0.3s ease',
@@ -320,13 +386,12 @@ const SettingsPage = () => {
                 />
             </div>
 
-            {/* Add Modal */}
+            {/* Verify (Save Changes) Modal */}
             {isVerifying && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 verify-modal verify-modal-overlay"
                     onClick={handleOverlayClick}
                     style={styles.modal}
-
                 >
                     <div className="verify-modal-content p-6 w-96">
                         <h3 className="verify-modal-title text-xl mb-4">Verify Changes</h3>
@@ -363,7 +428,7 @@ const SettingsPage = () => {
 
             {/* Delete Account Modal */}
             {isDeleting && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 delete-modal delete-modal-overlay"
                     onClick={handleDeleteOverlayClick}
                     style={styles.modal}
