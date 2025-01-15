@@ -45,6 +45,12 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/my-account/email")
+    public ResponseEntity<String> getEmail() {
+        String email = userService.getEmail();
+        return new ResponseEntity<>(email, HttpStatus.OK);
+    }
+
     @PutMapping("/change-password/my-account")
     public ResponseEntity<Void> changePassword(@RequestParam String currentPassword, @RequestParam String newPassword, @RequestParam String newPasswordtoConfirm) {
         userService.changePasswordByChecking(currentPassword, newPassword, newPasswordtoConfirm);

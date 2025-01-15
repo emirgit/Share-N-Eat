@@ -26,7 +26,7 @@ public class PostResponse {
     private Integer protein; // Protein in grams
     private Integer fat;     // Fat in grams
     private Integer calories; // Total calories
-    private Map<Product,Double> productQuantities;
+    private Map<ProductForPostDto, Double> productQuantities;
     private Instant createdDate;
     private Integer likeCount; 
     private Double averageRateExpert;

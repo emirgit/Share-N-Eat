@@ -242,6 +242,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getEmail() {
+        Long userId = AuthUtil.getUserId();
+
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found !"));
+
+        return user.getEmail();
+    }
+
+    @Override
     public void changePasswordByChecking(String currentPassword, String newPassword, String newPasswordtoConfirm) {
         Long userId = AuthUtil.getUserId();
 

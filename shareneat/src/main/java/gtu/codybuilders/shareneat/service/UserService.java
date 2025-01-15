@@ -34,6 +34,8 @@ public interface UserService {
     PasswordResetToken validateToken(String token);
     User resetPassword(String token, String newPassword);
 
+    String getEmail();
+
     void deleteUser(String email);
     void deleteCurrentUser(String rawPassword);
     void deleteUserByUsername(String username);
