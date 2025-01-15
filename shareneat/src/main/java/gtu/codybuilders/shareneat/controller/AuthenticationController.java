@@ -76,33 +76,60 @@ public class AuthenticationController {
     // Registration endpoint
     @PostMapping(PathConstants.REGISTER)
     public ResponseEntity<String> register(@RequestBody UserRequestDto request) {
-        // Check if the user already exists by email or username
-        if (userService.isUserExists(request.getEmail()) || userService.isUsernameExists(request.getUsername())) {
-            return ResponseEntity.status(409).body("User with this email or username already exists");
+        try {
+            // Check if the user already exists by email or username
+            if (userService.isUserExists(request.getEmail()) || userService.isUsernameExists(request.getUsername())) {
+                return ResponseEntity.status(409).body("User with this email or username already exists");
+            }
+
+            // Create a new User object
+            User user = new User();
+            user.setEmail(request.getEmail());
+            user.setUsername(request.getUsername());
+            user.setPassword(request.getPassword());
+            user.setCreated(Instant.now());
+            user.setEnabled(false);
+            user.setBanned(false);
+            user.setRole(Role.ROLE_USER); // Assign ROLE_USER
+
+            // Set default values for other fields if necessary
+            user.setFollowersCount(0);
+            user.setFollowingCount(0);
+            user.setPostsCount(0);
+            user.setLastLogin(Instant.now());
+            user.setProfilePictureUrl("default-image.png");
+            user.setBio("I'm new in website!");
+
+            // Save the user
+            userService.saveUser(user);
+
+            // Generate an email verification token
+            String token = userService.createEmailVerificationToken(request.getEmail());
+
+            if (token.isEmpty()) {
+                // Mask response to avoid email enumeration
+                return ResponseEntity.ok("If you dont see the email in your inbox, check your spam folder. " +
+                        "If it is not there, the email address may not match an existing account.");
+            }
+
+            // Create the verification link
+            String verificationLink = PathConstants.REACT_APP_URL + "/auth/verify/email?token=" + token;
+
+            // Send the verification email
+            emailSenderService.sendVerificationEmail(request.getEmail(), verificationLink);
+
+            return ResponseEntity.ok("User registered successfully. Verification email has been sent successfully. Check your inbox or spam folder.");
+
+        } catch (UserNotFoundException e) {
+            // Log and respond if email is not found
+            logger.warn("Verification requested for non-existing email: {}", request.getEmail());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to process request. Please try again later.");
+        } catch (Exception e) {
+            // Log any unexpected errors
+            logger.error("An unexpected error occurred during email verification request for email: {}", request.getEmail(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred. Please try again later.");
         }
 
-        // Create a new User object
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        user.setCreated(Instant.now());
-        user.setEnabled(false);
-        user.setBanned(false);
-        user.setRole(Role.ROLE_USER); // Assign ROLE_USER
-
-        // Set default values for other fields if necessary
-        user.setFollowersCount(0);
-        user.setFollowingCount(0);
-        user.setPostsCount(0);
-        user.setLastLogin(Instant.now());
-        user.setProfilePictureUrl("default-image.png");
-        user.setBio("I'm new in website!");
-
-        // Save the user
-        userService.saveUser(user);
-
-        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping(PathConstants.FORGOT_PASSWORD_EMAIL_VAR)
@@ -164,6 +191,7 @@ public class AuthenticationController {
         return ResponseEntity.ok("Password has been reset successfully.");
     }
 
+/* 
     @PostMapping(PathConstants.EMAIL_VERIFY_REQUEST)
     public ResponseEntity<String> sendEmailVerification(@PathVariable String email) {
         try {
@@ -193,7 +221,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred. Please try again later.");
         }
     }
-
+*/
 
     @GetMapping(PathConstants.EMAIL_VERIFY_TOKEN)
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
