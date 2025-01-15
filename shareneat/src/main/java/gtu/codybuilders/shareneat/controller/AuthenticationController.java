@@ -118,7 +118,7 @@ public class AuthenticationController {
             }
 
             // Create a reset link including the token
-            String resetLink = "http://localhost:3000/auth/reset/password?token=" + token;
+            String resetLink = PathConstants.REACT_APP_URL + "/auth/reset/password?token=" + token;
 
             // Send the reset link to the user's email
             emailSenderService.sendPasswordResetEmail(email, resetLink);
@@ -177,7 +177,7 @@ public class AuthenticationController {
             }
 
             // Create the verification link
-            String verificationLink = "http://localhost:3000/auth/verify/email?token=" + token;
+            String verificationLink = PathConstants.REACT_APP_URL + "/auth/verify/email?token=" + token;
 
             // Send the verification email
             emailSenderService.sendVerificationEmail(email, verificationLink);

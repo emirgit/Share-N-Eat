@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 public class PathConstants {
 
+    public static final String REACT_APP_URL = "http://localhost:3000";
 
     public static final String AUTH = "/auth";
     public static final String LOGIN = "/login";

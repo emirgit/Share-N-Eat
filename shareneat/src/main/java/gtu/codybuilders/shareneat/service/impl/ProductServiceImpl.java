@@ -1,6 +1,7 @@
 package gtu.codybuilders.shareneat.service.impl;
 
 import gtu.codybuilders.shareneat.constant.PathConstants;
+import gtu.codybuilders.shareneat.controller.AdminController;
 import gtu.codybuilders.shareneat.dto.AdminProductRequestRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductRequestDTO;
 import gtu.codybuilders.shareneat.dto.ProductResponseDTO;
@@ -17,6 +18,8 @@ import gtu.codybuilders.shareneat.service.ProductService;
 import gtu.codybuilders.shareneat.util.AuthUtil;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +40,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
     private UserRepository userRepository;
     private ProductRepository productRepository;
     private ImageService imageService;
@@ -171,14 +175,19 @@ public class ProductServiceImpl implements ProductService {
             adminProductRequest.setContentImageUrl(contentImageUrl);
             adminProductRequest.setMacrotableImageUrl(macrotableImageUrl);
 
-            ImageProcessingService imageProcessingService = new ImageProcessingServiceImpl();
-            NutritionInfo nutritionInfo = imageProcessingService.parseImages(macrotableImageUrl, contentImageUrl);
+            try {
+                ImageProcessingService imageProcessingService = new ImageProcessingServiceImpl();
+                NutritionInfo nutritionInfo = imageProcessingService.parseImages(macrotableImageUrl, contentImageUrl);
 
-            adminProductRequest.setDescription(nutritionInfo.getContent());
-            adminProductRequest.setCalories(nutritionInfo.getCalories());
-            adminProductRequest.setProteinGrams(nutritionInfo.getProteinGrams());
-            adminProductRequest.setCarbonhydrateGrams(nutritionInfo.getCarbonhydrateGrams());
-            adminProductRequest.setFatGrams(nutritionInfo.getFatGrams());
+                adminProductRequest.setDescription(nutritionInfo.getContent());
+                adminProductRequest.setCalories(nutritionInfo.getCalories());
+                adminProductRequest.setProteinGrams(nutritionInfo.getProteinGrams());
+                adminProductRequest.setCarbonhydrateGrams(nutritionInfo.getCarbonhydrateGrams());
+                adminProductRequest.setFatGrams(nutritionInfo.getFatGrams());
+            } catch (Exception ex) {
+                logger.error("An exception occured when trying to process image");
+            }
+
             adminProductRequest.setQuantity(100.0);
 
         } catch (IOException e) {

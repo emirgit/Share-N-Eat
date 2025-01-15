@@ -6,12 +6,16 @@ import gtu.codybuilders.shareneat.service.ImageProcessingService;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ImageProcessingServiceImpl implements ImageProcessingService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ImageProcessingServiceImpl.class);
 
     @Override
     public NutritionInfo parseImages(String macroTableUrl, String contentUrl) {
@@ -55,6 +59,12 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
     private String extractText(String imageUrl, ITesseract tesseract) {
         try {
             File file = new File(imageUrl);
+
+            if (!file.exists() || !file.isFile()) {
+                logger.error("File does not exist or is not a valid file: " + imageUrl);
+                return "";
+            }
+
             return tesseract.doOCR(file);
         } catch (TesseractException e) {
             e.printStackTrace();

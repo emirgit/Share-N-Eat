@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AdminController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
     private final UserServiceImpl userService;
     private final ProductService productService;
     private final AdminProductRequestService adminProductRequestService;
