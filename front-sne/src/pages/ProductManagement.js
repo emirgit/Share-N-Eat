@@ -175,10 +175,7 @@ const ProductManagement = () => {
         newWindow.document.write(`<img src="${imageUrl}" alt="Image" />`);
         newWindow.document.close();
     };
-
-    const handleImageClickProduct = (productId) => {
-        navigate(`/product/${productId}`);
-    };
+    
 
     //done product management
     useEffect(() => {
@@ -474,12 +471,12 @@ const ProductManagement = () => {
                                                         className="rounded-lg object-cover cursor-pointer"
                                                         onClick={() => handleImageClick(image)}
                                                     />
-                                                    <button
+                                                    {image === request.imageUrlLocal ? <button
                                                         onClick={() => document.querySelector(`input[type="file"]`).click()}
                                                         className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"
                                                     >
                                                         <FontAwesomeIcon icon={faRecycle} />
-                                                    </button>
+                                                    </button> : <p></p>}
                                                     {/*<button*/}
                                                     {/*    onClick={() => handleRemoveImage(request.id, index)}*/}
                                                     {/*    className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}

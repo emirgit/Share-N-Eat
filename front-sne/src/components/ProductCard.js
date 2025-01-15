@@ -179,13 +179,13 @@ const ProductCard = ({ product, userRoles, currentUsername }) => {
                     {/* Macronutrient Details */}
                     <div className="flex flex-col text-sm text-gray-600">
                         <div className="flex items-center mb-1">
-                            <span>🍗</span> <span className="ml-1">{product.proteinGrams}g protein</span>
+                            <span>🍗</span> <span className="ml-1 text-red-600">{product.proteinGrams}g protein</span>
                         </div>
                         <div className="flex items-center mb-1">
-                            <span>🍞</span> <span className="ml-1">{product.carbonhydrateGrams}g carbs</span>
+                            <span>🍞</span> <span className="ml-1 text-blue-500">{product.carbonhydrateGrams}g carbs</span>
                         </div>
                         <div className="flex items-center mb-1">
-                            <span>🥓</span> <span className="ml-1">{product.fatGrams}g fat</span>
+                            <span>🥓</span> <span className="ml-1 text-yellow-500">{product.fatGrams}g fat</span>
                         </div>
                         {/*<div className="mt-2 text-center">*/}
                         {/*    {product.calories} kcal*/}
