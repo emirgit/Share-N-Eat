@@ -23,6 +23,7 @@ import ProductManagement from './pages/ProductManagement';
 import UserManagement from './pages/UserManagement';
 import SettingsPage from './pages/SettingsPage';
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import FindYourMealPage from './pages/FindYourMealPage';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path="/products" element={<PrivateRoute element={ProductPage} />} />
         <Route path="/product/:productId" element={<ProductDetailsPage />} />
         <Route path="/settings" element={<PrivateRoute element={SettingsPage} />} />
+        <Route path="/find-your-meal" element={<PrivateRoute element={FindYourMealPage} />} />
 
         {/* Admin Routes */}
         <Route path="/admin" element={<PrivateRoute element={AdminPanel} />} />
