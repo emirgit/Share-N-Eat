@@ -58,7 +58,9 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
      */
     private String extractText(String imageUrl, ITesseract tesseract) {
         try {
-            File file = new File(imageUrl);
+            File file = PathConstants.UPLOAD_DIR_ADMIN_PRODUCT_REQUEST
+                    .resolve(imageUrl)
+                    .toFile();
 
             if (!file.exists() || !file.isFile()) {
                 logger.error("File does not exist or is not a valid file: " + imageUrl);
