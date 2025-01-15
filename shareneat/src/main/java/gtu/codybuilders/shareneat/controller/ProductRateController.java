@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/product-rate")
 @AllArgsConstructor
@@ -24,6 +26,11 @@ public class ProductRateController {
         return new ResponseEntity<>(rate, HttpStatus.OK);
     }
 
+    @GetMapping("product-raters-list-usernames/{productId}")
+    public ResponseEntity<List<String>> getProductRatersListUsernames(@PathVariable("productId") Long productId) {
+        List<String> usernames = productRateService.getProductRatersListUsernames(productId);
+        return new ResponseEntity<>(usernames, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<Void> rateProduct(@RequestBody ProductRateRequestDTO productRateRequestDTO) {
