@@ -17,7 +17,6 @@ const LoginPage = () => {
                 password: password,
             });
             localStorage.setItem('token', response.data.jwt);
-            console.log('Jwt:',localStorage.getItem('token'));
             setError('');
             navigate('/'); // Redirect to MainPage on successful login
         } catch (err) {

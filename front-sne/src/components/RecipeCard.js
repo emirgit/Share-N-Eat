@@ -169,16 +169,18 @@ const RecipeCard = ({ post, currentUsername }) => {
     ];
 
     return (
-        <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl relative">
+        <div className="bg-white shadow-md rounded-3xl overflow-hidden mb-6 max-w-4xl">
             {/* Delete button (only if owner or admin) */}
-            {isOwnerOrAdmin && (
+            <div className="relative">
+                {isOwnerOrAdmin && (
                 <button
                     onClick={handleDelete}
                     className="absolute top-4 right-4 bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700"
                 >
                     Delete
                 </button>
-            )}
+                )}
+            </div>
 
             <div className="flex items-center p-4 border-b border-gray-200">
                 {profileImage && (

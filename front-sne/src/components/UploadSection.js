@@ -160,7 +160,7 @@ const UploadSection = () => {
     };
 
     return (
-        <div className="flex items-center justify-center w-full my-4">
+        <div className="flex items-center justify-center w-full my-4 ">
             {!isExpanded && (
                 <div
                     className="transition-all duration-300 ease-in-out w-full max-w-4xl bg-gray-100 p-8 rounded-lg shadow-md cursor-pointer"
@@ -173,7 +173,7 @@ const UploadSection = () => {
             )}
 
             {isExpanded && (
-                <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl overflow-y-auto max-h-full">
                         <div className="flex flex-col items-center">
                             <h2 className="text-lg font-semibold mb-4">Create a New Post</h2>

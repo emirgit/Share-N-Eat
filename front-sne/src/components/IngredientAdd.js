@@ -134,7 +134,7 @@ const IngredientAdd = ({ onAddIngredient, onCancel }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl">
                 <h2 className="text-lg font-semibold mb-4">Add Product</h2>
                 
