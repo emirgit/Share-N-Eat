@@ -1,67 +1,114 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axiosHelper from '../axiosHelper';
 
 const IngredientAdd = ({ onAddIngredient, onCancel }) => {
-    const [searchKeyword, setSearchKeyword] = useState('');
-    const [availableProducts, setAvailableProducts] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState('');
+    const [imageURLs, setImageURLs] = useState({});
 
-    useEffect(() => {
-        fetchProducts();
+    // Use a ref to hold imageURLs for cleanup to avoid re-creating the cleanup function
+    const imageURLsRef = useRef(imageURLs);
+    imageURLsRef.current = imageURLs;
+
+    // Cleanup function
+    const cleanupImageURLs = useCallback(() => {
+        Object.values(imageURLsRef.current).forEach(url => URL.revokeObjectURL(url));
     }, []);
 
-    const fetchProducts = async () => {
+    const fetchAndSetProducts = useCallback(async (products) => {
+        if (!Array.isArray(products)) {
+            products = products.content || [];
+        }
+
+        const newImageURLs = {};
+        for (const product of products) {
+            try {
+                const imageResponse = await axiosHelper(
+                    `/products/getImage/${product.id}`,
+                    'GET',
+                    null,
+                    { responseType: 'blob' }
+                );
+                newImageURLs[product.id] = URL.createObjectURL(imageResponse);
+            } catch (error) {
+                console.error(`Failed to fetch image for product ${product.id}:`, error);
+            }
+        }
+
+        setImageURLs(prev => {
+            // Cleanup old URLs that aren't in the new results
+            Object.entries(prev).forEach(([id, url]) => {
+                if (!newImageURLs[id]) {
+                    URL.revokeObjectURL(url);
+                }
+            });
+            return newImageURLs;
+        });
+
+        setSearchResults(products);
+    }, []);
+
+    const fetchInitialProducts = useCallback(async () => {
         setLoading(true);
-        setError('');
         try {
-            const allProducts = await axiosHelper('/products/getAll', 'GET');
-            const productsWithImages = await Promise.all(
-                allProducts.map(async (product) => {
-                    const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, { responseType: 'blob' });
-                    const imageUrl = URL.createObjectURL(imageResponse);
-                    return { ...product, imageUrl };
-                })
-            );
-            setAvailableProducts(productsWithImages);
+            const products = await axiosHelper('/products/getAll', 'GET');
+            await fetchAndSetProducts(products);
         } catch (error) {
-            console.error('Failed to fetch products:', error);
-            setError('Failed to load products. Please try again later.');
+            console.error('Failed to fetch initial products:', error);
+            setError('Failed to load products.');
         } finally {
             setLoading(false);
         }
-    };
+    }, [fetchAndSetProducts]);
 
-    const handleSearch = async () => {
-        if (!searchKeyword.trim()) {
-            fetchProducts();
-            return;
-        }
+    // Initial load of products
+    useEffect(() => {
+        fetchInitialProducts();
+    }, [fetchInitialProducts]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            cleanupImageURLs();
+        };
+    }, [cleanupImageURLs]);
+
+    const performSearch = useCallback(async () => {
+        if (!searchQuery.trim()) return;
+
         setLoading(true);
         setError('');
+
         try {
-            const searchedProducts = await axiosHelper(`/products/search?keyword=${encodeURIComponent(searchKeyword)}`, 'GET');
-            const productsWithImages = await Promise.all(
-                searchedProducts.map(async (product) => {
-                    const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, { responseType: 'blob' });
-                    const imageUrl = URL.createObjectURL(imageResponse);
-                    return { ...product, imageUrl };
-                })
+            const response = await axiosHelper(
+                `/products/search?keyword=${encodeURIComponent(searchQuery)}`,
+                'GET'
             );
-            setAvailableProducts(productsWithImages);
+            await fetchAndSetProducts(response);
         } catch (error) {
-            console.error('Failed to search products:', error);
-            setError('Failed to search products. Please try again later.');
+            console.error('Search failed:', error);
+            setError('Failed to search products.');
         } finally {
             setLoading(false);
         }
-    };
+    }, [searchQuery, fetchAndSetProducts]);
 
-    const handleSelectProduct = (product) => {
-        setSelectedProduct(product);
-    };
+    // Debounced search effect
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if (searchQuery) {
+                performSearch();
+            } else {
+                fetchInitialProducts();
+            }
+        }, 300);
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchQuery, performSearch, fetchInitialProducts]);
 
     const handleAdd = () => {
         if (!selectedProduct) {
@@ -72,13 +119,16 @@ const IngredientAdd = ({ onAddIngredient, onCancel }) => {
             alert('Please enter a valid quantity.');
             return;
         }
+
         const ingredient = {
             productId: selectedProduct.id,
             name: selectedProduct.name,
+            brand: selectedProduct.brand,
             quantity: Number(quantity),
+            imageUrl: imageURLs[selectedProduct.id]
         };
+
         onAddIngredient(ingredient);
-        // Reset selections
         setSelectedProduct(null);
         setQuantity('');
     };
@@ -87,47 +137,47 @@ const IngredientAdd = ({ onAddIngredient, onCancel }) => {
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl">
                 <h2 className="text-lg font-semibold mb-4">Add Product</h2>
-                <div className="flex mb-4">
-                    <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={searchKeyword}
-                        onChange={(e) => setSearchKeyword(e.target.value)}
-                        className="flex-1 p-2 border rounded-l-md"
-                    />
-                    <button
-                        onClick={handleSearch}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
-                    >
-                        Search
-                    </button>
-                </div>
+                
+                {/* Search Input */}
+                <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full p-2 border rounded-md mb-4"
+                />
 
-                {loading && <p>Loading products...</p>}
+                {/* Loading and Error States */}
+                {loading && <p className="text-gray-500">Loading products...</p>}
                 {error && <p className="text-red-500">{error}</p>}
 
-                <div className="flex space-x-4 overflow-x-auto py-4">
-                    {availableProducts.map((product) => (
+                {/* Products Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+                    {searchResults.map((product) => (
                         <div
                             key={product.id}
-                            className={`w-40 p-2 border rounded-md cursor-pointer ${
-                                selectedProduct && selectedProduct.id === product.id
-                                    ? 'border-blue-500'
-                                    : 'border-gray-300'
+                            className={`p-2 border rounded-md cursor-pointer transition-all ${
+                                selectedProduct?.id === product.id
+                                    ? 'border-blue-500 shadow-md'
+                                    : 'border-gray-300 hover:border-blue-300'
                             }`}
-                            onClick={() => handleSelectProduct(product)}
+                            onClick={() => setSelectedProduct(product)}
                         >
                             <img
-                                src={product.imageUrl}
+                                src={imageURLs[product.id]}
                                 alt={product.name}
-                                className="w-full h-24 object-cover rounded-md"
+                                className="w-full h-24 object-cover rounded-md mb-2"
+                                onError={(e) => {
+                                    e.target.src = 'https://via.placeholder.com/100';
+                                }}
                             />
-                            <h3 className="mt-2 text-sm font-medium">{product.name}</h3>
-                            <p className="text-xs text-gray-600">{product.brand}</p>
+                            <h3 className="text-sm font-medium truncate">{product.name}</h3>
+                            <p className="text-xs text-gray-600 truncate">{product.brand}</p>
                         </div>
                     ))}
                 </div>
 
+                {/* Quantity Input */}
                 {selectedProduct && (
                     <div className="mt-4">
                         <label className="block mb-2">Quantity (g/ml):</label>
@@ -141,6 +191,7 @@ const IngredientAdd = ({ onAddIngredient, onCancel }) => {
                     </div>
                 )}
 
+                {/* Action Buttons */}
                 <div className="flex justify-end space-x-4 mt-6">
                     <button
                         onClick={onCancel}

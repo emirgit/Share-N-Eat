@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCamera } from '@fortawesome/free-solid-svg-icons';
 import axiosHelper from '../axiosHelper';
@@ -12,13 +12,37 @@ const UploadSection = () => {
     const [showProductModal, setShowProductModal] = useState(false);
     const [image, setImage] = useState(null);
 
-    const fileInputRef = useRef(null); // Reference to the hidden file input
+    const fileInputRef = useRef(null);
+
+    // Cleanup effect when component unmounts
+    useEffect(() => {
+        return () => {
+            selectedProducts.forEach(product => {
+                if (product.imageUrl) {
+                    URL.revokeObjectURL(product.imageUrl);
+                }
+            });
+            if (image) {
+                URL.revokeObjectURL(URL.createObjectURL(image));
+            }
+        };
+    }, [selectedProducts, image]);
 
     const handleUploadClick = () => {
         setIsExpanded(true);
     };
 
     const handleCancel = () => {
+        // Cleanup image URLs
+        selectedProducts.forEach(product => {
+            if (product.imageUrl) {
+                URL.revokeObjectURL(product.imageUrl);
+            }
+        });
+        if (image) {
+            URL.revokeObjectURL(URL.createObjectURL(image));
+        }
+
         setIsExpanded(false);
         setTitle('');
         setDescription('');
@@ -30,36 +54,63 @@ const UploadSection = () => {
         setShowProductModal(true);
     };
 
-    const handleAddIngredient = (ingredient) => {
-        // Check if the product is already selected
-        const existing = selectedProducts.find(p => p.productId === ingredient.productId);
-        if (existing) {
-            // Update the quantity
-            setSelectedProducts(selectedProducts.map(p =>
-                p.productId === ingredient.productId
-                    ? { ...p, quantity: p.quantity + ingredient.quantity }
-                    : p
-            ));
-        } else {
-            // Add new product
-            setSelectedProducts([...selectedProducts, { ...ingredient }]);
+    const handleAddIngredient = async (ingredient) => {
+        try {
+            // Corrected URL syntax with backticks
+            const imageResponse = await axiosHelper(
+                `/products/getImage/${ingredient.productId}`, 
+                'GET', 
+                null, 
+                { responseType: 'blob' }
+            );
+            const imageUrl = URL.createObjectURL(imageResponse);
+
+            // Check if the product is already selected
+            const existing = selectedProducts.find(p => p.productId === ingredient.productId);
+            if (existing) {
+                // Update the quantity
+                setSelectedProducts(selectedProducts.map(p =>
+                    p.productId === ingredient.productId
+                        ? { ...p, quantity: p.quantity + ingredient.quantity }
+                        : p
+                ));
+            } else {
+                // Add new product with image URL
+                setSelectedProducts([...selectedProducts, { 
+                    ...ingredient,
+                    imageUrl: imageUrl 
+                }]);
+            }
+            setShowProductModal(false);
+        } catch (error) {
+            console.error('Error fetching product image:', error);
+            alert('Failed to load product image');
         }
-        setShowProductModal(false);
     };
 
     const handleImageChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
+            // Revoke previous image URL if exists to prevent memory leaks
+            if (image) {
+                URL.revokeObjectURL(URL.createObjectURL(image));
+            }
             setImage(selectedFile);
         }
     };
 
     const handleImageClick = () => {
-        fileInputRef.current.click(); // Trigger the hidden file input
+        fileInputRef.current.click();
     };
 
     const handleRemoveProduct = (productId) => {
-        setSelectedProducts(selectedProducts.filter(p => p.productId !== productId));
+        setSelectedProducts(prevProducts => {
+            const productToRemove = prevProducts.find(p => p.productId === productId);
+            if (productToRemove?.imageUrl) {
+                URL.revokeObjectURL(productToRemove.imageUrl);
+            }
+            return prevProducts.filter(p => p.productId !== productId);
+        });
     };
 
     const handleQuantityChange = (productId, newQuantity) => {
@@ -81,17 +132,18 @@ const UploadSection = () => {
             return;
         }
 
-        const postRequest = {
-            postName: title,
-            description: description,
-            productQuantities: selectedProducts.map(p => ({
-                productId: p.productId,
-                usedQuantity: p.quantity,
-            })),
-        };
-
+        // Create FormData and append individual fields
         const formData = new FormData();
-        formData.append('postRequest', JSON.stringify(postRequest));
+        formData.append('postName', title);
+        formData.append('description', description);
+
+        // Append productQuantities as individual fields
+        selectedProducts.forEach((product, index) => {
+            formData.append(`productQuantities[${index}].productId`, product.productId);
+            formData.append(`productQuantities[${index}].usedQuantity`, product.quantity);
+        });
+
+        // Append the image file
         formData.append('image', image);
 
         try {
@@ -121,7 +173,7 @@ const UploadSection = () => {
             )}
 
             {isExpanded && (
-                <div className="fixed inset-0 z-70 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl overflow-y-auto max-h-full">
                         <div className="flex flex-col items-center">
                             <h2 className="text-lg font-semibold mb-4">Create a New Post</h2>
@@ -141,7 +193,7 @@ const UploadSection = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 className="w-full p-2 mb-3 border rounded-md"
-                            ></textarea>
+                            />
 
                             {/* Clickable Image Upload Area */}
                             <div
@@ -158,7 +210,6 @@ const UploadSection = () => {
                                     <FontAwesomeIcon icon={faCamera} className="text-gray-400 text-3xl" />
                                 )}
 
-                                {/* Hidden File Input */}
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -168,7 +219,7 @@ const UploadSection = () => {
                                 />
                             </div>
 
-                            {/* Scrollable Selected Products Section */}
+                            {/* Selected Products Section */}
                             <div className="w-full overflow-x-auto py-4">
                                 <div className="flex items-center space-x-4">
                                     {selectedProducts.map((product) => (
@@ -178,9 +229,13 @@ const UploadSection = () => {
                                         >
                                             <div className="flex items-center">
                                                 <img
-                                                    src={`https://via.placeholder.com/100`} // Placeholder, you might want to fetch actual images or pass them from IngredientAdd
+                                                    src={product.imageUrl}
                                                     alt={product.name}
                                                     className="w-16 h-16 object-cover rounded-md mr-4"
+                                                    onError={(e) => {
+                                                        e.target.src = 'https://via.placeholder.com/100';
+                                                        console.error('Failed to load product image');
+                                                    }}
                                                 />
                                                 <div className="flex-1">
                                                     <h3 className="text-sm font-medium">{product.name}</h3>
