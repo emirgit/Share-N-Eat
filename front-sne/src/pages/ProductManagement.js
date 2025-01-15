@@ -176,6 +176,9 @@ const ProductManagement = () => {
         newWindow.document.close();
     };
     
+    const handleImageClickProduct = (productId) => {
+        navigate(`/product/${productId}`);
+    };
 
     //done product management
     useEffect(() => {
