@@ -34,5 +34,8 @@ public class ProductResponseDTO {
 
     private Double averageRateExpert;
     private Double averageRateRegular;
+    private Integer totalRatersExpert;
+    private Integer totalRatersRegular;
+
 
 }

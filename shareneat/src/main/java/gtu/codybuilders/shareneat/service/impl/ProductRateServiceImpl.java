@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,6 +39,15 @@ public class ProductRateServiceImpl implements ProductRateService {
         Optional<ProductRate> existingRate = productRateRepository.findByProductAndUser(product, user);
 
         return existingRate.map(ProductRate::getRating).orElse(null);
+    }
+
+    @Override
+    public List<String> getProductRatersListUsernames(Long productId){
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product Not Found with ID - " + productId));
+
+        Optional<List<ProductRate>> productRates = productRateRepository.findAllByProduct(product);
+        return productRates.map(productRateList -> productRateList.stream().map(productRate -> productRate.getUser().getUsername()).toList()).orElse(null);
     }
 
 
