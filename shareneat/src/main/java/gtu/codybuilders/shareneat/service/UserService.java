@@ -35,6 +35,7 @@ public interface UserService {
     User resetPassword(String token, String newPassword);
 
     String getEmail();
+    String getRole(String username);
 
     void deleteUser(String email);
     void deleteCurrentUser(String rawPassword);

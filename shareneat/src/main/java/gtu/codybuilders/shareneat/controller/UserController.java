@@ -51,6 +51,12 @@ public class UserController {
         return new ResponseEntity<>(email, HttpStatus.OK);
     }
 
+    @GetMapping("/account/role")
+    public ResponseEntity<String> getRole(@RequestParam String username){
+        String role = userService.getRole(username);
+        return new ResponseEntity<>(role, HttpStatus.OK);
+    }
+
     @PutMapping("/change-password/my-account")
     public ResponseEntity<Void> changePassword(@RequestParam String currentPassword, @RequestParam String newPassword, @RequestParam String newPasswordtoConfirm) {
         userService.changePasswordByChecking(currentPassword, newPassword, newPasswordtoConfirm);
