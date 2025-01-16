@@ -1,26 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosHelper from '../axiosHelper';
 import logo from '../assets/logo.png';
 
 const AdminNavbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
-    const dropdownRef = useRef(null); // Ref for the dropdown
+    const dropdownRef = useRef(null);
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
-    // Fetch user profile picture on component mount
+    // 📥 Fetch user profile picture using axiosHelper
     useEffect(() => {
         const fetchProfilePicture = async () => {
             try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/api/user/my-account/profile-picture', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    responseType: 'blob',
-                });
-                setProfilePictureUrl(URL.createObjectURL(response.data));
+                const response = await axiosHelper('/user/my-account/profile-picture', 'GET', null, { responseType: 'blob' });
+                setProfilePictureUrl(URL.createObjectURL(response));  // `axiosHelper` returns `response.data`
             } catch (error) {
                 console.error("Failed to fetch profile picture", error);
             }
@@ -29,12 +23,12 @@ const AdminNavbar = () => {
         fetchProfilePicture();
     }, []);
 
-    // Toggle dropdown visibility
+    // 🔽 Toggle dropdown visibility
     const handleProfileClick = () => {
         setIsDropdownOpen((prev) => !prev);
     };
 
-    // Close dropdown when clicking outside
+    // ❌ Close dropdown when clicking outside
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setIsDropdownOpen(false);
@@ -53,12 +47,12 @@ const AdminNavbar = () => {
         };
     }, [isDropdownOpen]);
 
-    // Navigate to Admin Dashboard
+    // 🏠 Navigate to Admin Dashboard
     const navigateToDashboard = () => {
         navigate('/admin');
     };
 
-    // Logout function
+    // 🚪 Logout function
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/auth/login');
@@ -66,7 +60,7 @@ const AdminNavbar = () => {
 
     return (
         <nav className="sticky top-0 z-20 w-full flex items-center justify-between p-4 bg-white shadow-md">
-            {/* Logo Section */}
+            {/* 🏠 Logo Section */}
             <div className="flex items-center cursor-pointer" onClick={navigateToDashboard}>
                 <img 
                     src={logo} 
@@ -76,7 +70,7 @@ const AdminNavbar = () => {
                 <div className="text-xl font-bold text-green-600">admi'n eat</div>
             </div>
 
-            {/* User Profile Image and Dropdown */}
+            {/* 👤 User Profile Image and Dropdown */}
             <div className="relative">
                 <img
                     src={profilePictureUrl || 'defaultProfilePic.png'}
@@ -85,7 +79,7 @@ const AdminNavbar = () => {
                     onClick={handleProfileClick}
                 />
                 
-                {/* Dropdown Menu */}
+                {/* ⬇️ Dropdown Menu */}
                 {isDropdownOpen && (
                     <div
                         ref={dropdownRef}

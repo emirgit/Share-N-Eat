@@ -7,7 +7,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         alert("Please wait response to come...")
         try {
-            const response = await fetch(`http://localhost:8080/auth/forgot/password/${encodeURIComponent(email)}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/forgot/password/${encodeURIComponent(email)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

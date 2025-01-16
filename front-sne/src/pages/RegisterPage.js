@@ -18,7 +18,7 @@ const RegisterPage = () => {
         setLoading(true); // Start loading
         try {
             // Send a POST request to register the user
-            const response = await axios.post('http://localhost:8080/auth/register', {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, {
                 username,
                 email,
                 password,

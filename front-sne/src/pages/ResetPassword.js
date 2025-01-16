@@ -19,7 +19,7 @@ const ResetPassword = () => {
 
             // Validate the token by calling the back-end
             axios
-                .get(`http://localhost:8080/auth/reset/password?token=${tokenFromUrl}`)
+                .get(`${process.env.REACT_APP_API_URL}/auth/reset/password?token=${tokenFromUrl}`)
                 .then((response) => {
                     console.log(response.data); // Handle success (e.g., show reset form)
                 })
@@ -38,7 +38,7 @@ const ResetPassword = () => {
         if (newPassword === repeatPassword) {
             // Send the new password and token to the back-end
             axios
-                .post('http://localhost:8080/auth/reset/password', {
+                .post(`${process.env.REACT_APP_API_URL}/auth/reset/password`, {
                     token,
                     newPassword,
                 })

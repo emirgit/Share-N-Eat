@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Set the base URL for all API requests
-axios.defaults.baseURL = 'http://localhost:8080/api';
+axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}/api`;
 
 /**
  * A helper function to make API requests with automatic JWT token inclusion.

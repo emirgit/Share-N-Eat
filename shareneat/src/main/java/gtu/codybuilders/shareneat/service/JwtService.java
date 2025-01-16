@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 public interface JwtService {
 
-    String generateSecretKey();
 
     String generateToken(String username);
 
