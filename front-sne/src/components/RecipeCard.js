@@ -36,15 +36,20 @@ const RecipeCard = ({ post, currentUsername }) => {
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
     const [isProductOpen, setIsProductOpen] = useState(false); // <-- New state for ProductList
 
-    // New States for User Roles
+    // New States for Current User Roles
     const [currentUserRole, setCurrentUserRole] = useState([]); // State to hold current user roles
     const [rolesLoading, setRolesLoading] = useState(true); // Loading state for roles
     const [rolesError, setRolesError] = useState(null); // Error state for roles
 
+    // New States for Post Owner's Role
+    const [postOwnerRole, setPostOwnerRole] = useState(null); // State to hold post owner's role
+    const [postOwnerRoleLoading, setPostOwnerRoleLoading] = useState(true); // Loading state for post owner's role
+    const [postOwnerRoleError, setPostOwnerRoleError] = useState(null); // Error state for post owner's role
+
     useEffect(() => {
         const fetchUserRoles = async () => {
             try {
-                const data = await axiosHelper('/user/my-account/roles', 'GET'); // Endpoint to fetch user roles
+                const data = await axiosHelper('/user/my-account/roles', 'GET'); // Endpoint to fetch current user roles
                 setCurrentUserRole(data); // Set the retrieved roles in state
             } catch (error) {
                 console.error('Error fetching user roles:', error);
@@ -56,6 +61,29 @@ const RecipeCard = ({ post, currentUsername }) => {
 
         fetchUserRoles(); // Call the fetchUserRoles function
     }, []);
+
+    useEffect(() => {
+        const fetchPostOwnerRole = async () => {
+
+            const params = new URLSearchParams({
+                username: username,
+            });
+
+            try {
+                const data = await axiosHelper(`/user/account/role?${params}`); // Endpoint to fetch post owner's role
+                setPostOwnerRole(data); // Set the retrieved role in state
+            } catch (error) {
+                console.error('Error fetching post owner role:', error);
+                setPostOwnerRoleError('Failed to load post owner role.');
+            } finally {
+                setPostOwnerRoleLoading(false); // Mark post owner role loading as complete
+            }
+        };
+
+        if (username) {
+            fetchPostOwnerRole(); // Call the fetchPostOwnerRole function
+        }
+    }, [username]);
 
     // Determine if the user has ROLE_USER
     const isUser = currentUserRole.includes('ROLE_USER');
@@ -202,13 +230,13 @@ const RecipeCard = ({ post, currentUsername }) => {
                 <div className="ml-3 flex-1">
                     <div className="font-semibold">{username}</div>
                     <div className="text-sm text-gray-500">
-                        {rolesLoading ? (
+                        {postOwnerRoleLoading ? (
                             'Loading role...'
-                        ) : rolesError ? (
+                        ) : postOwnerRoleError ? (
                             'Role unavailable'
                         ) : (
-                            currentUserRole.length > 0
-                                ? currentUserRole[0].replace('ROLE_', '').toLowerCase()
+                            postOwnerRole
+                                ? postOwnerRole.replace('ROLE_', '').toLowerCase()
                                 : 'No Role'
                         )}
                     </div>
