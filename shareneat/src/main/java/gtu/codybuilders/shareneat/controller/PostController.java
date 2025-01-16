@@ -7,6 +7,8 @@ import gtu.codybuilders.shareneat.dto.PostResponse;
 import gtu.codybuilders.shareneat.service.impl.PostServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,8 @@ import java.util.Map;
 @RequestMapping(PathConstants.POSTS)
 @AllArgsConstructor
 public class PostController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
     private final PostServiceImpl postService;
 
@@ -126,9 +130,11 @@ public class PostController {
         @Valid @ModelAttribute NutritionFilterDto nutritionFilterDto,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
-            Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
-            Page<PostResponse> posts = postService.findYourMeal(nutritionFilterDto, pageable);
-            return new ResponseEntity<>(posts, HttpStatus.OK);
+
+        logger.info(nutritionFilterDto.toString());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+        Page<PostResponse> posts = postService.findYourMeal(nutritionFilterDto, pageable);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping(PathConstants.COUNT)

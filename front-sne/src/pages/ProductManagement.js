@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import AdminNavbar from '../components/AdminNavbar';
 import AdminMenu from '../components/AdminMenu';
@@ -25,24 +25,12 @@ const ProductManagement = () => {
     };
 
     const [requests, setRequests] = useState([
-        // {
-        //     id: 2,
-        //     name: 'Milk',
-        //     brand: 'Sutas',
-        //     category: 'Dairy',
-        //     quantity: 1000,
-        //     proteinGrams:3,
-        //     carbonhydrateGrams:5,
-        //     fatGrams:2,
-        //     calories: 50,
-        //     images: [Milk,Milk,Milk],
-        //     description: 'description',
-        // }
+        // Initial state
     ]);
 
     const [products, setProducts] = useState([]);
 
-    //done request management
+    // Fetch Product Requests
     useEffect(() => {
         const fetchProductRequests = async () => {
             try {
@@ -64,22 +52,7 @@ const ProductManagement = () => {
         fetchProductRequests();
     }, []);
 
-
-    // const handleImageChange = (requestId, imageIndex, newImageUrl) => {
-    //     setRequests((prevRequests) =>
-    //         prevRequests.map((request) =>
-    //             request.id === requestId
-    //                 ? {
-    //                       ...request,
-    //                       images: request.images.map((img, idx) =>
-    //                           idx === imageIndex ? newImageUrl : img
-    //                       ),
-    //                   }
-    //                 : request
-    //         )
-    //     );
-    // };
-
+    // Handle Image Change
     const handleImageChange = (requestId, imageIndex, file) => {
         setRequests((prevRequests) =>
             prevRequests.map((request) =>
@@ -94,20 +67,7 @@ const ProductManagement = () => {
         );
     };
 
-    // const handleRemoveImage = (requestId, imageIndex) => {
-    //     setRequests((prevRequests) =>
-    //         prevRequests.map((request) =>
-    //             request.id === requestId
-    //                 ? {
-    //                       ...request,
-    //                       images: request.images.filter((_, idx) => idx !== imageIndex),
-    //                   }
-    //                 : request
-    //         )
-    //     );
-    // };
-
-    //done request management
+    // Handle Accept Request
     const handleAcceptRequest = async (id) => {
         const acceptedRequest = requests.find((request) => request.id === id);
         if (acceptedRequest) {
@@ -133,23 +93,25 @@ const ProductManagement = () => {
                     'Content-Type': 'multipart/form-data',
                 });
                 console.log('Product uploaded successfully:', response);
+                window.location.reload(); // Refresh the page after successful accept
             } catch (error) {
                 console.error('Error uploading product:', error);
             }
         }
     };
 
-    //done request management
+    // Handle Deny Request
     const handleDenyRequest = async (id) => {
         try {
             await axiosHelper(`/admin/product-requests/reject/${id}`, 'DELETE');
             setRequests(requests.filter((request) => request.id !== id));
+            window.location.reload(); // Refresh the page after successful deny
         } catch (error) {
             console.error('Failed to deny request:', error);
         }
     };
 
-    //done request management
+    // Handle Request Attribute Change
     const handleRequestAttributeChange = (id, attribute, value) => {
         setRequests((prevRequests) =>
             prevRequests.map((request) =>
@@ -166,10 +128,7 @@ const ProductManagement = () => {
         );
     }
 
-    // const handleImageClick = (imageUrl) => {
-    //     window.open(imageUrl, '_blank'); // Open image in a new tab
-    // };
-
+    // Handle Image Click
     const handleImageClick = (imageUrl) => {
         const newWindow = window.open();
         newWindow.document.write(`<img src="${imageUrl}" alt="Image" />`);
@@ -180,12 +139,11 @@ const ProductManagement = () => {
         navigate(`/product/${productId}`);
     };
 
-    //done product management
+    // Fetch Products
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const allProducts = await axiosHelper('/products/getAll');
-                //console.log(allProducts);
                 const productsWithImages = await Promise.all(
                     allProducts.map(async (product) => {
                         const imageResponse = await axiosHelper(`/products/getImage/${product.id}`, 'GET', null, {responseType: 'blob'});
@@ -201,13 +159,14 @@ const ProductManagement = () => {
         fetchProducts();
     }, []);
 
-    //done product management
+    // Toggle Edit Mode
     const toggleEditMode = async (id) => {
         const productToUpdate = products.find((product) => product.id === id);
         if (productToUpdate.isEditing) {
             try {
                 await axiosHelper(`/admin/products/${id}`, 'PUT', productToUpdate);
                 console.log('Product updated successfully');
+                window.location.reload(); // Refresh the page after successful update
             } catch (error) {
                 console.error('Failed to update product:', error);
             }
@@ -221,7 +180,7 @@ const ProductManagement = () => {
         );
     };
 
-    //done product management
+    // Handle Product Attribute Change
     const handleProductAttributeChange = (id, attribute, value) => {
         setProducts((prevProducts) =>
             prevProducts.map((product) =>
@@ -238,15 +197,16 @@ const ProductManagement = () => {
         );
     };
 
-    //done product management
+    // Handle Remove Product
     const handleRemoveProduct = async (id) => {
         const confirmed = window.confirm('Are you sure you want to delete this product?');
         if (confirmed) {
             try {
                 await axiosHelper(`/admin/products/${id}`, 'DELETE');
                 setProducts(products.filter((product) => product.id !== id));
+                window.location.reload(); // Refresh the page after successful removal
             } catch (error) {
-                console.error('Failed to deny request:', error);
+                console.error('Failed to remove product:', error);
             }
         }
     };
@@ -389,77 +349,6 @@ const ProductManagement = () => {
                                 >
                                     <div className="w-40">
                                         <Slider {...sliderSettings}>
-                                            {/*{[request.imageUrlLocal, request.contentImageUrlLocal, request.macrotableImageUrlLocal].map((image, index) => (*/}
-                                            {/*    <div key={index} className="relative">*/}
-                                            {/*        <img*/}
-
-                                            {/*            src={image}*/}
-                                            {/*            alt={`Request ${request.id}`}*/}
-                                            {/*            className="rounded-lg object-cover cursor-pointer"*/}
-                                            {/*            onClick={() => handleImageClick(image)}*/}
-                                            {/*            onLoad={() => console.log(`Image loaded successfully for request ${request.id}`)}*/}
-                                            {/*            onError={() => console.error(`Failed to load image for request ${request.id}`)}*/}
-                                            {/*        />*/}
-                                            {/*        */}
-                                            {/*        <button*/}
-                                            {/*            onClick={() =>*/}
-                                            {/*                handleImageChange(*/}
-                                            {/*                    request.id,*/}
-                                            {/*                    index,*/}
-                                            {/*                    prompt(*/}
-                                            {/*                        'Enter new image URL:',*/}
-                                            {/*                        image*/}
-                                            {/*                    ) || image*/}
-                                            {/*                )*/}
-                                            {/*            }*/}
-                                            {/*            className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"*/}
-                                            {/*        >*/}
-                                            {/*            <FontAwesomeIcon icon={faRecycle} />*/}
-                                            {/*        </button>*/}
-                                            {/*        <button*/}
-                                            {/*            onClick={() =>*/}
-                                            {/*                handleRemoveImage(request.id, index)*/}
-                                            {/*            }*/}
-                                            {/*            className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}
-                                            {/*        >*/}
-                                            {/*            <FontAwesomeIcon icon={faTimes} />*/}
-                                            {/*        </button>*/}
-                                            {/*    </div>*/}
-                                            {/*))}*/}
-                                            {/*{[request.imageUrlLocal, request.contentImageUrlLocal, request.macrotableImageUrlLocal].map((image, index) => (*/}
-                                            {/*    <div key={index} className="relative">*/}
-                                            {/*        <input*/}
-                                            {/*            type="file"*/}
-                                            {/*            accept="image/*"*/}
-                                            {/*            className="hidden"*/}
-                                            {/*            onChange={(e) => handleImageChange(request.id, index, e.target.files[0])}*/}
-                                            {/*        />*/}
-                                            {/*        <img*/}
-                                            {/*            src={image}*/}
-                                            {/*            alt={`Request ${request.id}`}*/}
-                                            {/*            className="rounded-lg object-cover cursor-pointer"*/}
-                                            {/*            onClick={() => handleImageClick(image)}*/}
-                                            {/*        />*/}
-                                            {/*        <button*/}
-                                            {/*            onClick={() =>*/}
-                                            {/*                handleImageChange(*/}
-                                            {/*                    request.id,*/}
-                                            {/*                    index,*/}
-                                            {/*                    prompt('Enter new image URL:', image) || image*/}
-                                            {/*                )*/}
-                                            {/*            }*/}
-                                            {/*            className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"*/}
-                                            {/*        >*/}
-                                            {/*            <FontAwesomeIcon icon={faRecycle} />*/}
-                                            {/*        </button>*/}
-                                            {/*        <button*/}
-                                            {/*            onClick={() => handleRemoveImage(request.id, index)}*/}
-                                            {/*            className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}
-                                            {/*        >*/}
-                                            {/*            <FontAwesomeIcon icon={faTimes} />*/}
-                                            {/*        </button>*/}
-                                            {/*    </div>*/}
-                                            {/*))}*/}
                                             {[request.imageUrlLocal, request.contentImageUrlLocal, request.macrotableImageUrlLocal].map((image, index) => (
                                                 <div key={index} className="relative">
                                                     <input
@@ -474,18 +363,24 @@ const ProductManagement = () => {
                                                         className="rounded-lg object-cover cursor-pointer"
                                                         onClick={() => handleImageClick(image)}
                                                     />
-                                                    {image === request.imageUrlLocal ? <button
-                                                        onClick={() => document.querySelector(`input[type="file"]`).click()}
-                                                        className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"
+                                                    {image === request.imageUrlLocal ? (
+                                                        <button
+                                                            onClick={() => document.querySelector(`input[type="file"]`).click()}
+                                                            className="absolute top-1 right-1 bg-gray-800 text-white text-xs px-2 py-1 rounded"
+                                                        >
+                                                            <FontAwesomeIcon icon={faRecycle} />
+                                                        </button>
+                                                    ) : (
+                                                        <p></p>
+                                                    )}
+                                                    {/* Uncomment if you want to enable image removal
+                                                    <button
+                                                        onClick={() => handleRemoveImage(request.id, index)}
+                                                        className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
                                                     >
-                                                        <FontAwesomeIcon icon={faRecycle} />
-                                                    </button> : <p></p>}
-                                                    {/*<button*/}
-                                                    {/*    onClick={() => handleRemoveImage(request.id, index)}*/}
-                                                    {/*    className="absolute bottom-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"*/}
-                                                    {/*>*/}
-                                                    {/*    <FontAwesomeIcon icon={faTimes} />*/}
-                                                    {/*</button>*/}
+                                                        <FontAwesomeIcon icon={faTimes} />
+                                                    </button>
+                                                    */}
                                                 </div>
                                             ))}
                                         </Slider>
@@ -575,8 +470,6 @@ const ProductManagement = () => {
                                                 />
                                             </div>
                                         </div>
-
-
                                     </div>
 
                                     {/* Description Section */}

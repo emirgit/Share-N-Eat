@@ -1,5 +1,7 @@
+// src/components/Navbar.js
+
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import axiosHelper from '../axiosHelper';
 import logo from '../assets/logo.png';
 
@@ -8,6 +10,7 @@ const Navbar = () => {
     const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation(); // Import useLocation
     const dropdownRef = useRef(null);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -116,42 +119,30 @@ const Navbar = () => {
             const response = await axiosHelper(endpoint, 'GET');
 
             // Response is a page of data depending on category
-            // We'll standardize the data to a common structure: {id, title, imageKey}
             let results = response.content || response; 
-            // Check if response has .content (Page) or is direct. If it's a Page<DTO>, it's likely response.content
 
-            // If no .content, assume response is directly a page object
             if (response.content) {
                 results = response.content;
             } else {
                 // If not paginated or different shape, just assume results = response
-                // This depends on how your backend returns Page objects. Usually, it's {content: [...], ...}
-                // If the backend returns standard Page object, response should have content.
-                // If not, remove this else block.
             }
 
             // Fetch images for each result as needed
             const updatedImageURLs = {};
             for (let item of results) {
                 if (selectedCategory === 'user') {
-                    // item is UserProfileDTO
-                    // item.username is available
                     const uname = item.username;
                     const imgBlob = await fetchUserImage(uname);
                     if (imgBlob) {
                         updatedImageURLs[uname] = imgBlob;
                     }
                 } else if (selectedCategory === 'post') {
-                    // item is PostResponse
-                    // item.postId is available
                     const pid = item.postId;
                     const imgBlob = await fetchPostImage(pid);
                     if (imgBlob) {
                         updatedImageURLs[pid] = imgBlob;
                     }
                 } else if (selectedCategory === 'product') {
-                    // item is ProductResponseDTO
-                    // item.id is available
                     const prodId = item.id;
                     const imgBlob = await fetchProductImage(prodId);
                     if (imgBlob) {
@@ -220,9 +211,22 @@ const Navbar = () => {
         setShowSearchResults(false);
     };
 
+    // Handle Navbar Logo Click
+    const handleLogoClick = () => {
+        const params = new URLSearchParams(location.search);
+        params.delete('fetchMode'); // Remove fetchMode if it exists
+        // params.delete('refresh');    // Do not delete 'refresh' to allow multiple refreshes
+
+        // Append a new 'refresh' parameter with current timestamp
+        params.set('refresh', Date.now());
+
+        const newSearch = params.toString() ? `?${params.toString()}` : '';
+        navigate(`/${newSearch}`); // Navigate to '/' with 'refresh' parameter
+    };
+
     return (
         <nav className="sticky top-0 z-20 w-full flex items-center justify-between p-4 bg-white shadow-md">
-            <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
+            <div className="flex items-center cursor-pointer" onClick={handleLogoClick}>
                 <img 
                     src={logo} 
                     alt="Share'n Eat Logo" 
@@ -242,7 +246,7 @@ const Navbar = () => {
                         onKeyDown={handleSearchKeyDown}
                         className="flex-1 focus:outline-none text-sm"
                     />
-                    {/* Category Dropdown - expanded to left a bit using some margin/padding */}
+                    {/* Category Dropdown */}
                     <div className="ml-2 pl-2 border-l border-gray-200">
                         <select 
                             value={selectedCategory}
@@ -350,6 +354,7 @@ const Navbar = () => {
             </div>
         </nav>
     );
+
 };
 
 export default Navbar;

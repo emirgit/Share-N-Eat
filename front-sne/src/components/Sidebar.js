@@ -1,30 +1,43 @@
 // src/components/Sidebar.js
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import FindYourMealModal from './FindYourMealModal';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
 
-  // We simply navigate with query parameters:
-  const handleHomeClick = () => {
-    // For "home," we assume it's the "trendings" fetchMode
-    navigate('/?fetchMode=trendings');
+  // Function to navigate to '/' with a unique 'refresh' parameter
+  const navigateHome = () => {
+    const params = new URLSearchParams(location.search);
+    params.delete('fetchMode'); // Remove fetchMode if it exists
+
+    // Set 'refresh' parameter to current timestamp to force refresh
+    params.set('refresh', Date.now());
+
+    const newSearch = params.toString() ? `?${params.toString()}` : '';
+    navigate(`/${newSearch}`); // Navigate to '/' with 'refresh' parameter
   };
 
-  const handleFollowingsClick = () => {
-    navigate('/?fetchMode=followings');
+  const handleHomeClick = () => {
+    navigateHome();
   };
 
   const handleTrendsClick = () => {
-    navigate('/?fetchMode=trendings');
+    navigateHome();
+  };
+
+  const handleFollowingsClick = () => {
+    const params = new URLSearchParams(location.search);
+    params.set('fetchMode', 'followings');
+    params.set('refresh', Date.now()); // Unique timestamp to force re-render
+    navigate(`/?${params.toString()}`);
   };
 
   const handleMealSearch = (nutritionValues) => {
-    // If you need to do something else with the meal search,
-    // you can do it here. Otherwise, it's optional.
+    // Optional: Handle additional actions if needed
   };
 
   return (

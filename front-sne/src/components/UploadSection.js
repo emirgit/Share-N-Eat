@@ -14,7 +14,6 @@ const UploadSection = () => {
 
     const fileInputRef = useRef(null);
 
-    // Cleanup effect when component unmounts
     useEffect(() => {
         return () => {
             selectedProducts.forEach(product => {
@@ -33,7 +32,6 @@ const UploadSection = () => {
     };
 
     const handleCancel = () => {
-        // Cleanup image URLs
         selectedProducts.forEach(product => {
             if (product.imageUrl) {
                 URL.revokeObjectURL(product.imageUrl);
@@ -56,7 +54,6 @@ const UploadSection = () => {
 
     const handleAddIngredient = async (ingredient) => {
         try {
-            // Corrected URL syntax with backticks
             const imageResponse = await axiosHelper(
                 `/products/getImage/${ingredient.productId}`, 
                 'GET', 
@@ -65,17 +62,14 @@ const UploadSection = () => {
             );
             const imageUrl = URL.createObjectURL(imageResponse);
 
-            // Check if the product is already selected
             const existing = selectedProducts.find(p => p.productId === ingredient.productId);
             if (existing) {
-                // Update the quantity
                 setSelectedProducts(selectedProducts.map(p =>
                     p.productId === ingredient.productId
                         ? { ...p, quantity: p.quantity + ingredient.quantity }
                         : p
                 ));
             } else {
-                // Add new product with image URL
                 setSelectedProducts([...selectedProducts, { 
                     ...ingredient,
                     imageUrl: imageUrl 
@@ -91,7 +85,6 @@ const UploadSection = () => {
     const handleImageChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
-            // Revoke previous image URL if exists to prevent memory leaks
             if (image) {
                 URL.revokeObjectURL(URL.createObjectURL(image));
             }
@@ -132,18 +125,15 @@ const UploadSection = () => {
             return;
         }
 
-        // Create FormData and append individual fields
         const formData = new FormData();
         formData.append('postName', title);
         formData.append('description', description);
 
-        // Append productQuantities as individual fields
         selectedProducts.forEach((product, index) => {
             formData.append(`productQuantities[${index}].productId`, product.productId);
             formData.append(`productQuantities[${index}].usedQuantity`, product.quantity);
         });
 
-        // Append the image file
         formData.append('image', image);
 
         try {
@@ -152,7 +142,8 @@ const UploadSection = () => {
             });
 
             alert('Post created successfully!');
-            handleCancel();
+            // Page refresh after success
+            window.location.reload();
         } catch (error) {
             console.error('Error creating post:', error);
             alert('An unexpected error occurred.');
@@ -178,7 +169,6 @@ const UploadSection = () => {
                         <div className="flex flex-col items-center">
                             <h2 className="text-lg font-semibold mb-4">Create a New Post</h2>
 
-                            {/* Title Input */}
                             <input
                                 type="text"
                                 placeholder="Enter title"
@@ -187,7 +177,6 @@ const UploadSection = () => {
                                 className="w-full p-2 mb-3 border rounded-md"
                             />
 
-                            {/* Description Input */}
                             <textarea
                                 placeholder="Enter description"
                                 value={description}
@@ -195,7 +184,6 @@ const UploadSection = () => {
                                 className="w-full p-2 mb-3 border rounded-md"
                             />
 
-                            {/* Clickable Image Upload Area */}
                             <div
                                 className="w-40 h-40 mb-4 border-2 border-dashed border-gray-400 rounded-md flex items-center justify-center cursor-pointer relative hover:border-blue-500"
                                 onClick={handleImageClick}
@@ -219,7 +207,6 @@ const UploadSection = () => {
                                 />
                             </div>
 
-                            {/* Selected Products Section */}
                             <div className="w-full overflow-x-auto py-4">
                                 <div className="flex items-center space-x-4">
                                     {selectedProducts.map((product) => (
@@ -263,7 +250,6 @@ const UploadSection = () => {
                                 </div>
                             </div>
 
-                            {/* Add Product Button */}
                             <button
                                 onClick={handleAddProduct}
                                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mt-4"
@@ -271,7 +257,6 @@ const UploadSection = () => {
                                 Add Product
                             </button>
 
-                            {/* Action Buttons */}
                             <div className="flex justify-end w-full space-x-4 mt-4">
                                 <button
                                     onClick={handleCancel}
@@ -291,7 +276,6 @@ const UploadSection = () => {
                 </div>
             )}
 
-            {/* Product Modal */}
             {showProductModal && (
                 <IngredientAdd
                     onAddIngredient={handleAddIngredient}

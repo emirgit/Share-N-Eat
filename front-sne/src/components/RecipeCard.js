@@ -4,6 +4,7 @@ import RatingComponent from './RatingComponent'; // <-- Import new component
 import axiosHelper from '../axiosHelper';
 import { PieChart, Pie, Cell } from 'recharts';
 import Comment from '../components/Comment';
+import ProductList from './ProductList'; // <-- Import ProductList
 import { useNavigate } from 'react-router-dom';
 
 const COLORS = ['#fbbf24', '#8b0000', '#3b82f6'];
@@ -23,6 +24,7 @@ const RecipeCard = ({ post, currentUsername }) => {
         averageRateRegular,
         totalRatersExpert,
         totalRatersRegular,
+        productQuantities, // <-- Destructure productQuantities
     } = post;
 
     const navigate = useNavigate();
@@ -32,6 +34,7 @@ const RecipeCard = ({ post, currentUsername }) => {
     const [currentLikeCount, setCurrentLikeCount] = useState(likeCount);
     const [loadingLike, setLoadingLike] = useState(false);
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+    const [isProductOpen, setIsProductOpen] = useState(false); // <-- New state for ProductList
 
     // New States for User Roles
     const [currentUserRole, setCurrentUserRole] = useState([]); // State to hold current user roles
@@ -143,6 +146,11 @@ const RecipeCard = ({ post, currentUsername }) => {
     // Comments toggle
     const handleComments = () => {
         setIsCommentsOpen(!isCommentsOpen);
+    };
+
+    // Product toggle
+    const handleProductToggle = () => {
+        setIsProductOpen(!isProductOpen);
     };
 
     // Delete Post logic
@@ -315,11 +323,25 @@ const RecipeCard = ({ post, currentUsername }) => {
                         💬 Comments
                     </button>
                 </div>
-                <button className="text-blue-500" onClick={handleShare}>
-                    Share
-                </button>
+                <div className="flex space-x-4">
+                    <button
+                        onClick={handleProductToggle}
+                        className="flex items-center text-blue-500"
+                    >
+                        🛍️ Products
+                    </button>
+                    <button className="text-blue-500" onClick={handleShare}>
+                        Share
+                    </button>
+                </div>
             </div>
 
+            {/* Product List */}
+            {isProductOpen && (
+                <ProductList productQuantities={productQuantities} />
+            )}
+
+            {/* Comments */}
             {isCommentsOpen && (
                 <Comment postId={postId} username={currentUsername} />
             )}
