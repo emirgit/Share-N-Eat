@@ -223,7 +223,7 @@ public class AuthenticationController {
     }
 */
 
-    @GetMapping(PathConstants.EMAIL_VERIFY_TOKEN)
+    @GetMapping(PathConstants.EMAIL_VERIFY)
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
         try {
             // Validate the token and verify the email

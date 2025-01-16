@@ -23,7 +23,6 @@ public class PathConstants {
     public static final String VERIFY = "/verify";
     public static final String EMAIL_VERIFY = EMAIL + VERIFY;
     public static final String EMAIL_VERIFY_REQUEST = EMAIL_VERIFY + "/request/{email}";
-    public static final String EMAIL_VERIFY_TOKEN = EMAIL_VERIFY + "/token";
 
     public static final String API = "api";
     public static final String USER = API + "/user";

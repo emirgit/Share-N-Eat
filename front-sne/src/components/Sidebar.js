@@ -1,11 +1,10 @@
 // src/components/Sidebar.js
 
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import FindYourMealModal from './FindYourMealModal';
 
 const Sidebar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
 
@@ -18,7 +17,7 @@ const Sidebar = () => {
     params.set('refresh', Date.now());
 
     const newSearch = params.toString() ? `?${params.toString()}` : '';
-    navigate(`/${newSearch}`); // Navigate to '/' with 'refresh' parameter
+    window.location.href = `/${newSearch}`; // Navigate to '/' with 'refresh' parameter
   };
 
   const handleHomeClick = () => {
@@ -33,7 +32,7 @@ const Sidebar = () => {
     const params = new URLSearchParams(location.search);
     params.set('fetchMode', 'followings');
     params.set('refresh', Date.now()); // Unique timestamp to force re-render
-    navigate(`/?${params.toString()}`);
+    window.location.href = `/?${params.toString()}`; // Use window.location.href for full reload
   };
 
   const handleMealSearch = (nutritionValues) => {
@@ -76,7 +75,7 @@ const Sidebar = () => {
 
       <div
         className="flex items-center mb-6 cursor-pointer"
-        onClick={() => navigate('/products')}
+        onClick={() => window.location.href = '/products'} // Use window.location.href for full reload
       >
         <span className="mr-2">🛒</span>
         <span className="text-lg font-medium">Products</span>

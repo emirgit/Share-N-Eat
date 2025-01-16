@@ -26,6 +26,7 @@ import UserManagement from './pages/UserManagement';
 import SettingsPage from './pages/SettingsPage';
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import FindYourMealPage from './pages/FindYourMealPage';
+import VerifyEmail from './pages/VerifyEmail';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
         <Route path="/auth/register" element={<RegisterPage />} />
         <Route path="/auth/forgot/password" element={<PrivateRoute element={ForgotPassword} />} />
         <Route path="/auth/reset/password" element={<PrivateRoute element={ResetPassword} />} />
-        <Route path="/auth/verify/account" element={<PrivateRoute element={ResetPassword} />} />
+        <Route path="/auth/verify/email" element={<PrivateRoute element={VerifyEmail} />} />
 
         {/* Protected Routes */}
         <Route path="/" element={<PrivateRoute element={MainPage} />} />

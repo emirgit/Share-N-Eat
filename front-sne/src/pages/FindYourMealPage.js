@@ -1,7 +1,6 @@
 // src/components/FindYourMealModal.js
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const FindYourMealModal = ({ isOpen, onClose, onSubmit }) => {
   const [nutritionValues, setNutritionValues] = useState({
@@ -12,7 +11,6 @@ const FindYourMealModal = ({ isOpen, onClose, onSubmit }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
 
   const validateInputs = () => {
     const newErrors = {};
@@ -104,8 +102,11 @@ const FindYourMealModal = ({ isOpen, onClose, onSubmit }) => {
         queryParams.append('maxCalories', nutritionValues.calories.max);
       }
 
-      // Navigate to main page, passing filter via query params
-      navigate(`/?${queryParams.toString()}`);
+      // **Add the 'refresh' parameter with a unique timestamp to force a full page reload**
+      queryParams.append('refresh', Date.now());
+
+      // Force a full page reload by setting window.location.href
+      window.location.href = `/?${queryParams.toString()}`;
     }
   };
 
