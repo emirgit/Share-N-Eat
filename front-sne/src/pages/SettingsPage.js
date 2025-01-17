@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SettingsMenu from '../components/SettingsMenu';
-import axiosHelper from '../axiosHelper'; // Ensure this path is correct
+import axiosHelper from '../axiosHelper';
 import '../styles/SettingsPage.css';
 
 const SettingsPage = () => {
@@ -13,14 +13,13 @@ const SettingsPage = () => {
     );
 
     // Account Preferences States
-    // Başlangıçta mock değerler atanmış durumda:
     const [currentEmail, setCurrentEmail] = useState('currentEmail@example.com');
-    const [email, setEmail] = useState('currentEmail@example.com'); 
+    const [email, setEmail] = useState('currentEmail@example.com');
 
-    const [isVerifying, setIsVerifying] = useState(false); 
-    const [password, setPassword] = useState(''); 
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [password, setPassword] = useState('');
 
-    // Adres bilgisiyle ilgili state'ler
+    // Adres bilgileri
     const [currentCountry, setCurrentCountry] = useState('');
     const [currentCity, setCurrentCity] = useState('');
     const [currentRegion, setCurrentRegion] = useState('');
@@ -33,9 +32,6 @@ const SettingsPage = () => {
     const [postalCode, setPostalCode] = useState('');
     const [address, setAddress] = useState('');
 
-    const navigate = useNavigate();
-
-    // Data Privacy Rules States
     const [termsOfService, setTermsOfService] = useState('');
     const [privacyPolicy, setPrivacyPolicy] = useState('');
     const [loadingPrivacy, setLoadingPrivacy] = useState(true);
@@ -45,11 +41,13 @@ const SettingsPage = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [deletePassword, setDeletePassword] = useState('');
 
-    // 1) Site Settings (Terms of Service & Privacy Policy) verilerini çekme
+    const navigate = useNavigate();
+
+    // 1) Site Settings (Terms & Privacy) verilerini çekme
     useEffect(() => {
         const fetchSiteSettings = async () => {
             try {
-                const data = await axiosHelper('/settings'); // Endpoint: /api/settings
+                const data = await axiosHelper('/settings');
                 setTermsOfService(data.termsOfService);
                 setPrivacyPolicy(data.privacyPolicy);
                 setLoadingPrivacy(false);
@@ -59,7 +57,6 @@ const SettingsPage = () => {
                 setLoadingPrivacy(false);
             }
         };
-
         fetchSiteSettings();
     }, []);
 
@@ -67,23 +64,47 @@ const SettingsPage = () => {
     useEffect(() => {
         const fetchEmail = async () => {
             try {
-                // Burada /user/my-account/email endpoint'ine GET isteği atıyoruz
                 const userEmail = await axiosHelper('/user/my-account/email', 'GET');
-                
-                // State'leri gerçek email ile güncelliyoruz
                 setCurrentEmail(userEmail);
                 setEmail(userEmail);
             } catch (error) {
                 console.error('Failed to fetch email:', error);
             }
         };
-
         fetchEmail();
     }, []);
 
-    // Değişiklikleri kaydetmek için "Save Changes" butonuna basıldığında çalışır
+    // 3) Kullanıcının adres bilgilerini backend'den çekme
+    useEffect(() => {
+        const fetchAddressInfo = async () => {
+            try {
+                // /user/get-adress-info/my-account endpoint'i
+                const addressData = await axiosHelper('/user/get-adress-info/my-account', 'GET');
+
+                // Adres verisini state'lere yerleştiriyoruz
+                setCurrentCountry(addressData.country);
+                setCountry(addressData.country);
+
+                setCurrentCity(addressData.city);
+                setCity(addressData.city);
+
+                setCurrentRegion(addressData.region);
+                setRegion(addressData.region);
+
+                setCurrentPostalCode(addressData.postalCode);
+                setPostalCode(addressData.postalCode);
+
+                setCurrentAddress(addressData.fullAddress);
+                setAddress(addressData.fullAddress);
+            } catch (error) {
+                console.error('Failed to fetch address info:', error);
+            }
+        };
+        fetchAddressInfo();
+    }, []);
+
+    // Değişiklikleri kaydet ("Save Changes" butonuna basınca)
     const handleSaveChanges = () => {
-        // email veya adres bilgileri değiştiyse verification modal açıyoruz
         if (
             email !== currentEmail ||
             country !== currentCountry ||
@@ -98,27 +119,23 @@ const SettingsPage = () => {
         }
     };
 
-    // "Verify and Save" butonuna basıldığında password doğrulaması ve update işlemi
+    // "Verify and Save" butonuna basınca update işlemi
     const handleVerifyPassword = async () => {
         try {
-            // password query param olarak geçecek
             const params = new URLSearchParams({
-                password: password
+                password: password,
             });
-
-            // Adres bilgilerini body olarak hazırlıyoruz
             const addressData = {
                 country: country,
                 city: city,
                 region: region,
                 postalCode: parseInt(postalCode) || 0,
-                fullAddress: address
+                fullAddress: address,
             };
 
-            // Backend'e PUT isteği (/user/update-address/my-account?password=xxx)
             await axiosHelper(`/user/update-address/my-account?${params}`, 'PUT', addressData);
 
-            // Her şey başarılıysa, current değişkenleri güncelliyoruz
+            // Başarılıysa current* state'lerini güncelliyoruz
             setCurrentEmail(email);
             setCurrentCountry(country);
             setCurrentCity(city);
@@ -131,9 +148,8 @@ const SettingsPage = () => {
         } catch (error) {
             console.error('Update error:', {
                 status: error.response?.status,
-                data: error.response?.data
+                data: error.response?.data,
             });
-
             if (error.response?.status === 403) {
                 alert('Access denied. Please check your password and try again.');
             } else {
@@ -142,7 +158,7 @@ const SettingsPage = () => {
         }
     };
 
-    // Verification modal iptal butonu
+    // Update iptali (verification modal kapatma)
     const handleCancelVerification = () => {
         setEmail(currentEmail);
         setCountry(currentCountry);
@@ -153,41 +169,39 @@ const SettingsPage = () => {
         setIsVerifying(false);
     };
 
-    // Parola değiştirme butonu
+    // Şifre değiştirme
     const handleChangePassword = () => {
         navigate('/change-password');
     };
 
-    // Hesap silme butonuna basıldığında açılacak modal
+    // Hesap silme butonu
     const handleDeleteAccount = () => {
         setIsDeleting(true);
     };
 
-    // Hesabı gerçekten silmek için Confirm butonuna basılınca
-    // Delete Account Modal - Confirm Delete
-const handleConfirmDelete = async () => {
-    try {
-        const params = new URLSearchParams({
-            password: deletePassword
-        });
-        await axiosHelper(`/user/delete/my-account?${params}`, 'DELETE');
-        
-        localStorage.clear();
-        sessionStorage.clear();
-        alert('Account deleted successfully');
-        navigate('/auth/login');
-    } catch (error) {
-        console.error('Delete error:', error);
-        if (error.response?.status === 403) {
-            alert('Access denied. Please check your password and try again.');
-        } else {
-            alert('An error occurred while trying to delete your account.');
+    // Hesap silmeyi doğrulama
+    const handleConfirmDelete = async () => {
+        try {
+            const params = new URLSearchParams({
+                password: deletePassword,
+            });
+            await axiosHelper(`/user/delete/my-account?${params}`, 'DELETE');
+
+            localStorage.clear();
+            sessionStorage.clear();
+            alert('Account deleted successfully');
+            navigate('/auth/login');
+        } catch (error) {
+            console.error('Delete error:', error);
+            if (error.response?.status === 403) {
+                alert('Access denied. Please check your password and try again.');
+            } else {
+                alert('An error occurred while trying to delete your account.');
+            }
         }
-    }
-};
+    };
 
-
-    // Hesap silme modal'ını iptal
+    // Hesap silme iptali
     const handleCancelDelete = () => {
         setIsDeleting(false);
         setDeletePassword('');
@@ -212,26 +226,26 @@ const handleConfirmDelete = async () => {
         input: {
             transition: 'all 0.3s ease',
             ':hover': {
-                borderColor: '#3b82f6'
+                borderColor: '#3b82f6',
             },
             ':focus': {
                 borderColor: '#3b82f6',
                 boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.2)',
-                outline: 'none'
-            }
+                outline: 'none',
+            },
         },
         button: {
             transition: 'all 0.3s ease',
             ':hover': {
-                transform: 'translateY(-1px)'
-            }
+                transform: 'translateY(-1px)',
+            },
         },
         modal: {
-            animation: 'fadeIn 0.3s ease'
+            animation: 'fadeIn 0.3s ease',
         },
         modalContent: {
-            animation: 'slideIn 0.3s ease'
-        }
+            animation: 'slideIn 0.3s ease',
+        },
     };
 
     return (
