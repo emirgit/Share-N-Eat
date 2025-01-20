@@ -9,7 +9,7 @@ A web application with integrated social media features designed to inspire and 
 | Number         | Name                | Role                               | GitHub                                        | LinkedIn                                     |
 |----------------|---------------------|------------------------------------|-----------------------------------------------|---------------------------------------------|
 | 210104004071   | Muhammed Emir Kara  | Scrum Master / Back-End Developer  | [GitHub](https://github.com/emirgit) | [LinkedIn](https://www.linkedin.com/in/muhammed-emir-kara-787605251/) |
-| 210104004004   | Serkan Efe Çamoğlu  | Product Owner / Front-End Developer| [GitHub](https://github.com/serkanefecamoglu) | [LinkedIn](https://linkedin.com/in/serkanefecamoglu) |
+| 210104004004   | Serkan Efe Çamoğlu  | Product Owner / Full Stack Developer| [GitHub](https://github.com/serkanefecamoglu) | [LinkedIn](https://linkedin.com/in/serkanefecamoglu) |
 | 210104004093   | Emre Kibar          | Back-End Developer                 | [GitHub](https://github.com/emrekibar)        | [LinkedIn](https://linkedin.com/in/emrekibar)        |
 | 210104004041   | Barış Eren Gezici   | Back-End Developer                 | [GitHub](https://github.com/bariserengezici)  | [LinkedIn](https://linkedin.com/in/bariserengezici)  |
 | 220104004026   | Oğuz Akkuş          | Front-End Developer                | [GitHub](https://github.com/oguzakkus)        | [LinkedIn](https://linkedin.com/in/oguzakkus)        |
